@@ -1,0 +1,55 @@
+.accent-red {
+    color: var(--color-accent-red);
+}
+
+.accent-green {
+    color: var(--color-accent-green);
+}
+
+.background-primary {
+    color: var(--color-background-primary);
+}
+
+.background-secondary {
+    color: var(--color-background-secondary);
+}
+
+.label-primary {
+    color: var(--color-label-primary);
+}
+
+.label-secondary {
+    color: var(--color-label-secondary);
+}
+
+.label-tertiary {
+    color: var(--color-label-tertiary);
+}
+
+.fill-primary {
+    color: var(--color-fill-primary);
+}
+
+.fill-secondary {
+    color: var(--color-fill-secondary);
+}
+
+.fill-tertiary {
+    color: var(--color-fill-tertiary);
+}
+
+.fill-quaternary {
+    color: var(--color-fill-quaternary);
+}
+
+.fill-danger {
+    color: var(--color-fill-danger);
+}
+
+.border-primary {
+    color: var(--color-border-primary);
+}
+
+.border-secondary {
+    color: var(--color-border-secondary);
+}
