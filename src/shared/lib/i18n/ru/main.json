@@ -1,0 +1,18 @@
+{
+  "header": {
+    "title": "Финансы",
+    "subtitle": "ведение бюджета"
+  },
+  "expensesFromReceipts": {
+    "title": "Траты от поступлений"
+  },
+  "incomes": {
+    "title": "Доходы"
+  },
+  "savings": {
+    "title": "Накопления"
+  },
+  "expenses": {
+    "title": "Расходы"
+  }
+}
