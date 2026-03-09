@@ -1,0 +1,51 @@
+.root {
+    padding: 20px 15px;
+    display: flex;
+    width: 285px;
+}
+
+.trigger {
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin: auto 0;
+    width: 100%;
+
+    &[data-popup-open] {
+        .chevron {
+            transform: rotate(180deg);
+        }
+    }
+}
+
+.chevron {
+    transition: 0.1s transform;
+}
+
+.popup {
+    display: flex;
+    flex-direction: column;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-top: none;
+    /*noinspection CssUnresolvedCustomProperty*/
+    width: calc(var(--anchor-width) + 10px * 2);
+    padding: 5px 5px;
+}
+
+.popup-item {
+    border-radius: 4px;
+    padding: 5px 10px;
+    cursor: pointer;
+    transition: background-color 0.1s, color 0.1s;
+
+    &:hover:not([data-checked]) {
+        background-color: var(--color-fill-primary);
+        color: var(--color-fill-tertiary);
+    }
+
+    &[data-checked] {
+        background-color: var(--color-background-secondary);
+    }
+}
