@@ -14,5 +14,17 @@
   },
   "expenses": {
     "title": "Расходы"
+  },
+  "fromLastYear": {
+    "title": "С прошлого года",
+    "rest": "Остаток",
+    "savings": "Накопления"
+  },
+  "incomeExpense": {
+    "title": "Доход/расход",
+    "income": "Поступления",
+    "expenses": "Расходы",
+    "savings": "Накопления",
+    "debtCollection": "Возврат долгов"
   }
 }

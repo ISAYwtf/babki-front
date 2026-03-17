@@ -1,15 +1,16 @@
 import { getCurrentCurrencyCode } from '@/shared/lib/currency';
 import { CardBase } from '@/shared/ui/card-base';
 import type { ICardBaseProps } from '@/shared/ui/card-base/cardBase';
-import { Icon } from '@/shared/ui/icon';
-import { Stack } from '@/shared/ui/stack';
 import { Body2 } from '@/shared/ui/typography/Body2';
 import { SpecialBody1 } from '@/shared/ui/typography/SpecialBody1';
 import { Title3 } from '@/shared/ui/typography/Title3';
 import clsx from 'clsx';
 import i18next from 'i18next';
+import {
+  LucideArrowDown,
+  LucideArrowUp,
+} from 'lucide-react';
 import type { FC } from 'react';
-import classes from './cardAmount.module.css';
 
 type CurrencyType = string;
 type DiffStyleType = 'percent' | 'currency';
@@ -23,7 +24,6 @@ interface ICardAmountProps extends ICardBaseProps {
 }
 
 export const CardAmount: FC<ICardAmountProps> = ({
-  className,
   children,
   title,
   value,
@@ -49,28 +49,29 @@ export const CardAmount: FC<ICardAmountProps> = ({
     notation: 'compact',
   });
 
+  const DiffIcon = isIncrease ? LucideArrowUp : LucideArrowDown;
+
   return (
-    <CardBase {...htmlProps} className={clsx(classes.root)}>
-      {title && <Title3 className={classes.title} color="label-secondary">{title}</Title3>}
-      <Stack
-        direction="row"
-        justify="space-between"
-        alignItems="end"
-        gap="10px"
-      >
+    <CardBase {...htmlProps} className={clsx('flex flex-col gap-2.5 max-w-xl p-3.5', htmlProps.className)}>
+      {title && (
+      <Title3 className="text-muted-foreground uppercase">
+        {title}
+      </Title3>
+      )}
+      <div className="flex justify-between items-end gap-2.5">
         <SpecialBody1 title={value.toLocaleString()}>
           {formatAmount.format(value)}
         </SpecialBody1>
         {!!diff && (
-          <Body2 color={isIncrease ? 'accent-green' : 'accent-red'}>
+          <Body2 className={clsx('flex items-center', isIncrease ? 'text-success' : 'text-destructive')}>
             {formatDiff.format(diff)}
-            <Icon
-              icon={isIncrease ? 'IcArrowUp10' : 'IcArrowDown10'}
-              className={classes.diffIcon}
+            <DiffIcon
+              className="ml-1 size-4"
+              strokeWidth={1.75}
             />
           </Body2>
         )}
-      </Stack>
+      </div>
     </CardBase>
   );
 };

@@ -5,7 +5,6 @@ import type {
   FC,
   HTMLProps,
 } from 'react';
-import classes from './header.module.css';
 
 interface IHeaderProps extends HTMLProps<HTMLDivElement> {
   title: string;
@@ -15,12 +14,12 @@ interface IHeaderProps extends HTMLProps<HTMLDivElement> {
 export const Header: FC<IHeaderProps> = ({
   className, title, subtitle, ...htmlProps
 }) => (
-  <div {...htmlProps} className={clsx(classes.root, className)}>
+  <div {...htmlProps} className={clsx('flex p-7 mx-auto mt-10 mb-2.5 w-fit', className)}>
     <Title1>
       {title}
       {' '}
       -
     </Title1>
-    {subtitle && <Title2 className={classes.subtitle} color="label-secondary">{subtitle}</Title2>}
+    {subtitle && <Title2 className="text-muted-foreground ml-5">{subtitle}</Title2>}
   </div>
 );

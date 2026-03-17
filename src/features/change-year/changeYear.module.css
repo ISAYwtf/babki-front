@@ -8,6 +8,7 @@
     cursor: pointer;
     display: flex;
     justify-content: space-between;
+    align-items: center;
     gap: 10px;
     margin: auto 0;
     width: 100%;
@@ -29,8 +30,7 @@
     border-top-left-radius: 0;
     border-top-right-radius: 0;
     border-top: none;
-    /*noinspection CssUnresolvedCustomProperty*/
-    width: calc(var(--anchor-width) + 10px * 2);
+    width: 285px;
     padding: 5px 5px;
 }
 
@@ -41,11 +41,11 @@
     transition: background-color 0.1s, color 0.1s;
 
     &:hover:not([data-checked]) {
-        background-color: var(--color-fill-primary);
-        color: var(--color-fill-tertiary);
+        background-color: var(--foreground);
+        color: var(--muted);
     }
 
     &[data-checked] {
-        background-color: var(--color-background-secondary);
+        background-color: var(--secondary);
     }
 }

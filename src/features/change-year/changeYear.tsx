@@ -1,8 +1,8 @@
 import { CardBase } from '@/shared/ui/card-base';
-import { Icon } from '@/shared/ui/icon';
 import { Body2 } from '@/shared/ui/typography/Body2';
 import { SpecialBody2 } from '@/shared/ui/typography/SpecialBody2';
 import { Menu } from '@base-ui/react';
+import { LucideChevronUp } from 'lucide-react';
 import {
   type FC,
   useState,
@@ -28,10 +28,7 @@ export const YearCard: FC = () => {
             {' '}
             год
           </SpecialBody2>
-          <Icon
-            icon="IcChevronDown20"
-            className={classes.chevron}
-          />
+          <LucideChevronUp className={classes.chevron} size={20} />
         </Menu.Trigger>
         <Menu.Portal>
           <Menu.Positioner>

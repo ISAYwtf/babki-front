@@ -52,6 +52,7 @@ export default defineConfig([
       }],
       'react/button-has-type': 0,
       'react/require-default-props': 0,
+      'react/no-array-index-key': 0,
       'jsx-a11y/heading-has-content': 0,
       'jsx-a11y/anchor-has-content': 0,
       'import-x/prefer-default-export': 0,
