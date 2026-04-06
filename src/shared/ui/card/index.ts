@@ -1,1 +1,1 @@
-export { Card } from './card';
+export * as Card from './index.parts';

@@ -1,4 +1,5 @@
 import type { ElementProps } from '@/shared/types/jsx/elementProps';
+import { cva } from 'class-variance-authority';
 import { clsx } from 'clsx';
 import type { FC } from 'react';
 
@@ -19,7 +20,7 @@ export interface ITypographyProps extends ElementProps<'p'> {
   variant: TypographyVariantType;
 }
 
-const variantToClassName: Record<TypographyVariantType, string> = {
+const typographyVariantsToClasses: Record<TypographyVariantType, string> = {
   'special-title-1': 'text-special-title-1',
   'special-title-2': 'text-special-title-2',
   'special-body-1': 'text-special-body-1',
@@ -34,9 +35,68 @@ const variantToClassName: Record<TypographyVariantType, string> = {
   'caption-2': 'text-caption-2',
 };
 
-export const Typography: FC<ITypographyProps> = ({ variant, ...htmlProps }) => (
+const typographyVariants = cva('', {
+  variants: {
+    variant: typographyVariantsToClasses,
+  },
+  defaultVariants: {
+    variant: 'body-1',
+  },
+});
+
+export const TypographyBase: FC<ITypographyProps> = ({ variant, className, ...htmlProps }) => (
   <p
     {...htmlProps}
-    className={clsx(variantToClassName[variant], htmlProps.className)}
+    className={clsx(typographyVariants({ variant }), className)}
   />
+);
+
+export type ITypographyVariantProps = Omit<ITypographyProps, 'variant'>;
+
+export const Body1: FC<ITypographyVariantProps> = (props) => (
+  <TypographyBase variant="body-1" {...props} />
+);
+
+export const Body2: FC<ITypographyVariantProps> = (props) => (
+  <TypographyBase variant="body-2" {...props} />
+);
+
+export const Body3: FC<ITypographyVariantProps> = (props) => (
+  <TypographyBase variant="body-3" {...props} />
+);
+
+export const Caption1: FC<ITypographyVariantProps> = (props) => (
+  <TypographyBase variant="caption-1" {...props} />
+);
+
+export const Caption2: FC<ITypographyVariantProps> = (props) => (
+  <TypographyBase variant="caption-2" {...props} />
+);
+
+export const SpecialBody1: FC<ITypographyVariantProps> = (props) => (
+  <TypographyBase variant="special-body-1" {...props} />
+);
+
+export const SpecialBody2: FC<ITypographyVariantProps> = (props) => (
+  <TypographyBase variant="special-body-2" {...props} />
+);
+
+export const SpecialTitle1: FC<ITypographyVariantProps> = (props) => (
+  <TypographyBase variant="special-title-1" {...props} />
+);
+
+export const SpecialTitle2: FC<ITypographyVariantProps> = (props) => (
+  <TypographyBase variant="special-title-2" {...props} />
+);
+
+export const Title1: FC<ITypographyVariantProps> = (props) => (
+  <TypographyBase variant="title-1" {...props} />
+);
+
+export const Title2: FC<ITypographyVariantProps> = (props) => (
+  <TypographyBase variant="title-2" {...props} />
+);
+
+export const Title3: FC<ITypographyVariantProps> = (props) => (
+  <TypographyBase variant="title-3" {...props} />
 );

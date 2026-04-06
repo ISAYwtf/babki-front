@@ -1,8 +1,8 @@
-import { AppRouter } from '@/app/browser-router';
-import { ThemeProvider } from '@/shared/ui/theme-provider';
-import { QueryClientProvider } from '@tanstack/react-query';
-import { queryClient } from '@/shared/queryClient';
 import { Suspense } from 'react';
+import { QueryClientProvider } from '@tanstack/react-query';
+import { AppRouter } from '@/app/router';
+import { ThemeProvider } from '@/shared/ui/theme-provider';
+import { queryClient } from '@/shared/lib/query-client';
 
 function App() {
   return (

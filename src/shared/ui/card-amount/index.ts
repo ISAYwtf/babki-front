@@ -1,1 +1,1 @@
-export { CardAmount } from './cardAmount';
+export { CardAmount } from './card-amount';

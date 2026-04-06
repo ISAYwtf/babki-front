@@ -1,2 +1,1 @@
-export { Button } from './button';
-export { buttonVariants } from './variants';
+export * as Button from './index.parts';

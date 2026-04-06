@@ -36,6 +36,9 @@ const { jsFiles, tsFiles } = helpers.extensions;
 export default defineConfig([
   // Ignore files and folders listed in .gitignore
   includeIgnoreFile(gitignorePath),
+  {
+    ignores: ['src/routeTree.gen.ts'],
+  },
   // JavaScript config
   ...jsConfig,
   // React config

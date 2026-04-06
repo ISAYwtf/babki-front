@@ -1,6 +1,5 @@
-import { CardBase } from '@/shared/ui/card-base';
-import { Body2 } from '@/shared/ui/typography/Body2';
-import { SpecialBody2 } from '@/shared/ui/typography/SpecialBody2';
+import { Card } from '@/shared/ui/card';
+import { Typography } from '@/shared/ui/typography';
 import { Menu } from '@base-ui/react';
 import { LucideChevronUp } from 'lucide-react';
 import {
@@ -20,26 +19,26 @@ export const YearCard: FC = () => {
   const [selectedYear, setSelectedYear] = useState(years[0]);
 
   return (
-    <CardBase className={classes.root}>
+    <Card.Base className="flex w-2xs py-5 px-4">
       <Menu.Root>
         <Menu.Trigger className={classes.trigger}>
-          <SpecialBody2>
+          <Typography.SpecialBody2>
             {selectedYear.label}
             {' '}
             год
-          </SpecialBody2>
+          </Typography.SpecialBody2>
           <LucideChevronUp className={classes.chevron} size={20} />
         </Menu.Trigger>
         <Menu.Portal>
           <Menu.Positioner>
-            <Menu.Popup className={classes.popup} render={<CardBase />}>
+            <Menu.Popup className="flex flex-col rounded-t-none border-t-0 w-2xs p-1" render={<Card.Base />}>
               <Menu.RadioGroup value={selectedYear} onValueChange={setSelectedYear}>
                 {years.map((year) => (
                   <Menu.RadioItem
                     key={year.value}
                     value={year}
                     className={classes.popupItem}
-                    render={<Body2 />}
+                    render={<Typography.Body2 />}
                     closeOnClick
                   >
                     {year.label}
@@ -52,6 +51,6 @@ export const YearCard: FC = () => {
           </Menu.Positioner>
         </Menu.Portal>
       </Menu.Root>
-    </CardBase>
+    </Card.Base>
   );
 };

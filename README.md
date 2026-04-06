@@ -1,73 +1,127 @@
-# React + TypeScript + Vite
+# Babki Front
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Babki Front is a React + TypeScript + Vite single-page finance dashboard. The current repo implements a frontend-focused prototype for viewing yearly budget signals such as income, expenses, savings, carryover, and purchase items.
 
-Currently, two official plugins are available:
+## Product Summary
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+The UI appears aimed at a Russian-speaking person or household manager tracking personal finances over a year. That inference comes from the finance-focused screen structure, the year selector, and the Russian translation strings in the repo.
 
-## React Compiler
+Current feature coverage in the codebase:
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- Finance dashboard header and summary cards
+- Year switcher with local component state
+- Carryover and income/expense breakdown cards
+- Purchase table with dated items and amounts
+- Add/edit action affordances on cards
+- Localized Russian UI copy through i18next
+- Theme persistence through local storage
 
-## Expanding the ESLint configuration
+## Technical Work In The Application
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+This repository is currently centered on frontend application structure and reusable UI composition rather than a fully wired data product.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+Implemented technical work:
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+- React 19 application bootstrapped with Vite and TypeScript
+- Shared app shell in [`src/app/app.tsx`](/Users/isay/WebstormProjects/babki-front/src/app/app.tsx) with:
+  - TanStack Query `QueryClientProvider`
+  - local `ThemeProvider`
+  - suspense-wrapped router rendering
+- Typed app router in [`src/app/router.tsx`](/Users/isay/WebstormProjects/babki-front/src/app/router.tsx) using TanStack Router
+- File-based route definitions in [`src/pages`](/Users/isay/WebstormProjects/babki-front/src/pages) with generated route tree support
+- Main screen assembly in [`src/pages/main.tsx`](/Users/isay/WebstormProjects/babki-front/src/pages/main.tsx)
+- Shared design primitives under [`src/shared/ui`](/Users/isay/WebstormProjects/babki-front/src/shared/ui)
+- Russian translations loaded from [`src/shared/lib/i18n/ru/main.json`](/Users/isay/WebstormProjects/babki-front/src/shared/lib/i18n/ru/main.json)
+- Theme and language preference persisted with `localStorage`
+- Tailwind CSS v4 integration through Vite
+- SVG component loading with `vite-plugin-svgr`
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+Not found in repo:
+
+- Implemented backend or API integration
+- Persisted finance data source
+- Environment variable requirements
+- Auth, roles, or multi-user flows
+- Automated tests
+
+## Architecture Overview
+
+Application flow based on repo evidence:
+
+1. [`src/app/main.tsx`](/Users/isay/WebstormProjects/babki-front/src/app/main.tsx) mounts React, imports global styles, and initializes i18n.
+2. [`src/app/app.tsx`](/Users/isay/WebstormProjects/babki-front/src/app/app.tsx) provides query and theme context for the whole app.
+3. [`src/app/router.tsx`](/Users/isay/WebstormProjects/babki-front/src/app/router.tsx) creates the TanStack router with typed context and generated route tree wiring.
+4. [`src/pages/__root.tsx`](/Users/isay/WebstormProjects/babki-front/src/pages/__root.tsx) defines the root route shell, outlet, and route-level error handling.
+5. [`src/pages/index.tsx`](/Users/isay/WebstormProjects/babki-front/src/pages/index.tsx) defines the `/` route and lazy-loads the shared main screen from the `/main` module.
+6. [`src/pages/main.tsx`](/Users/isay/WebstormProjects/babki-front/src/pages/main.tsx) defines the `/main` route and exports the shared page component.
+7. [`src/features/change-year/changeYear.tsx`](/Users/isay/WebstormProjects/babki-front/src/features/change-year/changeYear.tsx) manages the selected year with local React state.
+
+Data flow today is mostly static:
+
+- Screen values are defined directly in component-level constants and props
+- Query client infrastructure exists, but no implemented fetch flow was found in `src`
+- Axios is installed, but no concrete API client usage was found in the frontend source
+
+## Stack
+
+- React 19
+- TypeScript 5
+- Vite 7
+- TanStack Router 1
+- TanStack React Query 5
+- i18next + react-i18next
+- Tailwind CSS 4
+- Base UI
+- Lucide icons
+
+## Project Structure
+
+```text
+src/
+  app/          App bootstrap, providers, and router instance
+  features/     Feature-scoped UI logic
+  pages/        File-based route modules and route-level composition
+  shared/       Shared UI, styles, types, and utilities
+public/         Static assets
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Getting Started
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+Install dependencies:
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
 ```
+
+Run the development server:
+
+```bash
+npm run dev
+```
+
+Create a production build:
+
+```bash
+npm run build
+```
+
+Preview the production build locally:
+
+```bash
+npm run preview
+```
+
+Lint the project:
+
+```bash
+npm run lint
+```
+
+File-based routing notes:
+
+- `src/pages` is the TanStack Router route tree source.
+- `src/routeTree.gen.ts` is generated by the router plugin and should not be edited manually.
+
+## Current Limitations
+
+The current implementation reads as a polished dashboard prototype rather than a fully integrated finance system. Several sections in the main page still use hard-coded values and placeholder content, so the next technical step would likely be connecting the existing UI shell to a real domain model and API.

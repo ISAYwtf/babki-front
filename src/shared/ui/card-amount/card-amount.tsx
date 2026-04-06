@@ -1,21 +1,21 @@
 import { getCurrentCurrencyCode } from '@/shared/lib/currency';
-import { CardBase } from '@/shared/ui/card-base';
-import type { ICardBaseProps } from '@/shared/ui/card-base/cardBase';
-import { Body2 } from '@/shared/ui/typography/Body2';
-import { SpecialBody1 } from '@/shared/ui/typography/SpecialBody1';
-import { Title3 } from '@/shared/ui/typography/Title3';
+import { Card } from '@/shared/ui/card';
+import { Typography } from '@/shared/ui/typography';
 import clsx from 'clsx';
 import i18next from 'i18next';
 import {
   LucideArrowDown,
   LucideArrowUp,
 } from 'lucide-react';
-import type { FC } from 'react';
+import type {
+  ComponentProps,
+  FC,
+} from 'react';
 
 type CurrencyType = string;
 type DiffStyleType = 'percent' | 'currency';
 
-interface ICardAmountProps extends ICardBaseProps {
+interface ICardAmountProps extends ComponentProps<typeof Card.Base> {
   title?: string;
   value: number;
   currency?: CurrencyType;
@@ -52,26 +52,26 @@ export const CardAmount: FC<ICardAmountProps> = ({
   const DiffIcon = isIncrease ? LucideArrowUp : LucideArrowDown;
 
   return (
-    <CardBase {...htmlProps} className={clsx('flex flex-col gap-2.5 max-w-xl p-3.5', htmlProps.className)}>
+    <Card.Base {...htmlProps} className={clsx('flex flex-col gap-2.5 max-w-xl p-3.5', htmlProps.className)}>
       {title && (
-      <Title3 className="text-muted-foreground uppercase">
+      <Typography.Title3 className="text-muted-foreground uppercase">
         {title}
-      </Title3>
+      </Typography.Title3>
       )}
       <div className="flex justify-between items-end gap-2.5">
-        <SpecialBody1 title={value.toLocaleString()}>
+        <Typography.SpecialBody1 title={value.toLocaleString()}>
           {formatAmount.format(value)}
-        </SpecialBody1>
+        </Typography.SpecialBody1>
         {!!diff && (
-          <Body2 className={clsx('flex items-center', isIncrease ? 'text-success' : 'text-destructive')}>
+          <Typography.Body2 className={clsx('flex items-center', isIncrease ? 'text-success' : 'text-destructive')}>
             {formatDiff.format(diff)}
             <DiffIcon
               className="ml-1 size-4"
               strokeWidth={1.75}
             />
-          </Body2>
+          </Typography.Body2>
         )}
       </div>
-    </CardBase>
+    </Card.Base>
   );
 };
