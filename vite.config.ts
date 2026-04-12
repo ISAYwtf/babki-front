@@ -23,6 +23,7 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
+  envPrefix: 'FRONT_',
   css: {
     modules: {
       localsConvention: 'camelCase',

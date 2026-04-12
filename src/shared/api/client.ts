@@ -1,8 +1,9 @@
+import { env } from '@/shared/lib/env';
 import axios from 'axios';
 import { z } from 'zod';
 
 export const apiClient = axios.create({
-  baseURL: import.meta.env.VITE_API_URL ?? '',
+  baseURL: env.BASE_API_URL ?? '',
   headers: {
     'Content-Type': 'application/json',
   },
