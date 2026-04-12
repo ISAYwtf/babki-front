@@ -48,6 +48,7 @@ export default defineConfig([
   {
     files: [...jsFiles, ...tsFiles],
     rules: {
+      'no-underscore-dangle': [2, { allow: ['_id'] }],
       'react/react-in-jsx-scope': 0,
       'react/function-component-definition': [2, {
         namedComponents: ['function-declaration', 'function-expression', 'arrow-function'],

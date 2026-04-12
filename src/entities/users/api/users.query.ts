@@ -4,6 +4,7 @@ import {
   useMutation,
   useQuery,
   useQueryClient,
+  useSuspenseQuery,
 } from '@tanstack/react-query';
 import { usersApi } from './users.api';
 import type {
@@ -33,7 +34,7 @@ export const usersQueryOptions = {
 
 export const useUsersListQuery = (query: ListUsersQuery = {}) => useQuery(usersQueryOptions.findAll(query));
 
-export const useUserQuery = (userId: string) => useQuery(usersQueryOptions.findOne(userId));
+export const useUserQuery = (userId: string) => useSuspenseQuery(usersQueryOptions.findOne(userId));
 
 export const useCreateUserMutation = () => {
   const queryClient = useQueryClient();

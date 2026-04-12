@@ -1,3 +1,6 @@
+import { usersQueryOptions } from '@/entities/users';
+import { env } from '@/shared/lib/env';
+import { Debts } from '@/widgets/debts';
 import { createFileRoute } from '@tanstack/react-router';
 import { YearCard } from '@/features/change-year/changeYear';
 import { CardAmount } from '@/shared/ui/card-amount';
@@ -28,7 +31,7 @@ const incomeExpenseItems: ICardListItem[] = [
   { title: i18next.t('incomeExpense.debtCollection'), value: 100 },
 ];
 
-export function MainPage() {
+function MainPage() {
   const { t } = useTranslation();
 
   return (
@@ -118,6 +121,9 @@ export function MainPage() {
                 </Card.Content>
               </Card.Base>
             </div>
+            <div className="grid grid-flow-col-dense gap-5">
+              <Debts />
+            </div>
           </div>
         </div>
       </div>
@@ -126,7 +132,8 @@ export function MainPage() {
 }
 
 export const Route = createFileRoute('/main')({
+  loader: ({ context }) => (
+    context.queryClient.ensureQueryData(usersQueryOptions.findOne(env.USER_ID))
+  ),
   component: MainPage,
 });
-
-export default MainPage;
