@@ -13,7 +13,7 @@ interface IHeaderProps extends HTMLProps<HTMLDivElement> {
 export const Header: FC<IHeaderProps> = ({
   className, title, subtitle, ...htmlProps
 }) => (
-  <div {...htmlProps} className={clsx('flex p-7 mx-auto mt-10 mb-2.5 w-fit', className)}>
+  <div {...htmlProps} className={clsx('flex p-7 mx-auto w-fit', className)}>
     <Typography.Title1>
       {title}
       {' '}

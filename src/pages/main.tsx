@@ -3,6 +3,9 @@ import { env } from '@/shared/lib/env';
 import { Debts } from '@/widgets/debts';
 import { createFileRoute } from '@tanstack/react-router';
 import { YearCard } from '@/features/change-year/changeYear';
+import {
+  MonthSwitcher,
+} from '@/features/change-month';
 import { CardAmount } from '@/shared/ui/card-amount';
 import {
   CardList,
@@ -126,6 +129,7 @@ function MainPage() {
             </div>
           </div>
         </div>
+        <MonthSwitcher />
       </div>
     </div>
   );
