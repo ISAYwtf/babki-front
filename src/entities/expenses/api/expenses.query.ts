@@ -2,7 +2,6 @@ import {
   mutationOptions,
   queryOptions,
   useMutation,
-  useQuery,
   useQueryClient,
 } from '@tanstack/react-query';
 import { expensesApi } from './expenses.api';
@@ -40,14 +39,6 @@ export const expensesQueryOptions = {
     queryFn: () => expensesApi.findOne(userId, expenseId),
   }),
 };
-
-export const useExpensesListQuery = (userId: string, query: ListExpensesQuery = {}) => useQuery(
-  expensesQueryOptions.findAll(userId, query),
-);
-
-export const useExpenseQuery = (userId: string, expenseId: string) => useQuery(
-  expensesQueryOptions.findOne(userId, expenseId),
-);
 
 export const useCreateExpenseMutation = () => {
   const queryClient = useQueryClient();

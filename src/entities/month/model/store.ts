@@ -1,3 +1,7 @@
+import {
+  format,
+  startOfMonth,
+} from 'date-fns';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import {
@@ -8,6 +12,7 @@ import {
 export interface IMonthStore {
   selectedMonth: number;
   setSelectedMonth: (month: number) => void;
+  getSelectedPeriod: () => { from: string; to: string };
 }
 
 function getInitialMonth() {
@@ -20,9 +25,20 @@ function clampMonth(month: number) {
 
 export const useMonthStore = create<IMonthStore>()(
   persist(
-    (set) => ({
+    (set, getState) => ({
       selectedMonth: getInitialMonth(),
       setSelectedMonth: (month) => set({ selectedMonth: clampMonth(month) }),
+      getSelectedPeriod: () => {
+        const { selectedMonth } = getState();
+        const selectedDate = new Date().setMonth(selectedMonth);
+        const formattedSelectedDate = format(new Date().setMonth(selectedMonth), 'yyyy-MM-dd');
+        const startOfSelectedMonth = format(startOfMonth(selectedDate), 'yyyy-MM-dd');
+
+        return {
+          from: startOfSelectedMonth,
+          to: formattedSelectedDate,
+        };
+      },
     }),
     {
       name: 'babki-selected-month',

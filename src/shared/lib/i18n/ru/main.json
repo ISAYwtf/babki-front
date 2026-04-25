@@ -15,6 +15,9 @@
   "expenses": {
     "title": "Расходы"
   },
+  "balance": {
+    "title": "Баланс"
+  },
   "fromLastYear": {
     "title": "С прошлого года",
     "rest": "Остаток",

@@ -15,13 +15,13 @@ interface UpsertBalanceMutationPayload {
 
 export const balancesQueryKeys = {
   all: ['balances'] as const,
-  detail: (userId: string) => [...balancesQueryKeys.all, userId] as const,
+  detail: (userId: string, asOfDate?: string) => [...balancesQueryKeys.all, userId, asOfDate] as const,
 };
 
 export const balancesQueryOptions = {
-  findByUserId: (userId: string) => queryOptions({
-    queryKey: balancesQueryKeys.detail(userId),
-    queryFn: () => balancesApi.findByUserId(userId),
+  findByUserId: (userId: string, asOfDate?: string) => queryOptions({
+    queryKey: balancesQueryKeys.detail(userId, asOfDate),
+    queryFn: () => balancesApi.findByUserId(userId, asOfDate),
   }),
 };
 

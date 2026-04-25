@@ -2,9 +2,7 @@ import {
   mutationOptions,
   queryOptions,
   useMutation,
-  useQuery,
   useQueryClient,
-  useSuspenseQuery,
 } from '@tanstack/react-query';
 import { usersApi } from './users.api';
 import type {
@@ -32,10 +30,6 @@ export const usersQueryOptions = {
   }),
 };
 
-export const useUsersListQuery = (query: ListUsersQuery = {}) => useQuery(usersQueryOptions.findAll(query));
-
-export const useUserQuery = (userId: string) => useSuspenseQuery(usersQueryOptions.findOne(userId));
-
 export const useCreateUserMutation = () => {
   const queryClient = useQueryClient();
 
@@ -57,7 +51,7 @@ export const useUpdateUserMutation = () => {
       mutationFn: ({ userId, payload }: { userId: string; payload: UpdateUserDto }) => usersApi.update(userId, payload),
       onSuccess: async (user) => {
         await queryClient.invalidateQueries({ queryKey: usersQueryKeys.all });
-        /* eslint-disable-next-line no-underscore-dangle */
+
         const updatedUserId = user._id;
         queryClient.setQueryData(usersQueryKeys.detail(updatedUserId), user);
       },

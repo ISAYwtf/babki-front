@@ -1,6 +1,9 @@
 import { usersQueryOptions } from '@/entities/users';
 import { env } from '@/shared/lib/env';
+import { Balance } from '@/widgets/balance';
 import { Debts } from '@/widgets/debts';
+import { Incomes } from '@/widgets/incomes';
+import { Savings } from '@/widgets/savings';
 import { createFileRoute } from '@tanstack/react-router';
 import { YearCard } from '@/features/change-year/changeYear';
 import {
@@ -53,11 +56,6 @@ function MainPage() {
               title={t('incomes.title')}
               value={0}
               diff={0.36}
-            />
-            <CardAmount
-              title={t('savings.title')}
-              value={0}
-              diff={-0.36}
             />
             <CardAmount
               title={t('expenses.title')}
@@ -130,6 +128,9 @@ function MainPage() {
           </div>
         </div>
         <MonthSwitcher />
+        <Balance />
+        <Incomes />
+        <Savings />
       </div>
     </div>
   );

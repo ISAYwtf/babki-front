@@ -2,7 +2,6 @@ import {
   mutationOptions,
   queryOptions,
   useMutation,
-  useQuery,
   useQueryClient,
 } from '@tanstack/react-query';
 import { expenseCategoriesApi } from './expense-categories.api';
@@ -38,12 +37,6 @@ export const expenseCategoriesQueryOptions = {
     queryFn: () => expenseCategoriesApi.findOne(userId, categoryId),
   }),
 };
-
-export const useExpenseCategoriesQuery = (userId: string) => useQuery(expenseCategoriesQueryOptions.findAll(userId));
-
-export const useExpenseCategoryQuery = (userId: string, categoryId: string) => useQuery(
-  expenseCategoriesQueryOptions.findOne(userId, categoryId),
-);
 
 export const useCreateExpenseCategoryMutation = () => {
   const queryClient = useQueryClient();

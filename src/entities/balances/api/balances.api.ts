@@ -8,8 +8,10 @@ import {
 class BalancesApi {
   private readonly client = apiClient;
 
-  async findByUserId(userId: string) {
-    const response = await this.client.get(`/users/${userId}/balance`);
+  async findByUserId(userId: string, asOfDate?: string) {
+    const response = await this.client.get(`/users/${userId}/balance`, {
+      params: { asOfDate },
+    });
 
     return parseWithSchema(balanceSchema, response.data);
   }

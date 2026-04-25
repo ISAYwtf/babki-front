@@ -1,11 +1,15 @@
-import { useDebtsListQuery } from '@/entities/debts';
-import { useUserQuery } from '@/entities/users';
+import { debtsQueryOptions } from '@/entities/debts';
+import { usersQueryOptions } from '@/entities/users';
 import { CreateDebtButton } from '@/features/create-debt';
 import { getCurrentCurrencyCode } from '@/shared/lib/currency';
 import { env } from '@/shared/lib/env';
 import { Button } from '@/shared/ui/button';
 import { Card } from '@/shared/ui/card';
 import { Table } from '@/shared/ui/table';
+import {
+  useQuery,
+  useSuspenseQuery,
+} from '@tanstack/react-query';
 import {
   format,
 } from 'date-fns';
@@ -25,8 +29,10 @@ const formatAmount = new Intl.NumberFormat(locale, {
 });
 
 export const Debts: FC = () => {
-  const { data: userData } = useUserQuery(env.USER_ID);
-  const { data: debtsData, isLoading } = useDebtsListQuery(userData._id, { status: 'active', limit: 5 });
+  const { data: userData } = useSuspenseQuery(usersQueryOptions.findOne(env.USER_ID));
+  const { data: debtsData, isLoading } = useQuery(
+    debtsQueryOptions.findAll(userData._id, { status: 'active', limit: 5 }),
+  );
   const { t } = useTranslation();
 
   if (isLoading) {

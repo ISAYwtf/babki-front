@@ -32,3 +32,8 @@ export const paginatedResponseSchema = <TSchema extends z.ZodTypeAny>(
   page: z.number().int().min(1),
   limit: z.number().int().min(1),
 });
+
+export const periodQuerySchema = z.object({
+  from: dateStringSchema.optional(),
+  to: dateStringSchema.optional(),
+});

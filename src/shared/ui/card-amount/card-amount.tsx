@@ -15,21 +15,27 @@ import type {
 type CurrencyType = string;
 type DiffStyleType = 'percent' | 'currency';
 
+type ClassNames<Keys extends string = string> = Partial<Record<Keys, string>>;
+
 interface ICardAmountProps extends ComponentProps<typeof Card.Base> {
   title?: string;
   value: number;
+  valueNotation?: Intl.NumberFormatOptions['notation'];
   currency?: CurrencyType;
   diff?: number;
   diffStyle?: DiffStyleType;
+  classes?: ClassNames<'value'>;
 }
 
 export const CardAmount: FC<ICardAmountProps> = ({
   children,
   title,
   value,
+  valueNotation = 'compact',
   currency: externalCurrency,
   diff,
   diffStyle = 'percent',
+  classes,
   ...htmlProps
 }) => {
   const locale = i18next.language;
@@ -39,7 +45,7 @@ export const CardAmount: FC<ICardAmountProps> = ({
   const formatAmount = new Intl.NumberFormat(locale, {
     style: 'currency',
     currency,
-    notation: 'compact',
+    notation: valueNotation,
   });
 
   const formatDiff = new Intl.NumberFormat(locale, {
@@ -59,11 +65,16 @@ export const CardAmount: FC<ICardAmountProps> = ({
       </Typography.Title3>
       )}
       <div className="flex justify-between items-end gap-2.5">
-        <Typography.SpecialBody1 title={value.toLocaleString()}>
+        <Typography.SpecialBody1 title={value.toLocaleString()} className={classes?.value}>
           {formatAmount.format(value)}
         </Typography.SpecialBody1>
         {!!diff && (
-          <Typography.Body2 className={clsx('flex items-center', isIncrease ? 'text-success' : 'text-destructive')}>
+          <Typography.Body2
+            className={clsx(
+              'flex items-center',
+              isIncrease ? 'text-success' : 'text-destructive',
+            )}
+          >
             {formatDiff.format(diff)}
             <DiffIcon
               className="ml-1 size-4"

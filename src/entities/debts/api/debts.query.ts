@@ -2,7 +2,6 @@ import {
   mutationOptions,
   queryOptions,
   useMutation,
-  useQuery,
   useQueryClient,
 } from '@tanstack/react-query';
 import { debtsApi } from './debts.api';
@@ -31,12 +30,6 @@ export const debtsQueryOptions = {
     queryFn: () => debtsApi.findOne(userId, debtId),
   }),
 };
-
-export const useDebtsListQuery = (userId: string, query: ListDebtsQuery = {}) => useQuery(
-  debtsQueryOptions.findAll(userId, query),
-);
-
-export const useDebtQuery = (userId: string, debtId: string) => useQuery(debtsQueryOptions.findOne(userId, debtId));
 
 export const useCreateDebtMutation = () => {
   const queryClient = useQueryClient();
