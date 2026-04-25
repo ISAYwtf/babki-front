@@ -1,4 +1,5 @@
 import { balancesQueryOptions } from '@/entities/balances';
+import { useSelectedPeriod } from '@/entities/month/hooks/useSelectedPeriod';
 import {
   usersQueryOptions,
 } from '@/entities/users';
@@ -12,8 +13,9 @@ import type { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
 export const Savings: FC = () => {
+  const selectedPeriod = useSelectedPeriod();
   const { data: userData } = useSuspenseQuery(usersQueryOptions.findOne(env.USER_ID));
-  const { data: balanceData, isLoading } = useQuery(balancesQueryOptions.findByUserId(userData._id));
+  const { data: balanceData, isLoading } = useQuery(balancesQueryOptions.findByUserId(userData._id, selectedPeriod.to));
   const { t } = useTranslation();
 
   if (isLoading) {
@@ -22,14 +24,10 @@ export const Savings: FC = () => {
     );
   }
 
-  if (!balanceData) {
-    return null;
-  }
-
   return (
     <CardAmount
       title={t('savings.title')}
-      value={balanceData.savingsAmount}
+      value={balanceData?.savingsAmount ?? 0}
       valueNotation="standard"
     />
   );

@@ -2,6 +2,7 @@ import { usersQueryOptions } from '@/entities/users';
 import { env } from '@/shared/lib/env';
 import { Balance } from '@/widgets/balance';
 import { Debts } from '@/widgets/debts';
+import { Expenses } from '@/widgets/expenses';
 import { Incomes } from '@/widgets/incomes';
 import { Savings } from '@/widgets/savings';
 import { createFileRoute } from '@tanstack/react-router';
@@ -128,9 +129,14 @@ function MainPage() {
           </div>
         </div>
         <MonthSwitcher />
-        <Balance />
-        <Incomes />
-        <Savings />
+        <div className="grid gap-2.5 grid-cols-[1fr_minmax(auto,400px)]">
+          <Expenses />
+          <div className="flex flex-col gap-2.5">
+            <Balance />
+            <Incomes />
+            <Savings />
+          </div>
+        </div>
       </div>
     </div>
   );

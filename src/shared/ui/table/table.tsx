@@ -1,63 +1,66 @@
 import type { ComponentProps } from 'react';
 import { cn } from '@/shared/lib/shadcn-utils';
 
-export const TableBase = ({ className, ...props }: ComponentProps<'table'>) => (
-  <div data-slot="table-container" className="relative w-full overflow-x-auto">
-    <table
+export const TableBase = ({ className, ...props }: ComponentProps<'div'>) => (
+  <div data-slot="table-container" className={cn('relative w-full overflow-x-auto', className)}>
+    <div
       data-slot="table"
-      className={cn('w-full caption-bottom text-body-1', className)}
+      className="table w-full caption-bottom text-body-1 border-collapse"
       {...props}
     />
   </div>
 );
 
-export const TableHeader = ({ className, ...props }: ComponentProps<'thead'>) => (
-  <thead
+export const TableHeader = ({ className, ...props }: ComponentProps<'div'>) => (
+  <div
     data-slot="table-header"
-    className={cn('[&_tr]:border-b', className)}
+    className={cn('table-header-group [&_tr]:border-b', className)}
     {...props}
   />
 );
 
-export const TableBody = ({ className, ...props }: ComponentProps<'tbody'>) => (
-  <tbody
+export const TableBody = ({ className, ...props }: ComponentProps<'div'>) => (
+  <div
     data-slot="table-body"
-    className={cn('[&_tr:last-child]:border-0', className)}
+    className={cn('table-row-group', className)}
     {...props}
   />
 );
 
-export const TableFooter = ({ className, ...props }: ComponentProps<'tfoot'>) => (
-  <tfoot
+export const TableFooter = ({ className, ...props }: ComponentProps<'div'>) => (
+  <div
     data-slot="table-footer"
-    className={cn('bg-muted/50 border-t font-medium [&>tr]:last:border-b-0', className)}
+    className={cn('table-footer-group bg-muted/50 border-t font-medium [&>tr]:last:border-b-0', className)}
     {...props}
   />
 );
 
-export const TableRow = ({ className, ...props }: ComponentProps<'tr'>) => (
-  <tr
+export const TableRow = ({ className, ...props }: ComponentProps<'div'>) => (
+  <div
     data-slot="table-row"
-    className={cn('hover:bg-muted/50 data-[state=selected]:bg-muted border-b transition-colors', className)}
+    className={cn(`
+      table-row border-b last-of-type:border-0
+      hover:bg-muted/50 data-[state=selected]:bg-muted transition-colors
+    `, className)}
     {...props}
   />
 );
 
-export const TableHead = ({ className, ...props }: ComponentProps<'th'>) => (
-  <th
+export const TableHead = ({ className, ...props }: ComponentProps<'div'>) => (
+  <div
     data-slot="table-head"
     className={cn(`
-      text-foreground h-10 px-2 text-left align-middle
+      table-cell text-foreground h-10 px-5 text-left align-middle
       font-medium whitespace-nowrap [&:has([role=checkbox])]:pr-0
     `, className)}
     {...props}
   />
 );
 
-export const TableCell = ({ className, ...props }: ComponentProps<'td'>) => (
-  <td
+export const TableCell = ({ className, ...props }: ComponentProps<'div'>) => (
+  <div
     data-slot="table-cell"
-    className={cn('p-5 align-middle whitespace-nowrap [&:has([role=checkbox])]:pr-0', className)}
+    className={cn('table-cell p-5 align-middle whitespace-nowrap [&:has([role=checkbox])]:pr-0', className)}
     {...props}
   />
 );
@@ -65,10 +68,10 @@ export const TableCell = ({ className, ...props }: ComponentProps<'td'>) => (
 export const TableCaption = ({
   className,
   ...props
-}: ComponentProps<'caption'>) => (
-  <caption
+}: ComponentProps<'div'>) => (
+  <div
     data-slot="table-caption"
-    className={cn('text-muted-foreground mt-4 text-sm', className)}
+    className={cn('table-caption text-muted-foreground mt-4 text-sm', className)}
     {...props}
   />
 );

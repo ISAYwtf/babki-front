@@ -9,11 +9,15 @@ class BalancesApi {
   private readonly client = apiClient;
 
   async findByUserId(userId: string, asOfDate?: string) {
-    const response = await this.client.get(`/users/${userId}/balance`, {
+    const { data } = await this.client.get(`/users/${userId}/balance`, {
       params: { asOfDate },
     });
 
-    return parseWithSchema(balanceSchema, response.data);
+    if (!data) {
+      return null;
+    }
+
+    return parseWithSchema(balanceSchema, data);
   }
 
   async upsert(userId: string, payload: UpsertBalanceDto) {

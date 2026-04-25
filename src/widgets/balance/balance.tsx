@@ -10,9 +10,7 @@ import { useTranslation } from 'react-i18next';
 export const Balance: FC = () => {
   const selectedPeriod = useSelectedPeriod();
   const { data: userData } = useSuspenseQuery(usersQueryOptions.findOne(env.USER_ID));
-  const { data: balanceData = { currentAccountAmount: 0 }, isLoading } = useQuery(
-    balancesQueryOptions.findByUserId(userData._id, selectedPeriod.to),
-  );
+  const { data: balanceData, isLoading } = useQuery(balancesQueryOptions.findByUserId(userData._id, selectedPeriod.to));
   const { t } = useTranslation();
 
   if (isLoading) {
@@ -24,7 +22,7 @@ export const Balance: FC = () => {
   return (
     <CardAmount
       title={t('balance.title')}
-      value={balanceData.currentAccountAmount}
+      value={balanceData?.currentAccountAmount ?? 0}
       valueNotation="standard"
       classes={{
         value: 'text-success',

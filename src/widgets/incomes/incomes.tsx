@@ -10,7 +10,7 @@ import { useTranslation } from 'react-i18next';
 export const Incomes: FC = () => {
   const selectedPeriod = useSelectedPeriod();
   const { data: userData } = useSuspenseQuery(usersQueryOptions.findOne(env.USER_ID));
-  const { data: incomesData = { totalRevenue: 0 }, isLoading } = useQuery(
+  const { data: incomesData, isLoading } = useQuery(
     incomesQueryOptions.findTotalRevenue(userData._id, selectedPeriod),
   );
   const { t } = useTranslation();
@@ -24,7 +24,7 @@ export const Incomes: FC = () => {
   return (
     <CardAmount
       title={t('incomes.title')}
-      value={incomesData?.totalRevenue}
+      value={incomesData?.totalRevenue ?? 0}
       valueNotation="standard"
     />
   );

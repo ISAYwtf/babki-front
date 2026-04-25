@@ -13,7 +13,14 @@
     "title": "Накопления"
   },
   "expenses": {
-    "title": "Расходы"
+    "title": "Расходы",
+    "expandItems": "Развернуть",
+    "collapseItems": "Свернуть",
+    "itemFields": {
+      "name": "Наименование",
+      "quantity": "Количество",
+      "price": "Цена"
+    }
   },
   "balance": {
     "title": "Баланс"

@@ -2,7 +2,6 @@ import {
   mutationOptions,
   queryOptions,
   useMutation,
-  useQuery,
   useQueryClient,
 } from '@tanstack/react-query';
 import { balancesApi } from './balances.api';
@@ -24,8 +23,6 @@ export const balancesQueryOptions = {
     queryFn: () => balancesApi.findByUserId(userId, asOfDate),
   }),
 };
-
-export const useBalanceQuery = (userId: string) => useQuery(balancesQueryOptions.findByUserId(userId));
 
 export const useUpsertBalanceMutation = () => {
   const queryClient = useQueryClient();
