@@ -32,13 +32,13 @@ interface CreateDebtButtonProps {
 const mapErrorMessage = (code: string | undefined) => {
   switch (code) {
     case 'required':
-      return i18next.t('debts.create.validation.required');
+      return i18next.t('validation.required');
     case 'invalid':
-      return i18next.t('debts.create.validation.amountInvalid');
+      return i18next.t('validation.amountInvalid');
     case 'min':
-      return i18next.t('debts.create.validation.amountMin');
+      return i18next.t('validation.amountMin');
     case 'tooLong':
-      return i18next.t('debts.create.validation.nameTooLong');
+      return i18next.t('validation.nameTooLong');
     default:
       return undefined;
   }

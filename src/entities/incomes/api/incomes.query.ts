@@ -25,6 +25,9 @@ export const incomesQueryKeys = {
   all: ['incomes'] as const,
   lists: (userId: string) => [...incomesQueryKeys.all, userId, 'list'] as const,
   list: (userId: string, query: ListIncomesQuery) => [...incomesQueryKeys.lists(userId), query] as const,
+  totalRevenue: (userId: string, query: ListIncomesQuery) => [
+    ...incomesQueryKeys.lists(userId), query, 'totalRevenue',
+  ] as const,
   details: (userId: string) => [...incomesQueryKeys.all, userId, 'detail'] as const,
   detail: (userId: string, incomeId: string) => [...incomesQueryKeys.details(userId), incomeId] as const,
 };
@@ -39,7 +42,7 @@ export const incomesQueryOptions = {
     queryFn: () => incomesApi.findOne(userId, incomeId),
   }),
   findTotalRevenue: (userId: string, query: ListIncomesQuery = {}) => queryOptions({
-    queryKey: incomesQueryKeys.list(userId, query),
+    queryKey: incomesQueryKeys.totalRevenue(userId, query),
     queryFn: () => incomesApi.findTotalRevenue(userId, query),
   }),
 };

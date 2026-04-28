@@ -23,6 +23,7 @@ const formatAmount = new Intl.NumberFormat(locale, {
   style: 'currency',
   currency: getCurrentCurrencyCode(),
   notation: 'standard',
+  minimumFractionDigits: 0,
 });
 
 export const Expenses: FC = () => {
@@ -74,7 +75,7 @@ export const Expenses: FC = () => {
                     <div className="flex flex-col gap-1">
                       {formatAmount.format(amount)}
                       <Body2 className="text-muted-foreground">
-                        {expenseDate && format(new Date(expenseDate), 'LLLL d, y', { locale: ru })}
+                        {expenseDate && format(expenseDate, 'LLLL d, y', { locale: ru })}
                       </Body2>
                     </div>
                   </Table.Cell>

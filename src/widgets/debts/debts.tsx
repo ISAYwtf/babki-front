@@ -26,6 +26,7 @@ const formatAmount = new Intl.NumberFormat(locale, {
   style: 'currency',
   currency: getCurrentCurrencyCode(),
   notation: 'standard',
+  minimumFractionDigits: 0,
 });
 
 export const Debts: FC = () => {
