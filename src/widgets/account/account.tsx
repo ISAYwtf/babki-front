@@ -1,4 +1,4 @@
-import { balancesQueryOptions } from '@/entities/balances';
+import { accountsQueryOptions } from '@/entities/accounts';
 import { useSelectedPeriod } from '@/entities/month/hooks/useSelectedPeriod';
 import { usersQueryOptions } from '@/entities/users';
 import { env } from '@/shared/lib/env';
@@ -7,10 +7,10 @@ import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
 import type { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
-export const Balance: FC = () => {
+export const Account: FC = () => {
   const selectedPeriod = useSelectedPeriod();
   const { data: userData } = useSuspenseQuery(usersQueryOptions.findOne(env.USER_ID));
-  const { data: balanceData, isLoading } = useQuery(balancesQueryOptions.findByUserId(userData._id, selectedPeriod.to));
+  const { data: accountData, isLoading } = useQuery(accountsQueryOptions.findByUserId(userData._id, selectedPeriod.to));
   const { t } = useTranslation();
 
   if (isLoading) {
@@ -21,8 +21,8 @@ export const Balance: FC = () => {
 
   return (
     <CardAmount
-      title={t('balance.title')}
-      value={balanceData?.currentAccountAmount ?? 0}
+      title={t('account.title')}
+      value={accountData?.amount ?? 0}
       valueNotation="standard"
       classes={{
         value: 'text-success',

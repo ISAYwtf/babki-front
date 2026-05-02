@@ -33,7 +33,7 @@
       "price": "Цена"
     }
   },
-  "balance": {
+  "account": {
     "title": "Баланс"
   },
   "fromLastYear": {

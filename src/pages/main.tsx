@@ -1,6 +1,6 @@
 import { usersQueryOptions } from '@/entities/users';
 import { env } from '@/shared/lib/env';
-import { Balance } from '@/widgets/balance';
+import { Account } from '@/widgets/account';
 import { Debts } from '@/widgets/debts';
 import { Expenses } from '@/widgets/expenses';
 import { Incomes } from '@/widgets/incomes';
@@ -132,7 +132,7 @@ function MainPage() {
         <div className="grid gap-2.5 grid-cols-[1fr_minmax(auto,400px)]">
           <Expenses />
           <div className="flex flex-col gap-2.5">
-            <Balance />
+            <Account />
             <Incomes />
             <Savings />
           </div>
