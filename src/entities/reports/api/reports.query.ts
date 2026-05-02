@@ -4,25 +4,25 @@ import type { MonthSummaryQuery, YearSummaryQuery } from '../model/schemas';
 
 export const reportsQueryKeys = {
   all: ['summaries'] as const,
-  month: (userId: string, query: MonthSummaryQuery) => [...reportsQueryKeys.all, userId, 'month', query] as const,
-  year: (userId: string, query: YearSummaryQuery) => [...reportsQueryKeys.all, userId, 'year', query] as const,
+  month: (query: MonthSummaryQuery) => [...reportsQueryKeys.all, 'month', query] as const,
+  year: (query: YearSummaryQuery) => [...reportsQueryKeys.all, 'year', query] as const,
 };
 
 export const reportsQueryOptions = {
-  monthSummary: (userId: string, query: MonthSummaryQuery) => queryOptions({
-    queryKey: reportsQueryKeys.month(userId, query),
-    queryFn: () => reportsApi.getMonthlySummary(userId, query),
+  monthSummary: (query: MonthSummaryQuery) => queryOptions({
+    queryKey: reportsQueryKeys.month(query),
+    queryFn: () => reportsApi.getMonthlySummary(query),
   }),
-  yearSummary: (userId: string, query: YearSummaryQuery) => queryOptions({
-    queryKey: reportsQueryKeys.year(userId, query),
-    queryFn: () => reportsApi.getYearlySummary(userId, query),
+  yearSummary: (query: YearSummaryQuery) => queryOptions({
+    queryKey: reportsQueryKeys.year(query),
+    queryFn: () => reportsApi.getYearlySummary(query),
   }),
 };
 
-export const useMonthSummaryQuery = (userId: string, query: MonthSummaryQuery) => useQuery(
-  reportsQueryOptions.monthSummary(userId, query),
+export const useMonthSummaryQuery = (query: MonthSummaryQuery) => useQuery(
+  reportsQueryOptions.monthSummary(query),
 );
 
-export const useYearSummaryQuery = (userId: string, query: YearSummaryQuery) => useQuery(
-  reportsQueryOptions.yearSummary(userId, query),
+export const useYearSummaryQuery = (query: YearSummaryQuery) => useQuery(
+  reportsQueryOptions.yearSummary(query),
 );

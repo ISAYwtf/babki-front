@@ -21,7 +21,6 @@ import { useTranslation } from 'react-i18next';
 import { createIncomeFormSchema, defaultCreateIncomeFormValues } from '../model/create-income-form';
 
 interface CreateIncomeButtonProps {
-  userId: string;
   className?: string;
 }
 
@@ -69,7 +68,6 @@ const getFirstFieldError = (errors: unknown[]) => {
 };
 
 export const CreateIncomeButton: FC<CreateIncomeButtonProps> = ({
-  userId,
   className,
 }) => {
   const { t } = useTranslation();
@@ -85,7 +83,6 @@ export const CreateIncomeButton: FC<CreateIncomeButtonProps> = ({
     },
     onSubmit: async ({ value, formApi }) => {
       await createIncomeMutation.mutateAsync({
-        userId,
         payload: {
           source: value.source.trim(),
           amount: Number(value.amount),

@@ -25,7 +25,6 @@ import {
 } from '../model/create-debt-form';
 
 interface CreateDebtButtonProps {
-  userId: string;
   className?: string;
 }
 
@@ -73,7 +72,6 @@ const getFirstFieldError = (errors: unknown[]) => {
 };
 
 export const CreateDebtButton: FC<CreateDebtButtonProps> = ({
-  userId,
   className,
 }) => {
   const { t } = useTranslation();
@@ -91,7 +89,6 @@ export const CreateDebtButton: FC<CreateDebtButtonProps> = ({
       const principalAmount = Number(value.amount);
 
       await createDebtMutation.mutateAsync({
-        userId,
         payload: {
           debtor: value.debtor.trim(),
           principalAmount,

@@ -1,17 +1,11 @@
 import { apiClient, parseWithSchema } from '@/shared/api';
-import {
-  savingSchema,
-  type UpsertSavingDto,
-  upsertSavingSchema,
-} from '../model/schemas';
+import { savingSchema } from '../model/schemas';
 
 class SavingsApi {
   private readonly client = apiClient;
 
-  async findByUserId(userId: string, asOfDate?: string) {
-    const { data } = await this.client.get(`/users/${userId}/savings`, {
-      params: { asOfDate },
-    });
+  async findByUserId() {
+    const { data } = await this.client.get('/savings');
 
     if (!data) {
       return null;
@@ -20,11 +14,14 @@ class SavingsApi {
     return parseWithSchema(savingSchema, data);
   }
 
-  async upsert(userId: string, payload: UpsertSavingDto) {
-    const body = upsertSavingSchema.parse(payload);
-    const response = await this.client.put(`/users/${userId}/savings`, body);
+  async create() {
+    const response = await this.client.post('/savings');
 
     return parseWithSchema(savingSchema, response.data);
+  }
+
+  async remove(savingId: string) {
+    await this.client.delete(`/savings/${savingId}`);
   }
 }
 

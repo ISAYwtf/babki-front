@@ -1,5 +1,4 @@
 import { usersQueryOptions } from '@/entities/users';
-import { env } from '@/shared/lib/env';
 import { Account } from '@/widgets/account';
 import { Debts } from '@/widgets/debts';
 import { Expenses } from '@/widgets/expenses';
@@ -144,7 +143,7 @@ function MainPage() {
 
 export const Route = createFileRoute('/main')({
   loader: ({ context }) => (
-    context.queryClient.ensureQueryData(usersQueryOptions.findOne(env.USER_ID))
+    context.queryClient.ensureQueryData(usersQueryOptions.me())
   ),
   component: MainPage,
 });

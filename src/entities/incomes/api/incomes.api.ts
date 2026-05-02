@@ -14,42 +14,42 @@ import {
 class IncomesApi {
   private readonly client = apiClient;
 
-  async create(userId: string, payload: CreateIncomeDto) {
+  async create(payload: CreateIncomeDto) {
     const body = createIncomeSchema.parse(payload);
-    const response = await this.client.post(`/users/${userId}/incomes`, body);
+    const response = await this.client.post('/incomes', body);
 
     return parseWithSchema(incomeSchema, response.data);
   }
 
-  async findAll(userId: string, query: ListIncomesQuery = {}) {
+  async findAll(query: ListIncomesQuery = {}) {
     const params = listIncomesQuerySchema.parse(query);
-    const response = await this.client.get(`/users/${userId}/incomes`, { params });
+    const response = await this.client.get('/incomes', { params });
 
     return parseWithSchema(incomesPaginatedResponseSchema, response.data);
   }
 
-  async findTotalRevenue(userId: string, query: ListIncomesQuery = {}) {
+  async findTotalRevenue(query: ListIncomesQuery = {}) {
     const params = listIncomesQuerySchema.parse(query);
-    const response = await this.client.get(`/users/${userId}/incomes/revenue`, { params });
+    const response = await this.client.get('/incomes/revenue', { params });
 
     return parseWithSchema(incomeRevenueSchema, response.data);
   }
 
-  async findOne(userId: string, incomeId: string) {
-    const response = await this.client.get(`/users/${userId}/incomes/${incomeId}`);
+  async findOne(incomeId: string) {
+    const response = await this.client.get(`/incomes/${incomeId}`);
 
     return parseWithSchema(incomeSchema, response.data);
   }
 
-  async update(userId: string, incomeId: string, payload: UpdateIncomeDto) {
+  async update(incomeId: string, payload: UpdateIncomeDto) {
     const body = updateIncomeSchema.parse(payload);
-    const response = await this.client.patch(`/users/${userId}/incomes/${incomeId}`, body);
+    const response = await this.client.patch(`/incomes/${incomeId}`, body);
 
     return parseWithSchema(incomeSchema, response.data);
   }
 
-  async remove(userId: string, incomeId: string) {
-    await this.client.delete(`/users/${userId}/incomes/${incomeId}`);
+  async remove(incomeId: string) {
+    await this.client.delete(`/incomes/${incomeId}`);
   }
 }
 

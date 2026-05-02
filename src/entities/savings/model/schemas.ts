@@ -5,7 +5,8 @@ export const savingSchema = z
   .object({
     userId: z.string(),
     amount: z.number().min(0),
-    asOfDate: dateStringSchema,
+    asOfDate: dateStringSchema.optional(),
+    history: z.array(z.unknown()).optional(),
   })
   .extend(entityMetaSchema.shape);
 

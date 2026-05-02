@@ -1,8 +1,6 @@
 import { expensesQueryOptions } from '@/entities/expenses';
 import { useSelectedPeriod } from '@/entities/month/hooks/useSelectedPeriod';
-import { usersQueryOptions } from '@/entities/users';
 import { getCurrentCurrencyCode } from '@/shared/lib/currency';
-import { env } from '@/shared/lib/env';
 import { Card } from '@/shared/ui/card';
 import { ExpenseCategory } from '@/shared/ui/expense-category';
 import { Table } from '@/shared/ui/table';
@@ -11,7 +9,7 @@ import {
   Body2,
 } from '@/shared/ui/typography/typography';
 import { Accordion } from '@base-ui/react';
-import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { format } from 'date-fns';
 import { ru } from 'date-fns/locale';
 import i18next from 'i18next';
@@ -28,9 +26,8 @@ const formatAmount = new Intl.NumberFormat(locale, {
 
 export const Expenses: FC = () => {
   const selectedPeriod = useSelectedPeriod();
-  const { data: userData } = useSuspenseQuery(usersQueryOptions.findOne(env.USER_ID));
   const { data: expensesData, isLoading } = useQuery(
-    expensesQueryOptions.findAll(userData._id, selectedPeriod),
+    expensesQueryOptions.findAll(selectedPeriod),
   );
   const { t } = useTranslation();
 

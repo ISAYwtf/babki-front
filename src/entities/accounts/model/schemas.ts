@@ -10,7 +10,8 @@ export const accountSchema = z
   .extend(entityMetaSchema.shape);
 
 export const upsertAccountSchema = z.object({
-  amount: z.number().min(0),
+  currentAccountAmount: z.number().min(0),
+  savingsAmount: z.number().min(0),
   asOfDate: dateStringSchema,
 });
 

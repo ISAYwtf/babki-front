@@ -14,13 +14,13 @@ interface UpsertAccountMutationPayload {
 
 const accountsQueryKeys = {
   all: ['accounts'] as const,
-  detail: (userId: string, asOfDate?: string) => [...accountsQueryKeys.all, userId, asOfDate] as const,
+  detail: (asOfDate?: string) => [...accountsQueryKeys.all, asOfDate] as const,
 };
 
 export const accountsQueryOptions = {
-  findByUserId: (userId: string, asOfDate?: string) => queryOptions({
-    queryKey: accountsQueryKeys.detail(userId, asOfDate),
-    queryFn: () => accountsApi.findByUserId(userId, asOfDate),
+  findByDate: (asOfDate?: string) => queryOptions({
+    queryKey: accountsQueryKeys.detail(asOfDate),
+    queryFn: () => accountsApi.findByDate(asOfDate),
   }),
 };
 
@@ -29,9 +29,9 @@ export const useUpsertAccountMutation = () => {
 
   return useMutation(
     mutationOptions({
-      mutationFn: ({ userId, payload }: UpsertAccountMutationPayload) => accountsApi.upsert(userId, payload),
-      onSuccess: (account, { userId }) => {
-        queryClient.setQueryData(accountsQueryKeys.detail(userId), account);
+      mutationFn: ({ payload }: UpsertAccountMutationPayload) => accountsApi.create(payload),
+      onSuccess: (account) => {
+        queryClient.setQueryData(accountsQueryKeys.detail(), account);
       },
     }),
   );

@@ -12,39 +12,37 @@ const zExpenseCategoryArraySchema = expenseCategorySchema.array();
 class ExpenseCategoriesApi {
   private readonly client = apiClient;
 
-  async create(userId: string, payload: CreateExpenseCategoryDto) {
+  async create(payload: CreateExpenseCategoryDto) {
     const body = createExpenseCategorySchema.parse(payload);
-    const response = await this.client.post(`/users/${userId}/expense-categories`, body);
+    const response = await this.client.post('/expense-categories', body);
 
     return parseWithSchema(expenseCategorySchema, response.data);
   }
 
-  async findAll(userId: string) {
-    const response = await this.client.get(`/users/${userId}/expense-categories`);
+  async findAll() {
+    const response = await this.client.get('/expense-categories');
 
     return parseWithSchema(zExpenseCategoryArraySchema, response.data);
   }
 
-  async findOne(userId: string, categoryId: string) {
-    const response = await this.client.get(
-      `/users/${userId}/expense-categories/${categoryId}`,
-    );
+  async findOne(categoryId: string) {
+    const response = await this.client.get(`/expense-categories/${categoryId}`);
 
     return parseWithSchema(expenseCategorySchema, response.data);
   }
 
-  async update(userId: string, categoryId: string, payload: UpdateExpenseCategoryDto) {
+  async update(categoryId: string, payload: UpdateExpenseCategoryDto) {
     const body = updateExpenseCategorySchema.parse(payload);
     const response = await this.client.patch(
-      `/users/${userId}/expense-categories/${categoryId}`,
+      `/expense-categories/${categoryId}`,
       body,
     );
 
     return parseWithSchema(expenseCategorySchema, response.data);
   }
 
-  async remove(userId: string, categoryId: string) {
-    await this.client.delete(`/users/${userId}/expense-categories/${categoryId}`);
+  async remove(categoryId: string) {
+    await this.client.delete(`/expense-categories/${categoryId}`);
   }
 }
 

@@ -8,8 +8,8 @@ import {
 class AccountsApi {
   private readonly client = apiClient;
 
-  async findByUserId(userId: string, asOfDate?: string) {
-    const { data } = await this.client.get(`/users/${userId}/accounts`, {
+  async findByDate(asOfDate?: string) {
+    const { data } = await this.client.get('/accounts', {
       params: { asOfDate },
     });
 
@@ -20,11 +20,22 @@ class AccountsApi {
     return parseWithSchema(accountSchema, data);
   }
 
-  async upsert(userId: string, payload: UpsertAccountDto) {
+  async create(payload: UpsertAccountDto) {
     const body = upsertAccountSchema.parse(payload);
-    const response = await this.client.put(`/users/${userId}/accounts`, body);
+    const response = await this.client.post('/accounts', body);
 
     return parseWithSchema(accountSchema, response.data);
+  }
+
+  async update(accountId: string, payload: Partial<UpsertAccountDto>) {
+    const body = upsertAccountSchema.partial().parse(payload);
+    const response = await this.client.patch(`/accounts/${accountId}`, body);
+
+    return parseWithSchema(accountSchema, response.data);
+  }
+
+  async remove(accountId: string) {
+    await this.client.delete(`/accounts/${accountId}`);
   }
 }
 

@@ -1,18 +1,11 @@
 import { debtsQueryOptions } from '@/entities/debts';
-import { usersQueryOptions } from '@/entities/users';
 import { CreateDebtButton } from '@/features/create-debt';
 import { getCurrentCurrencyCode } from '@/shared/lib/currency';
-import { env } from '@/shared/lib/env';
 import { Button } from '@/shared/ui/button';
 import { Card } from '@/shared/ui/card';
 import { Table } from '@/shared/ui/table';
-import {
-  useQuery,
-  useSuspenseQuery,
-} from '@tanstack/react-query';
-import {
-  format,
-} from 'date-fns';
+import { useQuery } from '@tanstack/react-query';
+import { format } from 'date-fns';
 import { ru } from 'date-fns/locale';
 import i18next from 'i18next';
 import {
@@ -30,9 +23,8 @@ const formatAmount = new Intl.NumberFormat(locale, {
 });
 
 export const Debts: FC = () => {
-  const { data: userData } = useSuspenseQuery(usersQueryOptions.findOne(env.USER_ID));
   const { data: debtsData, isLoading } = useQuery(
-    debtsQueryOptions.findAll(userData._id, { status: 'active', limit: 5 }),
+    debtsQueryOptions.findAll({ status: 'active', limit: 5 }),
   );
   const { t } = useTranslation();
 
@@ -52,7 +44,7 @@ export const Debts: FC = () => {
         <Card.Title>{t('debts.title')}</Card.Title>
         <Card.Controls>
           <Button.Icon><LucidePencil className="size-5" /></Button.Icon>
-          <CreateDebtButton userId={userData._id} />
+          <CreateDebtButton />
         </Card.Controls>
       </Card.Header>
       <Card.Content className="px-0">

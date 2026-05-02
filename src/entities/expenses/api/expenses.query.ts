@@ -12,31 +12,29 @@ import type {
 } from '../model/schemas';
 
 interface DeleteExpenseMutationPayload {
-  userId: string;
   expenseId: string;
 }
 
 interface CreateExpenseMutationPayload {
-  userId: string;
   payload: CreateExpenseDto;
 }
 
 export const expensesQueryKeys = {
   all: ['expenses'] as const,
-  lists: (userId: string) => [...expensesQueryKeys.all, userId, 'list'] as const,
-  list: (userId: string, query: ListExpensesQuery) => [...expensesQueryKeys.lists(userId), query] as const,
-  details: (userId: string) => [...expensesQueryKeys.all, userId, 'detail'] as const,
-  detail: (userId: string, expenseId: string) => [...expensesQueryKeys.details(userId), expenseId] as const,
+  lists: () => [...expensesQueryKeys.all, 'list'] as const,
+  list: (query: ListExpensesQuery) => [...expensesQueryKeys.lists(), query] as const,
+  details: () => [...expensesQueryKeys.all, 'detail'] as const,
+  detail: (expenseId: string) => [...expensesQueryKeys.details(), expenseId] as const,
 };
 
 export const expensesQueryOptions = {
-  findAll: (userId: string, query: ListExpensesQuery = {}) => queryOptions({
-    queryKey: expensesQueryKeys.list(userId, query),
-    queryFn: () => expensesApi.findAll(userId, query),
+  findAll: (query: ListExpensesQuery = {}) => queryOptions({
+    queryKey: expensesQueryKeys.list(query),
+    queryFn: () => expensesApi.findAll(query),
   }),
-  findOne: (userId: string, expenseId: string) => queryOptions({
-    queryKey: expensesQueryKeys.detail(userId, expenseId),
-    queryFn: () => expensesApi.findOne(userId, expenseId),
+  findOne: (expenseId: string) => queryOptions({
+    queryKey: expensesQueryKeys.detail(expenseId),
+    queryFn: () => expensesApi.findOne(expenseId),
   }),
 };
 
@@ -45,11 +43,11 @@ export const useCreateExpenseMutation = () => {
 
   return useMutation(
     mutationOptions({
-      mutationFn: ({ userId, payload }: CreateExpenseMutationPayload) => expensesApi.create(userId, payload),
-      onSuccess: async (_, { userId }) => {
+      mutationFn: ({ payload }: CreateExpenseMutationPayload) => expensesApi.create(payload),
+      onSuccess: async () => {
         await queryClient.invalidateQueries({ queryKey: expensesQueryKeys.all });
         await queryClient.invalidateQueries({
-          queryKey: ['expense-categories', userId],
+          queryKey: ['expense-categories'],
         });
       },
     }),
@@ -62,17 +60,15 @@ export const useUpdateExpenseMutation = () => {
   return useMutation(
     mutationOptions({
       mutationFn: ({
-        userId,
         expenseId,
         payload,
       }: {
-        userId: string;
         expenseId: string;
         payload: UpdateExpenseDto;
-      }) => expensesApi.update(userId, expenseId, payload),
-      onSuccess: async (expense, { userId, expenseId }) => {
-        queryClient.setQueryData(expensesQueryKeys.detail(userId, expenseId), expense);
-        await queryClient.invalidateQueries({ queryKey: expensesQueryKeys.lists(userId) });
+      }) => expensesApi.update(expenseId, payload),
+      onSuccess: async (expense, { expenseId }) => {
+        queryClient.setQueryData(expensesQueryKeys.detail(expenseId), expense);
+        await queryClient.invalidateQueries({ queryKey: expensesQueryKeys.lists() });
       },
     }),
   );
@@ -83,9 +79,9 @@ export const useDeleteExpenseMutation = () => {
 
   return useMutation(
     mutationOptions({
-      mutationFn: ({ userId, expenseId }: DeleteExpenseMutationPayload) => expensesApi.remove(userId, expenseId),
-      onSuccess: async (_, { userId }) => {
-        await queryClient.invalidateQueries({ queryKey: expensesQueryKeys.lists(userId) });
+      mutationFn: ({ expenseId }: DeleteExpenseMutationPayload) => expensesApi.remove(expenseId),
+      onSuccess: async () => {
+        await queryClient.invalidateQueries({ queryKey: expensesQueryKeys.lists() });
       },
     }),
   );

@@ -12,38 +12,36 @@ import type {
 } from '../model/schemas';
 
 interface DeleteIncomeMutationPayload {
-  userId: string;
   incomeId: string;
 }
 
 interface CreateIncomeMutationPayload {
-  userId: string;
   payload: CreateIncomeDto;
 }
 
 export const incomesQueryKeys = {
   all: ['incomes'] as const,
-  lists: (userId: string) => [...incomesQueryKeys.all, userId, 'list'] as const,
-  list: (userId: string, query: ListIncomesQuery) => [...incomesQueryKeys.lists(userId), query] as const,
-  totalRevenue: (userId: string, query: ListIncomesQuery) => [
-    ...incomesQueryKeys.lists(userId), query, 'totalRevenue',
+  lists: () => [...incomesQueryKeys.all, 'list'] as const,
+  list: (query: ListIncomesQuery) => [...incomesQueryKeys.lists(), query] as const,
+  totalRevenue: (query: ListIncomesQuery) => [
+    ...incomesQueryKeys.lists(), query, 'totalRevenue',
   ] as const,
-  details: (userId: string) => [...incomesQueryKeys.all, userId, 'detail'] as const,
-  detail: (userId: string, incomeId: string) => [...incomesQueryKeys.details(userId), incomeId] as const,
+  details: () => [...incomesQueryKeys.all, 'detail'] as const,
+  detail: (incomeId: string) => [...incomesQueryKeys.details(), incomeId] as const,
 };
 
 export const incomesQueryOptions = {
-  findAll: (userId: string, query: ListIncomesQuery = {}) => queryOptions({
-    queryKey: incomesQueryKeys.list(userId, query),
-    queryFn: () => incomesApi.findAll(userId, query),
+  findAll: (query: ListIncomesQuery = {}) => queryOptions({
+    queryKey: incomesQueryKeys.list(query),
+    queryFn: () => incomesApi.findAll(query),
   }),
-  findOne: (userId: string, incomeId: string) => queryOptions({
-    queryKey: incomesQueryKeys.detail(userId, incomeId),
-    queryFn: () => incomesApi.findOne(userId, incomeId),
+  findOne: (incomeId: string) => queryOptions({
+    queryKey: incomesQueryKeys.detail(incomeId),
+    queryFn: () => incomesApi.findOne(incomeId),
   }),
-  findTotalRevenue: (userId: string, query: ListIncomesQuery = {}) => queryOptions({
-    queryKey: incomesQueryKeys.totalRevenue(userId, query),
-    queryFn: () => incomesApi.findTotalRevenue(userId, query),
+  findTotalRevenue: (query: ListIncomesQuery = {}) => queryOptions({
+    queryKey: incomesQueryKeys.totalRevenue(query),
+    queryFn: () => incomesApi.findTotalRevenue(query),
   }),
 };
 
@@ -52,7 +50,7 @@ export const useCreateIncomeMutation = () => {
 
   return useMutation(
     mutationOptions({
-      mutationFn: ({ userId, payload }: CreateIncomeMutationPayload) => incomesApi.create(userId, payload),
+      mutationFn: ({ payload }: CreateIncomeMutationPayload) => incomesApi.create(payload),
       onSuccess: async () => {
         await queryClient.invalidateQueries({ queryKey: incomesQueryKeys.all });
       },
@@ -66,17 +64,15 @@ export const useUpdateIncomeMutation = () => {
   return useMutation(
     mutationOptions({
       mutationFn: ({
-        userId,
         incomeId,
         payload,
       }: {
-        userId: string;
         incomeId: string;
         payload: UpdateIncomeDto;
-      }) => incomesApi.update(userId, incomeId, payload),
-      onSuccess: async (income, { userId, incomeId }) => {
-        queryClient.setQueryData(incomesQueryKeys.detail(userId, incomeId), income);
-        await queryClient.invalidateQueries({ queryKey: incomesQueryKeys.lists(userId) });
+      }) => incomesApi.update(incomeId, payload),
+      onSuccess: async (income, { incomeId }) => {
+        queryClient.setQueryData(incomesQueryKeys.detail(incomeId), income);
+        await queryClient.invalidateQueries({ queryKey: incomesQueryKeys.lists() });
       },
     }),
   );
@@ -87,9 +83,9 @@ export const useDeleteIncomeMutation = () => {
 
   return useMutation(
     mutationOptions({
-      mutationFn: ({ userId, incomeId }: DeleteIncomeMutationPayload) => incomesApi.remove(userId, incomeId),
-      onSuccess: async (_, { userId }) => {
-        await queryClient.invalidateQueries({ queryKey: incomesQueryKeys.lists(userId) });
+      mutationFn: ({ incomeId }: DeleteIncomeMutationPayload) => incomesApi.remove(incomeId),
+      onSuccess: async () => {
+        await queryClient.invalidateQueries({ queryKey: incomesQueryKeys.lists() });
       },
     }),
   );
