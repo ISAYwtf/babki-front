@@ -6,25 +6,16 @@ import {
 } from '@tanstack/react-query';
 import { incomesApi } from './incomes.api';
 import type {
-  CreateIncomeDto,
   ListIncomesQuery,
   UpdateIncomeDto,
 } from '../model/schemas';
 
-interface DeleteIncomeMutationPayload {
-  incomeId: string;
-}
-
-interface CreateIncomeMutationPayload {
-  payload: CreateIncomeDto;
-}
-
 export const incomesQueryKeys = {
   all: ['incomes'] as const,
-  lists: () => [...incomesQueryKeys.all, 'list'] as const,
-  list: (query: ListIncomesQuery) => [...incomesQueryKeys.lists(), query] as const,
+  listAll: () => [...incomesQueryKeys.all, 'list'] as const,
+  list: (query: ListIncomesQuery) => [...incomesQueryKeys.listAll(), query] as const,
   totalRevenue: (query: ListIncomesQuery) => [
-    ...incomesQueryKeys.lists(), query, 'totalRevenue',
+    ...incomesQueryKeys.listAll(), query, 'totalRevenue',
   ] as const,
   details: () => [...incomesQueryKeys.all, 'detail'] as const,
   detail: (incomeId: string) => [...incomesQueryKeys.details(), incomeId] as const,
@@ -50,9 +41,12 @@ export const useCreateIncomeMutation = () => {
 
   return useMutation(
     mutationOptions({
-      mutationFn: ({ payload }: CreateIncomeMutationPayload) => incomesApi.create(payload),
-      onSuccess: async () => {
-        await queryClient.invalidateQueries({ queryKey: incomesQueryKeys.all });
+      mutationFn: incomesApi.create,
+      onSuccess: async (data) => {
+        if (data) {
+          await queryClient.invalidateQueries({ queryKey: incomesQueryKeys.all });
+          await queryClient.invalidateQueries({ queryKey: ['snapshots', data?.accountId] });
+        }
       },
     }),
   );
@@ -72,20 +66,7 @@ export const useUpdateIncomeMutation = () => {
       }) => incomesApi.update(incomeId, payload),
       onSuccess: async (income, { incomeId }) => {
         queryClient.setQueryData(incomesQueryKeys.detail(incomeId), income);
-        await queryClient.invalidateQueries({ queryKey: incomesQueryKeys.lists() });
-      },
-    }),
-  );
-};
-
-export const useDeleteIncomeMutation = () => {
-  const queryClient = useQueryClient();
-
-  return useMutation(
-    mutationOptions({
-      mutationFn: ({ incomeId }: DeleteIncomeMutationPayload) => incomesApi.remove(incomeId),
-      onSuccess: async () => {
-        await queryClient.invalidateQueries({ queryKey: incomesQueryKeys.lists() });
+        await queryClient.invalidateQueries({ queryKey: incomesQueryKeys.listAll() });
       },
     }),
   );

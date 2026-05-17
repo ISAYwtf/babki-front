@@ -1,36 +1,30 @@
-import { z } from 'zod';
 import {
-  dateStringSchema,
-  entityMetaSchema,
-  paginatedResponseSchema,
-  paginationQuerySchema,
-  periodQuerySchema,
-} from '@/shared/api';
+  createTransactionSchema,
+  listTransactionsQuerySchema,
+  transactionSchema,
+  transactionsRevenueSchema,
+} from '@/entities/transactions';
+import { z } from 'zod';
+import { entityMetaSchema, paginatedResponseSchema } from '@/shared/api';
 
 export const incomeSchema = z
   .object({
-    userId: z.string(),
-    amount: z.number().min(0),
-    incomeDate: dateStringSchema,
-    description: z.string().max(1000).optional(),
     source: z.string().max(255).optional(),
   })
+  .extend(transactionSchema.shape)
   .extend(entityMetaSchema.shape);
 
 export const createIncomeSchema = z.object({
-  amount: z.number().min(0.01),
-  incomeDate: dateStringSchema,
-  description: z.string().max(1000).optional(),
   source: z.string().max(255).optional(),
-});
+}).extend(createTransactionSchema.shape);
 
-export const updateIncomeSchema = createIncomeSchema.partial();
+export const updateIncomeSchema = createIncomeSchema
+  .omit({ transactionDate: true })
+  .partial();
 
-export const listIncomesQuerySchema = paginationQuerySchema.extend(periodQuerySchema.shape);
+export const listIncomesQuerySchema = listTransactionsQuerySchema;
 
-export const incomeRevenueSchema = z
-  .object({ totalRevenue: z.number().min(0) })
-  .extend(periodQuerySchema.shape);
+export const incomeRevenueSchema = transactionsRevenueSchema;
 
 export const incomesPaginatedResponseSchema = paginatedResponseSchema(incomeSchema);
 

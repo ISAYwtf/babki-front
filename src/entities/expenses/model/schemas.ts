@@ -1,10 +1,13 @@
+import {
+  createTransactionSchema,
+  listTransactionsQuerySchema,
+  transactionSchema,
+} from '@/entities/transactions';
 import { z } from 'zod';
 import {
-  dateStringSchema,
   entityMetaSchema,
   objectIdSchema,
   paginatedResponseSchema,
-  paginationQuerySchema,
 } from '@/shared/api';
 import { expenseCategorySchema } from '@/entities/expense-categories/model/schemas';
 
@@ -16,32 +19,26 @@ export const expenseItemSchema = z.object({
 
 export const expenseSchema = z
   .object({
-    userId: z.string(),
     category: expenseCategorySchema,
-    amount: z.number().min(0.01),
-    expenseDate: dateStringSchema,
-    description: z.string().max(1000).optional(),
     merchant: z.string().max(255).optional(),
     items: expenseItemSchema.array(),
   })
+  .extend(transactionSchema.shape)
   .extend(entityMetaSchema.shape);
 
 export const createExpenseSchema = z.object({
   categoryId: objectIdSchema,
-  amount: z.number().min(0.01),
-  expenseDate: dateStringSchema,
-  description: z.string().max(1000).optional(),
   merchant: z.string().max(255).optional(),
   items: expenseItemSchema.array().optional(),
-});
+}).extend(createTransactionSchema.shape);
 
-export const updateExpenseSchema = createExpenseSchema.partial();
+export const updateExpenseSchema = createExpenseSchema
+  .omit({ transactionDate: true })
+  .partial();
 
-export const listExpensesQuerySchema = paginationQuerySchema.extend({
-  from: dateStringSchema.optional(),
-  to: dateStringSchema.optional(),
+export const listExpensesQuerySchema = z.object({
   categoryId: objectIdSchema.optional(),
-});
+}).extend(listTransactionsQuerySchema.shape);
 
 export const expensesPaginatedResponseSchema = paginatedResponseSchema(expenseSchema);
 

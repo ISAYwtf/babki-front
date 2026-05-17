@@ -10,7 +10,6 @@ export const debtStatusSchema = z.enum(['active', 'closed']);
 
 export const debtSchema = z
   .object({
-    userId: z.string(),
     debtor: z.string().max(150),
     principalAmount: z.number().min(0.01),
     remainingAmount: z.number().min(0),

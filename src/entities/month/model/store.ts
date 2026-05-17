@@ -35,8 +35,8 @@ export const useMonthStore = create<IMonthStore>()(
         const startOfSelectedMonth = format(startOfMonth(selectedDate), 'yyyy-MM-dd');
 
         return {
-          from: startOfSelectedMonth,
-          to: formattedSelectedDate,
+          fromDate: startOfSelectedMonth,
+          toDate: formattedSelectedDate,
         };
       },
     }),

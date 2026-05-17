@@ -10,7 +10,6 @@ class UsersApi {
 
   async me() {
     const response = await this.client.get('/users/me');
-
     return parseWithSchema(userSchema, response.data);
   }
 
@@ -19,10 +18,6 @@ class UsersApi {
     const response = await this.client.patch('/users/me', body);
 
     return parseWithSchema(userSchema, response.data);
-  }
-
-  async removeMe() {
-    await this.client.delete('/users/me');
   }
 }
 

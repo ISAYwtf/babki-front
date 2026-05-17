@@ -4,9 +4,8 @@ import { entityMetaSchema } from '@/shared/api';
 export const expenseCategorySchema = z
   .object({
     name: z.string().max(100),
-    userId: z.string(),
     description: z.string().max(500).optional(),
-    color: z.string().regex(/^#(?:[A-Fa-f0-9]{3}|[A-Fa-f0-9]{6})$/).optional(),
+    color: z.hex().optional(),
     isArchived: z.boolean(),
   })
   .extend(entityMetaSchema.shape);
@@ -14,7 +13,7 @@ export const expenseCategorySchema = z
 export const createExpenseCategorySchema = z.object({
   name: z.string().max(100),
   description: z.string().max(500).optional(),
-  color: z.string().regex(/^#(?:[A-Fa-f0-9]{3}|[A-Fa-f0-9]{6})$/).optional(),
+  color: z.hex().optional(),
   isArchived: z.boolean().optional(),
 });
 

@@ -17,7 +17,7 @@ export const useSelectedPeriod = () => {
   const startOfSelectedMonth = format(startOfMonth(selectedDate), 'yyyy-MM-dd');
 
   return useMemo(() => ({
-    from: startOfSelectedMonth,
-    to: formattedSelectedDate,
+    fromDate: startOfSelectedMonth,
+    toDate: formattedSelectedDate,
   }), [formattedSelectedDate, startOfSelectedMonth]);
 };

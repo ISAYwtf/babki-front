@@ -30,9 +30,9 @@ export const Incomes: FC = () => {
       value={totalRevenueData?.totalRevenue ?? 0}
       valueNotation="standard"
       controls={<CreateIncomeButton />}
-      items={incomesData?.items?.map(({ incomeDate, source, amount }) => ({
+      items={incomesData?.items?.map(({ transactionDate, source, amount }) => ({
         title: source,
-        date: format(incomeDate, 'LLL d, y', { locale: ru }),
+        date: format(transactionDate, 'LLL d, y', { locale: ru }),
         value: amount,
       }))}
     />

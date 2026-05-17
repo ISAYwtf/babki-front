@@ -64,4 +64,10 @@ apiClient.interceptors.request.use((config) => {
 export const parseWithSchema = <TSchema extends z.ZodTypeAny>(
   schema: TSchema,
   payload: unknown,
-): z.infer<TSchema> => schema.parse(payload);
+): z.infer<TSchema> | null => {
+  const { success, data } = schema.safeParse(payload);
+  if (success) {
+    return data;
+  }
+  return null;
+};

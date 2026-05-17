@@ -32,16 +32,3 @@ export const useUpdateCurrentUserMutation = () => {
     }),
   );
 };
-
-export const useDeleteCurrentUserMutation = () => {
-  const queryClient = useQueryClient();
-
-  return useMutation(
-    mutationOptions({
-      mutationFn: () => usersApi.removeMe(),
-      onSuccess: async () => {
-        await queryClient.invalidateQueries({ queryKey: usersQueryKeys.all });
-      },
-    }),
-  );
-};

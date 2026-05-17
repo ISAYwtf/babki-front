@@ -7,8 +7,6 @@ import {
   updateExpenseCategorySchema,
 } from '../model/schemas';
 
-const zExpenseCategoryArraySchema = expenseCategorySchema.array();
-
 class ExpenseCategoriesApi {
   private readonly client = apiClient;
 
@@ -22,7 +20,7 @@ class ExpenseCategoriesApi {
   async findAll() {
     const response = await this.client.get('/expense-categories');
 
-    return parseWithSchema(zExpenseCategoryArraySchema, response.data);
+    return parseWithSchema(expenseCategorySchema.array(), response.data);
   }
 
   async findOne(categoryId: string) {

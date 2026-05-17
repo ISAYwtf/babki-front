@@ -46,7 +46,7 @@ export const Expenses: FC = () => {
         <Table.Base>
           <Accordion.Root render={<Table.Body />}>
             {expensesData?.items.map(({
-              _id, amount, expenseDate, merchant, category, description, items,
+              _id, amount, transactionDate, merchant, category, description, items,
             }) => (
               <Accordion.Item key={_id} render={<Table.Row />}>
                 <div className="grid grid-cols-4 items-center">
@@ -66,17 +66,20 @@ export const Expenses: FC = () => {
                         </Body2>
                       </Accordion.Trigger>
                       )}
+                      {!description && !items.length && <Body1 className="text-muted-foreground">Нет описания</Body1>}
                     </div>
                   </Table.Cell>
                   <Table.Cell>
                     <div className="flex flex-col gap-1">
                       {formatAmount.format(amount)}
                       <Body2 className="text-muted-foreground">
-                        {expenseDate && format(expenseDate, 'LLLL d, y', { locale: ru })}
+                        {transactionDate && format(transactionDate, 'LLLL d, y', { locale: ru })}
                       </Body2>
                     </div>
                   </Table.Cell>
-                  <Table.Cell className="text-body-2 text-muted-foreground">{merchant}</Table.Cell>
+                  <Table.Cell className="text-body-2 text-muted-foreground">
+                    {merchant ?? <Body1 className="text-muted-foreground">Место не указано</Body1>}
+                  </Table.Cell>
                 </div>
                 <Accordion.Panel render={<Table.Base className="px-5" />}>
                   <Table.Header>
@@ -99,9 +102,9 @@ export const Expenses: FC = () => {
               </Accordion.Item>
             ))}
             {!expensesData?.items.length && (
-              <div className="w-fit m-auto p-5">
-                <Body1 className="text-muted-foreground">Данные отсутствуют</Body1>
-              </div>
+            <div className="w-fit m-auto p-5">
+              <Body1 className="text-muted-foreground">Данные отсутствуют</Body1>
+            </div>
             )}
           </Accordion.Root>
         </Table.Base>

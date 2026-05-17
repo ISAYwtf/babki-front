@@ -6,16 +6,11 @@ export const objectIdSchema = z
 
 export const dateStringSchema = z.string().refine(
   (value) => !Number.isNaN(Date.parse(value)),
-  {
-    message: 'Invalid date string',
-  },
+  { message: 'Invalid date string' },
 );
 
 export const entityMetaSchema = z.object({
   _id: objectIdSchema,
-  createdAt: dateStringSchema,
-  updatedAt: dateStringSchema,
-  __v: z.number().optional(),
 });
 
 export const paginationQuerySchema = z.object({
@@ -34,6 +29,6 @@ export const paginatedResponseSchema = <TSchema extends z.ZodTypeAny>(
 });
 
 export const periodQuerySchema = z.object({
-  from: dateStringSchema.optional(),
-  to: dateStringSchema.optional(),
+  fromDate: dateStringSchema.optional(),
+  toDate: dateStringSchema.optional(),
 });

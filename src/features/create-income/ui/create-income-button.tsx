@@ -83,11 +83,9 @@ export const CreateIncomeButton: FC<CreateIncomeButtonProps> = ({
     },
     onSubmit: async ({ value, formApi }) => {
       await createIncomeMutation.mutateAsync({
-        payload: {
-          source: value.source.trim(),
-          amount: Number(value.amount),
-          incomeDate: value.incomeDate,
-        },
+        source: value.source.trim(),
+        amount: Number(value.amount),
+        transactionDate: value.transactionDate,
       });
 
       setOpen(false);
@@ -223,7 +221,7 @@ export const CreateIncomeButton: FC<CreateIncomeButtonProps> = ({
               }}
             </form.Field>
 
-            <form.Field name="incomeDate">
+            <form.Field name="transactionDate">
               {(field) => {
                 const fieldError = mapErrorMessage(getFirstFieldError(field.state.meta.errors));
 

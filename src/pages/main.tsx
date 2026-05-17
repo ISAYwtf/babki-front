@@ -1,9 +1,9 @@
 import { usersQueryOptions } from '@/entities/users';
-import { Account } from '@/widgets/account';
 import { Debts } from '@/widgets/debts';
 import { Expenses } from '@/widgets/expenses';
 import { Incomes } from '@/widgets/incomes';
 import { Savings } from '@/widgets/savings';
+import { Balance } from '@/widgets/balance';
 import { createFileRoute } from '@tanstack/react-router';
 import { YearCard } from '@/features/change-year/changeYear';
 import {
@@ -131,7 +131,7 @@ function MainPage() {
         <div className="grid gap-2.5 grid-cols-[1fr_minmax(auto,400px)]">
           <Expenses />
           <div className="flex flex-col gap-2.5">
-            <Account />
+            <Balance />
             <Incomes />
             <Savings />
           </div>

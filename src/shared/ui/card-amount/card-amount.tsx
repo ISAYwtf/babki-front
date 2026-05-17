@@ -91,7 +91,7 @@ export const CardAmount: FC<ICardAmountProps> = ({
       <Collapsible.Panel render={<div className="flex flex-col gap-2.5" />}>
         <div className="table">
           {items.map((item) => (
-            <div key={item.title} className="table-row">
+            <div key={item.date} className="table-row">
               {item.title && (
                 <Body1 className="table-cell pb-2.5 font-semibold [&+.date]:text-right">
                   {item.title}

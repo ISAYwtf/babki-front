@@ -6,23 +6,14 @@ import {
 } from '@tanstack/react-query';
 import { expensesApi } from './expenses.api';
 import type {
-  CreateExpenseDto,
   ListExpensesQuery,
   UpdateExpenseDto,
 } from '../model/schemas';
 
-interface DeleteExpenseMutationPayload {
-  expenseId: string;
-}
-
-interface CreateExpenseMutationPayload {
-  payload: CreateExpenseDto;
-}
-
 export const expensesQueryKeys = {
   all: ['expenses'] as const,
-  lists: () => [...expensesQueryKeys.all, 'list'] as const,
-  list: (query: ListExpensesQuery) => [...expensesQueryKeys.lists(), query] as const,
+  listAll: () => [...expensesQueryKeys.all, 'list'] as const,
+  list: (query: ListExpensesQuery) => [...expensesQueryKeys.listAll(), query] as const,
   details: () => [...expensesQueryKeys.all, 'detail'] as const,
   detail: (expenseId: string) => [...expensesQueryKeys.details(), expenseId] as const,
 };
@@ -43,7 +34,7 @@ export const useCreateExpenseMutation = () => {
 
   return useMutation(
     mutationOptions({
-      mutationFn: ({ payload }: CreateExpenseMutationPayload) => expensesApi.create(payload),
+      mutationFn: expensesApi.create,
       onSuccess: async () => {
         await queryClient.invalidateQueries({ queryKey: expensesQueryKeys.all });
         await queryClient.invalidateQueries({
@@ -68,20 +59,7 @@ export const useUpdateExpenseMutation = () => {
       }) => expensesApi.update(expenseId, payload),
       onSuccess: async (expense, { expenseId }) => {
         queryClient.setQueryData(expensesQueryKeys.detail(expenseId), expense);
-        await queryClient.invalidateQueries({ queryKey: expensesQueryKeys.lists() });
-      },
-    }),
-  );
-};
-
-export const useDeleteExpenseMutation = () => {
-  const queryClient = useQueryClient();
-
-  return useMutation(
-    mutationOptions({
-      mutationFn: ({ expenseId }: DeleteExpenseMutationPayload) => expensesApi.remove(expenseId),
-      onSuccess: async () => {
-        await queryClient.invalidateQueries({ queryKey: expensesQueryKeys.lists() });
+        await queryClient.invalidateQueries({ queryKey: expensesQueryKeys.listAll() });
       },
     }),
   );

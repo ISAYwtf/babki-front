@@ -1,3 +1,4 @@
+import type { FindAccountByQuery } from '@/entities/accounts';
 import {
   mutationOptions,
   queryOptions,
@@ -8,24 +9,24 @@ import { savingsApi } from './savings.api';
 
 const savingsQueryKeys = {
   all: ['savings'] as const,
-  detail: (asOfDate?: string) => [...savingsQueryKeys.all, asOfDate] as const,
+  find: (query?: FindAccountByQuery) => [...savingsQueryKeys.all, query] as const,
 };
 
 export const savingsQueryOptions = {
-  findByUserId: (asOfDate?: string) => queryOptions({
-    queryKey: savingsQueryKeys.detail(asOfDate),
-    queryFn: () => savingsApi.findByUserId(),
+  find: (query?: FindAccountByQuery) => queryOptions({
+    queryKey: savingsQueryKeys.find(query),
+    queryFn: () => savingsApi.find(query),
   }),
 };
 
-export const useUpsertSavingMutation = () => {
+export const useCreateSavingMutation = () => {
   const queryClient = useQueryClient();
 
   return useMutation(
     mutationOptions({
-      mutationFn: () => savingsApi.create(),
-      onSuccess: (account) => {
-        queryClient.setQueryData(savingsQueryKeys.detail(), account);
+      mutationFn: savingsApi.create,
+      onSuccess: (saving) => {
+        queryClient.setQueryData(savingsQueryKeys.all, saving);
       },
     }),
   );

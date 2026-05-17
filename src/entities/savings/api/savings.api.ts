@@ -1,28 +1,22 @@
+import type { FindAccountByQuery } from '@/entities/accounts';
 import { apiClient, parseWithSchema } from '@/shared/api';
-import { savingSchema } from '../model/schemas';
+import {
+  type Saving,
+  savingSchema,
+} from '../model/schemas';
 
 class SavingsApi {
   private readonly client = apiClient;
 
-  async findByUserId() {
-    const { data } = await this.client.get('/savings');
-
-    if (!data) {
-      return null;
-    }
-
-    return parseWithSchema(savingSchema, data);
-  }
-
-  async create() {
-    const response = await this.client.post('/savings');
-
+  create = async () => {
+    const response = await this.client.post<Saving>('/savings');
     return parseWithSchema(savingSchema, response.data);
-  }
+  };
 
-  async remove(savingId: string) {
-    await this.client.delete(`/savings/${savingId}`);
-  }
+  find = async (params?: FindAccountByQuery) => {
+    const response = await this.client.get<Saving>('/savings', { params });
+    return parseWithSchema(savingSchema, response.data);
+  };
 }
 
 export const savingsApi = new SavingsApi();
