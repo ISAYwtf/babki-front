@@ -6,7 +6,7 @@ import { Incomes } from '@/widgets/incomes';
 import { Savings } from '@/widgets/savings';
 import { Balance } from '@/widgets/balance';
 import { createFileRoute } from '@tanstack/react-router';
-import { YearCard } from '@/features/change-year/changeYear';
+import { YearSwitcher } from '@/features/change-year/year-switcher';
 import {
   MonthSwitcher,
 } from '@/features/change-month';
@@ -31,25 +31,21 @@ const lastYearRestItems: ICardListItem[] = [
   { title: i18next.t('fromLastYear.savings'), value: 103_500 },
 ];
 
-const incomeExpenseItems: ICardListItem[] = [
-  { title: i18next.t('incomeExpense.income'), value: 0 },
-  { title: i18next.t('incomeExpense.expenses'), value: 500 },
-  { title: i18next.t('incomeExpense.savings'), value: 1_000 },
-  { title: i18next.t('incomeExpense.debtCollection'), value: 100 },
-];
-
 function MainPage() {
   const { t } = useTranslation();
 
   return (
     <div className="flex flex-col gap-2.5">
       <Header title={t('header.title')} subtitle={t('header.subtitle')} />
+
       <div className="flex flex-col gap-5">
         <div className="flex gap-5">
-          <YearCard />
-          <div className="grid gap-5 grow grid-cols-4">
+
+          <div className="flex flex-col gap-5">
+            <YearSwitcher />
+            <CardList title={t('fromLastYear.title')} items={lastYearRestItems} />
             <CardAmount
-              title={t('expensesFromReceipts.title')}
+              title={t('savings.title')}
               value={1_000_000}
               diff={0.36}
             />
@@ -64,12 +60,7 @@ function MainPage() {
               diff={-0.36}
             />
           </div>
-        </div>
-        <div className="flex gap-5">
-          <div className="flex flex-col gap-5">
-            <CardList title={t('fromLastYear.title')} items={lastYearRestItems} />
-            <CardList title={t('incomeExpense.title')} items={incomeExpenseItems} />
-          </div>
+
           <div className="flex flex-col gap-5">
             <div className="grid grid-flow-col-dense gap-5">
               <Card.Base>
@@ -128,7 +119,9 @@ function MainPage() {
             </div>
           </div>
         </div>
+
         <MonthSwitcher />
+
         <div className="grid gap-2.5 grid-cols-[1fr_minmax(auto,400px)]">
           <div />
           <div className="flex flex-col gap-2.5">

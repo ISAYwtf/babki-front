@@ -1,5 +1,5 @@
 import { incomesQueryOptions } from '@/entities/incomes/api/incomes.query';
-import { useSelectedPeriod } from '@/entities/month/hooks/useSelectedPeriod';
+import { useSelectedPeriod } from '@/entities/period/hooks/useSelectedPeriod';
 import { CreateIncomeButton } from '@/features/create-income';
 import { CardAmount } from '@/shared/ui/card-amount';
 import { useQuery } from '@tanstack/react-query';

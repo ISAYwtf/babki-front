@@ -1,4 +1,4 @@
-import { useSelectedPeriod } from '@/entities/month/hooks/useSelectedPeriod';
+import { useSelectedPeriod } from '@/entities/period/hooks/useSelectedPeriod';
 import { savingsQueryOptions } from '@/entities/savings';
 import { savesQueryOptions } from '@/entities/saves';
 import { CreateSaveButton } from '@/features/create-save';

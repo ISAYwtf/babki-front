@@ -1,5 +1,5 @@
 import { balancesQueryOptions } from '@/entities/balances';
-import { useSelectedPeriod } from '@/entities/month/hooks/useSelectedPeriod';
+import { useSelectedPeriod } from '@/entities/period/hooks/useSelectedPeriod';
 import { CardAmount } from '@/shared/ui/card-amount';
 import { useQuery } from '@tanstack/react-query';
 import type { FC } from 'react';

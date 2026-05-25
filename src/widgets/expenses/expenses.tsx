@@ -1,5 +1,5 @@
 import { expensesQueryOptions } from '@/entities/expenses';
-import { useSelectedPeriod } from '@/entities/month/hooks/useSelectedPeriod';
+import { useSelectedPeriod } from '@/entities/period/hooks/useSelectedPeriod';
 import { getCurrentCurrencyCode } from '@/shared/lib/currency';
 import { Card } from '@/shared/ui/card';
 import { ExpenseCategory } from '@/shared/ui/expense-category';

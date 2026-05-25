@@ -2,8 +2,8 @@ import {
   FIRST_MONTH_INDEX,
   LAST_MONTH_INDEX,
   MONTHS,
-  useMonthStore,
-} from '@/entities/month';
+  usePeriodStore,
+} from '@/entities/period';
 import { formatMonthIndex } from '@/shared/lib/i18n/date-fns';
 import {
   LucideChevronLeft,
@@ -245,8 +245,8 @@ const MonthSwitcherView: React.FC<DraggableSnapScrollProps> = ({
 };
 
 export const MonthSwitcher = () => {
-  const selectedMonth = useMonthStore((state) => state.selectedMonth);
-  const setSelectedMonth = useMonthStore((state) => state.setSelectedMonth);
+  const selectedMonth = usePeriodStore((state) => state.selectedMonth);
+  const setSelectedMonth = usePeriodStore((state) => state.setSelectedMonth);
 
   return (
     <MonthSwitcherView value={selectedMonth} onChange={setSelectedMonth} />
