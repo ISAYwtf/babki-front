@@ -1,3 +1,4 @@
+import { expenseCategorySchema } from '@/entities/expense-categories';
 import { z } from 'zod';
 import {
   dateStringSchema,
@@ -7,20 +8,21 @@ import {
 
 export const expenseLimitSchema = z
   .object({
-    categoryId: objectIdSchema,
+    category: expenseCategorySchema,
     startDate: dateStringSchema,
     endDate: dateStringSchema,
     total: z.number().positive(),
+    rest: z.number(),
   })
   .extend(entityMetaSchema.shape);
 
-export const createExpenseLimitSchema = expenseLimitSchema.pick({
-  categoryId: true,
-  total: true,
+export const createExpenseLimitSchema = z.object({
+  categoryId: objectIdSchema,
+  total: z.number().positive(),
 }).extend(expenseLimitSchema.pick({
   startDate: true,
   endDate: true,
-}).partial());
+}).partial().shape);
 
 export const updateExpenseLimitSchema = createExpenseLimitSchema.pick({
   total: true,
@@ -29,7 +31,7 @@ export const updateExpenseLimitSchema = createExpenseLimitSchema.pick({
 export const findExpenseLimitQuerySchema = z.object({
   periodDate: dateStringSchema,
 }).extend(expenseLimitSchema.pick({
-  categoryId: true,
+  category: true,
 }).partial().shape);
 
 export type ExpenseLimit = z.infer<typeof expenseLimitSchema>;

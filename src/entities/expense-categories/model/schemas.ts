@@ -5,7 +5,7 @@ export const expenseCategorySchema = z
   .object({
     name: z.string().max(100),
     description: z.string().max(500).optional(),
-    color: z.hex().optional(),
+    color: z.string().optional(),
     isArchived: z.boolean(),
   })
   .extend(entityMetaSchema.shape);
@@ -13,7 +13,7 @@ export const expenseCategorySchema = z
 export const createExpenseCategorySchema = z.object({
   name: z.string().max(100),
   description: z.string().max(500).optional(),
-  color: z.hex().optional(),
+  color: z.string().optional(),
   isArchived: z.boolean().optional(),
 });
 

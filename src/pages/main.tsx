@@ -1,5 +1,6 @@
 import { usersQueryOptions } from '@/entities/users';
 import { Debts } from '@/widgets/debts';
+import { ExpenseLimits } from '@/widgets/expense-limits';
 import { Expenses } from '@/widgets/expenses';
 import { Incomes } from '@/widgets/incomes';
 import { Savings } from '@/widgets/savings';
@@ -128,6 +129,12 @@ function MainPage() {
           </div>
         </div>
         <MonthSwitcher />
+        <div className="grid gap-2.5 grid-cols-[1fr_minmax(auto,400px)]">
+          <div />
+          <div className="flex flex-col gap-2.5">
+            <ExpenseLimits />
+          </div>
+        </div>
         <div className="grid gap-2.5 grid-cols-[1fr_minmax(auto,400px)]">
           <Expenses />
           <div className="flex flex-col gap-2.5">
