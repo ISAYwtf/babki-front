@@ -2,6 +2,7 @@ import { useSelectedPeriod } from '@/entities/period/hooks/useSelectedPeriod';
 import { savingsQueryOptions } from '@/entities/savings';
 import { savesQueryOptions } from '@/entities/saves';
 import { CreateSaveButton } from '@/features/create-save';
+import { getPercent } from '@/shared/lib/getPercent';
 import { CardAmount } from '@/shared/ui/card-amount';
 import { useQuery } from '@tanstack/react-query';
 import { format } from 'date-fns';
@@ -26,14 +27,7 @@ export const Savings: FC = () => {
   });
   const { t } = useTranslation();
   const prevSnapshotData = savingData?.timeline[1];
-  const diffAmount = (() => {
-    if (snapshotsData && prevSnapshotData) {
-      const diff = snapshotsData.amount - prevSnapshotData.amount;
-      return diff / prevSnapshotData.amount;
-    }
-
-    return 0;
-  })();
+  const diffAmount = getPercent(snapshotsData?.amount, prevSnapshotData?.amount);
 
   if (savingLoading) {
     return (

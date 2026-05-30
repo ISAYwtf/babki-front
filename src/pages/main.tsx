@@ -3,33 +3,21 @@ import { Debts } from '@/widgets/debts';
 import { ExpenseLimits } from '@/widgets/expense-limits';
 import { Expenses } from '@/widgets/expenses';
 import { Incomes } from '@/widgets/incomes';
+import { LastYearRest } from '@/widgets/last-year-rest';
 import { Savings } from '@/widgets/savings';
 import { Balance } from '@/widgets/balance';
+import { YearExpenses } from '@/widgets/year-expenses';
+import { YearIncomes } from '@/widgets/year-incomes';
+import { YearSavings } from '@/widgets/year-savings';
 import { createFileRoute } from '@tanstack/react-router';
 import { YearSwitcher } from '@/features/change-year/year-switcher';
-import {
-  MonthSwitcher,
-} from '@/features/change-month';
-import { CardAmount } from '@/shared/ui/card-amount';
-import {
-  CardList,
-  type ICardListItem,
-} from '@/shared/ui/card-list';
+import { MonthSwitcher } from '@/features/change-month';
 import { Header } from '@/shared/ui/header';
 import { Button } from '@/shared/ui/button';
-import i18next from 'i18next';
-import {
-  LucidePencil,
-  LucidePlus,
-} from 'lucide-react';
+import { LucidePencil, LucidePlus } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { Card } from '@/shared/ui/card';
 import { Table } from '@/shared/ui/table';
-
-const lastYearRestItems: ICardListItem[] = [
-  { title: i18next.t('fromLastYear.rest'), value: 0 },
-  { title: i18next.t('fromLastYear.savings'), value: 103_500 },
-];
 
 function MainPage() {
   const { t } = useTranslation();
@@ -43,22 +31,10 @@ function MainPage() {
 
           <div className="flex flex-col gap-5">
             <YearSwitcher />
-            <CardList title={t('fromLastYear.title')} items={lastYearRestItems} />
-            <CardAmount
-              title={t('savings.title')}
-              value={1_000_000}
-              diff={0.36}
-            />
-            <CardAmount
-              title={t('incomes.title')}
-              value={0}
-              diff={0.36}
-            />
-            <CardAmount
-              title={t('expenses.title')}
-              value={0}
-              diff={-0.36}
-            />
+            <LastYearRest />
+            <YearSavings />
+            <YearIncomes />
+            <YearExpenses />
           </div>
 
           <div className="flex flex-col gap-5">

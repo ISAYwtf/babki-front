@@ -1,7 +1,9 @@
 import { usePeriodStore } from '@/entities/period';
+import { reportsQueryOptions } from '@/entities/reports/api/reports.query';
 import { Card } from '@/shared/ui/card';
 import { Typography } from '@/shared/ui/typography';
 import { Menu } from '@base-ui/react';
+import { useQuery } from '@tanstack/react-query';
 import { LucideChevronUp } from 'lucide-react';
 import { type FC } from 'react';
 import classes from './year-switcher.module.css';
@@ -53,8 +55,8 @@ const YearSwitcherView: FC<YearSwitcherViewProps> = ({
 );
 
 export const YearSwitcher: FC = () => {
-  // TODO Брать из АПИ
-  const allowedYears = [2026, 2025, 2024, 2023];
+  const { data: yearReports } = useQuery(reportsQueryOptions.yearly());
+  const allowedYears = yearReports?.map(({ period }) => Number(period)) ?? [];
   const selectedYear = usePeriodStore((state) => state.selectedYear);
   const setSelectedYear = usePeriodStore((state) => state.setSelectedYear);
 
