@@ -29,7 +29,7 @@ export const ExpenseLimits: FC = () => {
   }
 
   return (
-    <Card.Base className="h-fit min-w-max">
+    <Card.Base className="h-fit min-w-93">
       <Card.Header>
         <Card.Title>По лимитам</Card.Title>
       </Card.Header>
