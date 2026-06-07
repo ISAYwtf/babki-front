@@ -49,7 +49,7 @@ export const ExpensesByDays: FC = () => {
   }
 
   return (
-    <Card.Base className="h-fit min-w-max">
+    <Card.Base className="h-fit min-w-max w-200">
       <Card.Header>
         <Card.Title>Расходы по дням</Card.Title>
       </Card.Header>

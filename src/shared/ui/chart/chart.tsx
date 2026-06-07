@@ -3,6 +3,7 @@ import * as React from 'react';
 import * as RechartsPrimitive from 'recharts';
 import type { TooltipValueType } from 'recharts';
 import { cn } from '@/shared/lib/shadcn-utils';
+import type { ValueType } from 'recharts/types/component/DefaultTooltipContent';
 
 // Format: { THEME_NAME: CSS_SELECTOR }
 const THEMES = { light: '', dark: '.dark' } as const;
@@ -158,7 +159,13 @@ const ChartContainer = ({
   );
 };
 
-const ChartTooltip = RechartsPrimitive.Tooltip;
+const ChartTooltip = (props: React.ComponentProps<typeof RechartsPrimitive.Tooltip>) => (
+  <RechartsPrimitive.Tooltip
+    cursor={false}
+    isAnimationActive={false}
+    {...props}
+  />
+);
 
 const ChartTooltipContent = ({
   active,
@@ -174,6 +181,7 @@ const ChartTooltipContent = ({
   color,
   nameKey,
   labelKey,
+  valueFormatter,
 }: React.ComponentProps<typeof RechartsPrimitive.Tooltip>
   & React.ComponentProps<'div'> & {
     hideLabel?: boolean;
@@ -181,6 +189,7 @@ const ChartTooltipContent = ({
     indicator?: 'line' | 'dot' | 'dashed';
     nameKey?: string;
     labelKey?: string;
+    valueFormatter?: (value?: ValueType) => ValueType | undefined;
   } & Omit<
     RechartsPrimitive.DefaultTooltipContentProps<
       TooltipValueType,
@@ -286,7 +295,7 @@ const ChartTooltipContent = ({
                     )}
                     <div
                       className={cn(
-                        'flex flex-1 justify-between leading-none',
+                        'flex flex-1 justify-between leading-none gap-2.5',
                         nestLabel ? 'items-end' : 'items-center',
                       )}
                     >
@@ -298,9 +307,11 @@ const ChartTooltipContent = ({
                       </div>
                       {item.value != null && (
                         <span className="font-mono font-medium text-foreground tabular-nums">
-                          {typeof item.value === 'number'
-                            ? item.value.toLocaleString()
-                            : String(item.value)}
+                          {valueFormatter
+                            ? valueFormatter(item.value)
+                            : typeof item.value === 'number'
+                              ? item.value.toLocaleString()
+                              : String(item.value)}
                         </span>
                       )}
                     </div>

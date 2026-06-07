@@ -4,6 +4,7 @@ import { ExpensesByCategories } from '@/widgets/expenses-by-categories';
 import { ExpenseLimits } from '@/widgets/expense-limits';
 import { Expenses } from '@/widgets/expenses';
 import { ExpensesByDays } from '@/widgets/expenses-by-days';
+import { ExpensesByMonths } from '@/widgets/expenses-by-months';
 import { Incomes } from '@/widgets/incomes';
 import { LastYearRest } from '@/widgets/last-year-rest';
 import { Savings } from '@/widgets/savings';
@@ -39,31 +40,14 @@ function MainPage() {
             <YearExpenses />
           </div>
 
-          <div className="flex flex-col gap-5">
+          <div className="flex flex-col grow gap-5">
+            <div className="grid grid-flow-col-dense gap-5">
+              <ExpensesByMonths />
+            </div>
             <div className="grid grid-flow-col-dense gap-5">
               <Card.Base>
                 <Card.Header>
-                  <Card.Title>По месяцам</Card.Title>
-                  <Card.Controls>
-                    <Button.Icon><LucidePencil className="size-5" /></Button.Icon>
-                    <Button.Icon><LucidePlus className="size-7" /></Button.Icon>
-                  </Card.Controls>
-                </Card.Header>
-                <Card.Content>
-                  <div>
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Animi aperiam commodi in nihil quis
-                    soluta tempora veniam vitae! Amet animi atque cum ea esse nam quaerat quam unde ut veritatis.
-                  </div>
-                  <div>
-                    Accusantium, aliquid autem blanditiis consequatur deserunt ea eos et, excepturi expedita facere
-                    fugit magni maxime modi molestiae non odio porro possimus quae, quo quod reiciendis repellendus
-                    suscipit totam voluptatem voluptatibus?
-                  </div>
-                </Card.Content>
-              </Card.Base>
-              <Card.Base>
-                <Card.Header>
-                  <Card.Title>По месяцам</Card.Title>
+                  <Card.Title>Планирование</Card.Title>
                   <Card.Controls>
                     <Button.Icon><LucidePencil className="size-5" /></Button.Icon>
                     <Button.Icon><LucidePlus className="size-7" /></Button.Icon>
@@ -91,8 +75,6 @@ function MainPage() {
                   </Table.Base>
                 </Card.Content>
               </Card.Base>
-            </div>
-            <div className="grid grid-flow-col-dense gap-5">
               <Debts />
             </div>
           </div>
