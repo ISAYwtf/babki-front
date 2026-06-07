@@ -1,8 +1,9 @@
 import { usersQueryOptions } from '@/entities/users';
 import { Debts } from '@/widgets/debts';
-import { ExpensesByCategories } from '@/widgets/expense-categories';
+import { ExpensesByCategories } from '@/widgets/expenses-by-categories';
 import { ExpenseLimits } from '@/widgets/expense-limits';
 import { Expenses } from '@/widgets/expenses';
+import { ExpensesByDays } from '@/widgets/expenses-by-days';
 import { Incomes } from '@/widgets/incomes';
 import { LastYearRest } from '@/widgets/last-year-rest';
 import { Savings } from '@/widgets/savings';
@@ -100,7 +101,7 @@ function MainPage() {
         <MonthSwitcher />
 
         <div className="grid gap-2.5 grid-cols-[1fr_minmax(auto,400px)] overflow-scroll no-scrollbar">
-          <div />
+          <ExpensesByDays />
           <div className="flex gap-2.5">
             <ExpensesByCategories />
             <ExpenseLimits />
