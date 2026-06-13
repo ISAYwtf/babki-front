@@ -8,6 +8,7 @@ import { ExpensesByMonths } from '@/widgets/expenses-by-months';
 import { ExpensesByAnnualCategories } from '@/widgets/expenses-by-categories-annual';
 import { Incomes } from '@/widgets/incomes';
 import { LastYearRest } from '@/widgets/last-year-rest';
+import { Plans } from '@/widgets/plans';
 import { Savings } from '@/widgets/savings';
 import { Balance } from '@/widgets/balance';
 import { YearExpenses } from '@/widgets/year-expenses';
@@ -17,11 +18,7 @@ import { createFileRoute } from '@tanstack/react-router';
 import { YearSwitcher } from '@/features/change-year/year-switcher';
 import { MonthSwitcher } from '@/features/change-month';
 import { Header } from '@/shared/ui/header';
-import { Button } from '@/shared/ui/button';
-import { LucidePencil, LucidePlus } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { Card } from '@/shared/ui/card';
-import { Table } from '@/shared/ui/table';
 
 function MainPage() {
   const { t } = useTranslation();
@@ -47,36 +44,7 @@ function MainPage() {
               <ExpensesByAnnualCategories />
             </div>
             <div className="grid grid-flow-col-dense gap-5">
-              <Card.Base>
-                <Card.Header>
-                  <Card.Title>Планирование</Card.Title>
-                  <Card.Controls>
-                    <Button.Icon><LucidePencil className="size-5" /></Button.Icon>
-                    <Button.Icon><LucidePlus className="size-7" /></Button.Icon>
-                  </Card.Controls>
-                </Card.Header>
-                <Card.Content className="px-0">
-                  <Table.Base>
-                    <Table.Body>
-                      <Table.Row>
-                        <Table.Cell>Стиральная машина</Table.Cell>
-                        <Table.Cell className="text-muted-foreground text-body-2">март 20, 2026</Table.Cell>
-                        <Table.Cell className="text-right">₽ 25 000</Table.Cell>
-                      </Table.Row>
-                      <Table.Row>
-                        <Table.Cell>Холодильник</Table.Cell>
-                        <Table.Cell className="text-muted-foreground text-body-2">март 20, 2026</Table.Cell>
-                        <Table.Cell className="text-right">₽ 25 000</Table.Cell>
-                      </Table.Row>
-                      <Table.Row>
-                        <Table.Cell>Холодильник</Table.Cell>
-                        <Table.Cell className="text-muted-foreground text-body-2">март 20, 2026</Table.Cell>
-                        <Table.Cell className="text-right">₽ 25 000</Table.Cell>
-                      </Table.Row>
-                    </Table.Body>
-                  </Table.Base>
-                </Card.Content>
-              </Card.Base>
+              <Plans />
               <Debts />
             </div>
           </div>
