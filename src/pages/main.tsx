@@ -5,6 +5,7 @@ import { ExpenseLimits } from '@/widgets/expense-limits';
 import { Expenses } from '@/widgets/expenses';
 import { ExpensesByDays } from '@/widgets/expenses-by-days';
 import { ExpensesByMonths } from '@/widgets/expenses-by-months';
+import { ExpensesByAnnualCategories } from '@/widgets/expenses-by-categories-annual';
 import { Incomes } from '@/widgets/incomes';
 import { LastYearRest } from '@/widgets/last-year-rest';
 import { Savings } from '@/widgets/savings';
@@ -40,9 +41,10 @@ function MainPage() {
             <YearExpenses />
           </div>
 
-          <div className="flex flex-col grow gap-5">
-            <div className="grid grid-flow-col-dense gap-5">
+          <div className="flex flex-col grow gap-5 overflow-hidden">
+            <div className="flex gap-5 overflow-scroll">
               <ExpensesByMonths />
+              <ExpensesByAnnualCategories />
             </div>
             <div className="grid grid-flow-col-dense gap-5">
               <Card.Base>

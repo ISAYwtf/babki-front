@@ -1,5 +1,6 @@
 import {
   type FindMonthlyReportsByQuery,
+  type FindYearlyReportsByQuery,
   type ReportPeriod,
   reportPeriodSchema,
 } from '@/entities/reports/model/schemas';
@@ -16,8 +17,8 @@ class ReportsApi {
     return parseWithSchema(reportPeriodSchema.array(), response.data);
   };
 
-  getYearly = async () => {
-    const response = await this.client.get<ReportPeriod[]>('/reports/years');
+  getYearly = async (params?: FindYearlyReportsByQuery) => {
+    const response = await this.client.get<ReportPeriod[]>('/reports/years', { params });
     return parseWithSchema(reportPeriodSchema.array(), response.data);
   };
 }
