@@ -1,4 +1,6 @@
-import { queryOptions } from '@tanstack/react-query';
+import {
+  mutationOptions, queryOptions, useMutation, useQueryClient,
+} from '@tanstack/react-query';
 import { plansApi } from './plans.api';
 import type { ListPlansQuery } from '../model/schemas';
 
@@ -13,4 +15,17 @@ export const plansQueryOptions = {
     queryKey: plansQueryKeys.list(query),
     queryFn: () => plansApi.findAll(query),
   }),
+};
+
+export const useCreatePlanMutation = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation(
+    mutationOptions({
+      mutationFn: plansApi.create,
+      onSuccess: async () => {
+        await queryClient.invalidateQueries({ queryKey: plansQueryKeys.listAll() });
+      },
+    }),
+  );
 };

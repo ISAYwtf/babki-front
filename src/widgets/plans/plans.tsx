@@ -1,11 +1,12 @@
 import { plansQueryOptions } from '@/entities/plans';
+import { CreatePlanButton } from '@/features/create-plan';
 import { getCurrentCurrencyCode } from '@/shared/lib/currency';
 import { Button } from '@/shared/ui/button';
 import { Card } from '@/shared/ui/card';
 import { Table } from '@/shared/ui/table';
 import { useQuery } from '@tanstack/react-query';
 import i18next from 'i18next';
-import { LucidePencil, LucidePlus } from 'lucide-react';
+import { LucidePencil } from 'lucide-react';
 import { type FC } from 'react';
 
 const locale = i18next.language;
@@ -34,7 +35,7 @@ export const Plans: FC = () => {
         <Card.Title>Планирование</Card.Title>
         <Card.Controls>
           <Button.Icon><LucidePencil className="size-5" /></Button.Icon>
-          <Button.Icon><LucidePlus className="size-7" /></Button.Icon>
+          <CreatePlanButton />
         </Card.Controls>
       </Card.Header>
       <Card.Content className="px-0">
