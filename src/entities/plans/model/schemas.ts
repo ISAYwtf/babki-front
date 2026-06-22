@@ -43,3 +43,20 @@ export const createPlanPayloadSchema = z.object({
 });
 
 export type CreatePlanPayload = z.infer<typeof createPlanPayloadSchema>;
+
+export const updatePlanPayloadSchema = z.object({
+  description: z.string().max(500).optional(),
+  targetDate: dateStringSchema.optional(),
+  amount: z.number().min(0.01).optional(),
+  categoryId: objectIdSchema.optional(),
+});
+
+export type UpdatePlanPayload = z.infer<typeof updatePlanPayloadSchema>;
+
+export const closePlanPayloadSchema = z.object({
+  closingDate: dateStringSchema.optional(),
+  amount: z.number().min(0.01).optional(),
+  description: z.string().max(500).optional(),
+});
+
+export type ClosePlanPayload = z.infer<typeof closePlanPayloadSchema>;

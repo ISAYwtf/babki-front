@@ -1,19 +1,18 @@
 import { expenseCategoriesQueryOptions } from '@/entities/expense-categories';
 import { useCreatePlanMutation } from '@/entities/plans';
-import { Dialog as DialogPrimitive, Select as SelectPrimitive } from '@base-ui/react';
+import { Dialog as DialogPrimitive } from '@base-ui/react';
 import type { StandardSchemaV1Issue } from '@tanstack/react-form';
 import { useForm } from '@tanstack/react-form';
 import { useQuery } from '@tanstack/react-query';
 import { cn } from '@/shared/lib/shadcn-utils';
 import { Button } from '@/shared/ui/button';
 import { Dialog } from '@/shared/ui/dialog';
-import { ExpenseCategory } from '@/shared/ui/expense-category';
+import { CategorySelect } from '@/shared/ui/category-select';
 import { Input } from '@/shared/ui/input';
 import { Typography } from '@/shared/ui/typography';
 import i18next from 'i18next';
 import {
   LucideCheck,
-  LucideChevronDown,
   LucidePlus,
   LucideX,
 } from 'lucide-react';
@@ -191,69 +190,21 @@ export const CreatePlanButton: FC<CreatePlanButtonProps> = ({ className }) => {
             <form.Field name="categoryId">
               {(field) => {
                 const fieldError = mapErrorMessage(getFirstFieldError(field.state.meta.errors));
-                const selectedCategory = categories.find((c) => c._id === field.state.value);
 
                 return (
                   <div>
-                    <SelectPrimitive.Root
+                    <CategorySelect
+                      options={categories}
                       value={field.state.value}
                       onValueChange={(value) => {
                         clearMutationError();
-                        field.handleChange(value ?? '');
+                        field.handleChange(value);
                       }}
+                      onBlur={field.handleBlur}
+                      placeholder={t('plans.create.fields.category')}
                       disabled={createPlanMutation.isPending}
-                    >
-                      <SelectPrimitive.Trigger
-                        onBlur={field.handleBlur}
-                        className={cn(
-                          `
-                            flex h-11 w-full items-center justify-between rounded-lg border bg-background
-                            px-3 py-2 text-body-2 transition-colors outline-none
-                            focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/30
-                            disabled:cursor-not-allowed disabled:opacity-50
-                          `,
-                          fieldError && [
-                            'border-destructive',
-                            'focus-visible:border-destructive focus-visible:ring-destructive/20',
-                          ],
-                        )}
-                      >
-                        {selectedCategory ? (
-                          <ExpenseCategory color={selectedCategory.color}>
-                            {selectedCategory.name}
-                          </ExpenseCategory>
-                        ) : (
-                          <span className="text-muted-foreground">{t('plans.create.fields.category')}</span>
-                        )}
-                        <LucideChevronDown className="size-4 shrink-0 text-muted-foreground" />
-                      </SelectPrimitive.Trigger>
-
-                      <SelectPrimitive.Portal>
-                        <SelectPrimitive.Positioner className="z-50">
-                          <SelectPrimitive.Popup
-                            className="
-                              z-50 max-h-60 min-w-(--anchor-width) overflow-y-auto rounded-lg border
-                              bg-popover p-1 shadow-md outline-none
-                            "
-                          >
-                            {categories.map((cat) => (
-                              <SelectPrimitive.Item
-                                key={cat._id}
-                                value={cat._id}
-                                className="
-                                  flex cursor-default items-center rounded-md px-2 py-1.5 outline-none
-                                  hover:bg-muted data-highlighted:bg-muted
-                                "
-                              >
-                                <SelectPrimitive.ItemText>
-                                  <ExpenseCategory color={cat.color}>{cat.name}</ExpenseCategory>
-                                </SelectPrimitive.ItemText>
-                              </SelectPrimitive.Item>
-                            ))}
-                          </SelectPrimitive.Popup>
-                        </SelectPrimitive.Positioner>
-                      </SelectPrimitive.Portal>
-                    </SelectPrimitive.Root>
+                      hasError={Boolean(fieldError)}
+                    />
                     {fieldError && <Input.Error>{fieldError}</Input.Error>}
                   </div>
                 );

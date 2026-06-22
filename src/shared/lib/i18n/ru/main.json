@@ -70,6 +70,54 @@
         "category": "Категория",
         "amount": "00.00"
       }
+    },
+    "details": {
+      "title": "План",
+      "close": "Закрыть окно",
+      "fields": {
+        "description": "Описание",
+        "category": "Категория",
+        "amount": "Сумма",
+        "targetDate": "Дата"
+      },
+      "actions": {
+        "edit": "Редактировать",
+        "delete": "Удалить",
+        "execute": "Выполнить"
+      }
+    },
+    "edit": {
+      "title": "Редактирование плана",
+      "save": "Сохранить",
+      "saving": "Сохранение...",
+      "cancel": "Отмена",
+      "close": "Закрыть окно",
+      "fields": {
+        "description": "Описание",
+        "category": "Категория",
+        "amount": "00.00"
+      }
+    },
+    "delete": {
+      "title": "Удалить план?",
+      "description": "Это действие нельзя отменить.",
+      "confirm": "Удалить",
+      "deleting": "Удаление...",
+      "cancel": "Отмена"
+    },
+    "execute": {
+      "title": "Выполнить план",
+      "description": "Будет создан расход, план будет закрыт.",
+      "confirm": "Выполнить",
+      "executing": "Выполнение...",
+      "cancel": "Отмена",
+      "reset": "Сбросить",
+      "close": "Закрыть окно",
+      "fields": {
+        "closingDate": "Дата",
+        "amount": "00.00",
+        "description": "Описание"
+      }
     }
   },
   "validation": {

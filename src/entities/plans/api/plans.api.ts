@@ -1,6 +1,8 @@
 import { apiClient, parseWithSchema } from '@/shared/api';
 import {
+  closePlanPayloadSchema,
   createPlanPayloadSchema,
+  type ClosePlanPayload,
   type CreatePlanPayload,
   type ListPlansQuery,
   listPlansQuerySchema,
@@ -8,6 +10,8 @@ import {
   planSchema,
   type PlansPaginatedResponse,
   plansPaginatedResponseSchema,
+  updatePlanPayloadSchema,
+  type UpdatePlanPayload,
 } from '../model/schemas';
 
 class PlansApi {
@@ -23,6 +27,24 @@ class PlansApi {
   create = async (payload: CreatePlanPayload) => {
     const body = createPlanPayloadSchema.parse(payload);
     const response = await this.client.post<Plan>('/plans', body);
+
+    return parseWithSchema(planSchema, response.data);
+  };
+
+  update = async (planId: string, payload: UpdatePlanPayload) => {
+    const body = updatePlanPayloadSchema.parse(payload);
+    const response = await this.client.patch<Plan>(`/plans/${planId}`, body);
+
+    return parseWithSchema(planSchema, response.data);
+  };
+
+  remove = async (planId: string) => {
+    await this.client.delete(`/plans/${planId}`);
+  };
+
+  close = async (planId: string, payload: ClosePlanPayload) => {
+    const body = closePlanPayloadSchema.parse(payload);
+    const response = await this.client.post<Plan>(`/plans/${planId}/close`, body);
 
     return parseWithSchema(planSchema, response.data);
   };

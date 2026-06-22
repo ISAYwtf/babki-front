@@ -1,13 +1,12 @@
-import { plansQueryOptions } from '@/entities/plans';
+import { type Plan, plansQueryOptions } from '@/entities/plans';
 import { CreatePlanButton } from '@/features/create-plan';
+import { PlanDetailsDialog } from '@/features/manage-plan';
 import { getCurrentCurrencyCode } from '@/shared/lib/currency';
-import { Button } from '@/shared/ui/button';
 import { Card } from '@/shared/ui/card';
 import { Table } from '@/shared/ui/table';
 import { useQuery } from '@tanstack/react-query';
 import i18next from 'i18next';
-import { LucidePencil } from 'lucide-react';
-import { type FC } from 'react';
+import { type FC, useState } from 'react';
 
 const locale = i18next.language;
 
@@ -28,13 +27,13 @@ export const Plans: FC = () => {
   const { data, isLoading } = useQuery(
     plansQueryOptions.findAll({ status: 'active', limit: 100 }),
   );
+  const [selectedPlan, setSelectedPlan] = useState<Plan | null>(null);
 
   return (
     <Card.Base>
       <Card.Header>
         <Card.Title>Планирование</Card.Title>
         <Card.Controls>
-          <Button.Icon><LucidePencil className="size-5" /></Button.Icon>
           <CreatePlanButton />
         </Card.Controls>
       </Card.Header>
@@ -47,7 +46,19 @@ export const Plans: FC = () => {
           <Table.Base>
             <Table.Body>
               {data.items.map((plan) => (
-                <Table.Row key={plan._id}>
+                <Table.Row
+                  key={plan._id}
+                  role="button"
+                  tabIndex={0}
+                  className="cursor-pointer transition-colors hover:bg-muted"
+                  onClick={() => setSelectedPlan(plan)}
+                  onKeyDown={(event) => {
+                    if (event.key === 'Enter' || event.key === ' ') {
+                      event.preventDefault();
+                      setSelectedPlan(plan);
+                    }
+                  }}
+                >
                   <Table.Cell>{plan.description}</Table.Cell>
                   <Table.Cell className="text-muted-foreground text-body-2">
                     {formatDate.format(new Date(plan.targetDate))}
@@ -61,6 +72,8 @@ export const Plans: FC = () => {
           </Table.Base>
         )}
       </Card.Content>
+
+      <PlanDetailsDialog plan={selectedPlan} onClose={() => setSelectedPlan(null)} />
     </Card.Base>
   );
 };
