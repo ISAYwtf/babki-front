@@ -32,7 +32,7 @@ export const updateDebtSchema = createDebtSchema.partial();
 
 export const repayDebtSchema = z.object({
   repaymentDate: dateStringSchema,
-  repaymentAmount: z.number().min(0.01),
+  amount: z.number().min(0.01),
   description: z.string().max(1000).optional(),
 });
 

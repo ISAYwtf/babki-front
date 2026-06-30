@@ -71,6 +71,7 @@ export const useRepayDebtMutation = () => {
         await queryClient.invalidateQueries({
           queryKey: ['debt-transactions', debtId],
         });
+        await queryClient.invalidateQueries({ queryKey: ['summaries'] });
       },
     }),
   );
@@ -82,8 +83,10 @@ export const useDeleteDebtMutation = () => {
   return useMutation(
     mutationOptions({
       mutationFn: ({ debtId }: { debtId: string }) => debtsApi.remove(debtId),
-      onSuccess: async () => {
+      onSuccess: async (_, { debtId }) => {
+        queryClient.removeQueries({ queryKey: debtsQueryKeys.detail(debtId) });
         await queryClient.invalidateQueries({ queryKey: debtsQueryKeys.lists() });
+        await queryClient.invalidateQueries({ queryKey: ['summaries'] });
       },
     }),
   );

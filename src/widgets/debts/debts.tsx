@@ -1,17 +1,15 @@
-import { debtsQueryOptions } from '@/entities/debts';
+import { type Debt, debtsQueryOptions } from '@/entities/debts';
 import { CreateDebtButton } from '@/features/create-debt';
+import { DebtDetailsDialog } from '@/features/manage-debt';
 import { getCurrentCurrencyCode } from '@/shared/lib/currency';
-import { Button } from '@/shared/ui/button';
 import { Card } from '@/shared/ui/card';
 import { Table } from '@/shared/ui/table';
+import { Body1 } from '@/shared/ui/typography/typography';
 import { useQuery } from '@tanstack/react-query';
 import { format } from 'date-fns';
 import { ru } from 'date-fns/locale';
 import i18next from 'i18next';
-import {
-  LucidePencil,
-} from 'lucide-react';
-import type { FC } from 'react';
+import { type FC, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 const locale = i18next.language;
@@ -27,6 +25,7 @@ export const Debts: FC = () => {
     debtsQueryOptions.findAll({ status: 'active', limit: 5 }),
   );
   const { t } = useTranslation();
+  const [selectedDebt, setSelectedDebt] = useState<Debt | null>(null);
 
   if (isLoading) {
     return (
@@ -34,39 +33,51 @@ export const Debts: FC = () => {
     );
   }
 
-  if (!debtsData?.items.length) {
-    return null;
-  }
-
   return (
     <Card.Base>
       <Card.Header>
         <Card.Title>{t('debts.title')}</Card.Title>
         <Card.Controls>
-          <Button.Icon><LucidePencil className="size-5" /></Button.Icon>
           <CreateDebtButton />
         </Card.Controls>
       </Card.Header>
       <Card.Content className="px-0">
         <Table.Base>
           <Table.Body>
-            {debtsData?.items.map(({
-              _id, debtor, dueDate, remainingAmount,
-            }) => (
-              <Table.Row key={_id}>
-                <Table.Cell>{debtor}</Table.Cell>
+            {debtsData?.items.map((debt) => (
+              <Table.Row
+                key={debt._id}
+                role="button"
+                tabIndex={0}
+                className="cursor-pointer transition-colors hover:bg-muted"
+                onClick={() => setSelectedDebt(debt)}
+                onKeyDown={(event) => {
+                  if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault();
+                    setSelectedDebt(debt);
+                  }
+                }}
+              >
+                <Table.Cell>{debt.debtor}</Table.Cell>
                 <Table.Cell
                   className="text-body-2 text-muted-foreground"
-                  title={dueDate && format(new Date(dueDate), 'P', { locale: ru })}
+                  title={debt.dueDate && format(new Date(debt.dueDate), 'P', { locale: ru })}
                 >
-                  {dueDate && format(new Date(dueDate), 'LLLL d, y', { locale: ru })}
+                  {debt.dueDate && format(new Date(debt.dueDate), 'LLLL d, y', { locale: ru })}
                 </Table.Cell>
-                <Table.Cell className="text-right">{formatAmount.format(remainingAmount)}</Table.Cell>
+                <Table.Cell className="text-right">{formatAmount.format(debt.remainingAmount)}</Table.Cell>
               </Table.Row>
             ))}
+            {!debtsData?.items.length && (
+              <div className="w-fit m-auto p-5">
+                <Body1 className="text-muted-foreground">Данные отсутствуют</Body1>
+              </div>
+            )}
           </Table.Body>
         </Table.Base>
       </Card.Content>
+
+      <DebtDetailsDialog debt={selectedDebt} onClose={() => setSelectedDebt(null)} />
     </Card.Base>
   );
 };

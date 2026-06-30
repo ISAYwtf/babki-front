@@ -9,7 +9,7 @@ import {
 export const debtTransactionSchema = z
   .object({
     debtId: z.string(),
-    repaymentAmount: z.number().min(0.01),
+    amount: z.number().min(0.01),
     transactionDate: dateStringSchema,
     description: z.string().optional(),
   })
