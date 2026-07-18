@@ -14,6 +14,7 @@ export const getRepayDebtFormSchema = (remainingAmount: number) => z.object({
     .string()
     .trim()
     .max(1000, 'repaymentDescriptionTooLong'),
+  isIncome: z.boolean(),
 });
 
 export type RepayDebtFormValues = z.infer<ReturnType<typeof getRepayDebtFormSchema>>;
@@ -24,4 +25,5 @@ export const getRepayDebtFormValues = (debt: Debt): RepayDebtFormValues => ({
   repaymentDate: todayDateInputValue(),
   amount: String(debt.remainingAmount),
   description: '',
+  isIncome: true,
 });

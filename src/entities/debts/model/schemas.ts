@@ -8,11 +8,15 @@ import {
 
 export const debtStatusSchema = z.enum(['active', 'closed']);
 
+const amountWithCentsSchema = z
+  .number()
+  .refine((value) => /^\d+(\.\d{1,2})?$/.test(String(value)), 'maxDecimalPlaces');
+
 export const debtSchema = z
   .object({
     debtor: z.string().max(150),
-    principalAmount: z.number().min(0.01),
-    remainingAmount: z.number().min(0),
+    principalAmount: amountWithCentsSchema.min(0.01),
+    remainingAmount: amountWithCentsSchema.min(0),
     description: z.string().max(150).optional(),
     dueDate: dateStringSchema.optional(),
     status: debtStatusSchema,
@@ -21,8 +25,8 @@ export const debtSchema = z
 
 export const createDebtSchema = z.object({
   debtor: z.string().max(150),
-  principalAmount: z.number().min(0.01),
-  remainingAmount: z.number().min(0),
+  principalAmount: amountWithCentsSchema.min(0.01),
+  remainingAmount: amountWithCentsSchema.min(0),
   description: z.string().max(150).optional(),
   dueDate: dateStringSchema.optional(),
   status: debtStatusSchema.optional(),
@@ -32,8 +36,9 @@ export const updateDebtSchema = createDebtSchema.partial();
 
 export const repayDebtSchema = z.object({
   repaymentDate: dateStringSchema,
-  amount: z.number().min(0.01),
+  amount: amountWithCentsSchema.min(0.01),
   description: z.string().max(1000).optional(),
+  isIncome: z.boolean().optional(),
 });
 
 export const listDebtsQuerySchema = paginationQuerySchema.extend({

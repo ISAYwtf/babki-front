@@ -2,6 +2,7 @@ import { type Debt, type useRepayDebtMutation } from '@/entities/debts';
 import { Button } from '@/shared/ui/button';
 import { Dialog } from '@/shared/ui/dialog';
 import { Input } from '@/shared/ui/input';
+import { Switch } from '@/shared/ui/switch';
 import { Typography } from '@/shared/ui/typography';
 import { useForm } from '@tanstack/react-form';
 import { LucideCheck } from 'lucide-react';
@@ -40,6 +41,7 @@ export const DebtRepayForm: FC<DebtRepayFormProps> = ({
           repaymentDate: value.repaymentDate,
           amount: Number(value.amount),
           description: description || undefined,
+          isIncome: value.isIncome,
         },
       });
 
@@ -139,6 +141,32 @@ export const DebtRepayForm: FC<DebtRepayFormProps> = ({
               </div>
             );
           }}
+        </form.Field>
+
+        <form.Field name="isIncome">
+          {(field) => (
+            <label
+              className="
+                flex min-h-11 items-center justify-between gap-3 rounded-lg border bg-background px-3 py-2
+                transition-colors
+                has-disabled:cursor-not-allowed has-disabled:opacity-50
+              "
+              htmlFor="repay-debt-is-income"
+            >
+              <Typography.Body2>{t('debts.repay.fields.isIncome')}</Typography.Body2>
+              <Switch
+                id="repay-debt-is-income"
+                name={field.name}
+                checked={field.state.value}
+                onBlur={field.handleBlur}
+                onCheckedChange={(checked) => {
+                  clearMutationError();
+                  field.handleChange(checked);
+                }}
+                disabled={mutation.isPending}
+              />
+            </label>
+          )}
         </form.Field>
 
         <form.Field name="description">
