@@ -1,8 +1,7 @@
 import { getCurrentCurrencyCode } from '@/shared/lib/currency';
 import { Card } from '@/shared/ui/card';
 import { ExpandIcon } from '@/shared/ui/expand-icon';
-import { Typography } from '@/shared/ui/typography';
-import { Body1, Body2 } from '@/shared/ui/typography/typography';
+import { Body1, Body2, Typography } from '@/shared/ui/typography';
 import { Collapsible } from '@base-ui/react';
 import clsx from 'clsx';
 import i18next from 'i18next';

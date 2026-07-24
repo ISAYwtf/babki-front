@@ -1,4 +1,4 @@
-import type { FindAccountByQuery } from '@/entities/accounts';
+import type { FindAccountByQuery } from '@/entities/accounts/@x/savings';
 import {
   mutationOptions,
   queryOptions,
@@ -7,7 +7,7 @@ import {
 } from '@tanstack/react-query';
 import { savingsApi } from './savings.api';
 
-const savingsQueryKeys = {
+export const savingsQueryKeys = {
   all: ['savings'] as const,
   find: (query?: FindAccountByQuery) => [...savingsQueryKeys.all, query] as const,
 };

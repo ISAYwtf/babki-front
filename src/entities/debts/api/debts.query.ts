@@ -4,6 +4,7 @@ import {
   useMutation,
   useQueryClient,
 } from '@tanstack/react-query';
+import { debtTransactionsQueryKeys } from '@/entities/debt-transactions/@x/debts';
 import { debtsApi } from './debts.api';
 import type {
   CreateDebtDto,
@@ -39,7 +40,6 @@ export const useCreateDebtMutation = () => {
       mutationFn: ({ payload }: { payload: CreateDebtDto }) => debtsApi.create(payload),
       onSuccess: async () => {
         await queryClient.invalidateQueries({ queryKey: debtsQueryKeys.all });
-        await queryClient.invalidateQueries({ queryKey: ['summaries'] });
       },
     }),
   );
@@ -68,10 +68,7 @@ export const useRepayDebtMutation = () => {
       onSuccess: async (debt, { debtId }) => {
         queryClient.setQueryData(debtsQueryKeys.detail(debtId), debt);
         await queryClient.invalidateQueries({ queryKey: debtsQueryKeys.lists() });
-        await queryClient.invalidateQueries({
-          queryKey: ['debt-transactions', debtId],
-        });
-        await queryClient.invalidateQueries({ queryKey: ['summaries'] });
+        await queryClient.invalidateQueries({ queryKey: debtTransactionsQueryKeys.lists(debtId) });
       },
     }),
   );
@@ -86,7 +83,6 @@ export const useDeleteDebtMutation = () => {
       onSuccess: async (_, { debtId }) => {
         queryClient.removeQueries({ queryKey: debtsQueryKeys.detail(debtId) });
         await queryClient.invalidateQueries({ queryKey: debtsQueryKeys.lists() });
-        await queryClient.invalidateQueries({ queryKey: ['summaries'] });
       },
     }),
   );

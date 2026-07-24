@@ -1,4 +1,4 @@
-import type { FindAccountByQuery } from '@/entities/accounts';
+import type { FindAccountByQuery } from '@/entities/accounts/@x/savings';
 import { apiClient, parseWithSchema } from '@/shared/api';
 import {
   type Saving,

@@ -1,1 +1,1 @@
-export { ExpensesByDays } from './expenses-by-days';
+export { ExpensesByDays } from './ui/expenses-by-days';

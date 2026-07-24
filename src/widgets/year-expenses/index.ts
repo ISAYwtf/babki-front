@@ -1,1 +1,1 @@
-export { YearExpenses } from './year-expenses';
+export { YearExpenses } from './ui/year-expenses';

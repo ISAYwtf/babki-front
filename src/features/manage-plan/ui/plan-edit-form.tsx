@@ -1,9 +1,8 @@
 import { type Plan, type useUpdatePlanMutation } from '@/entities/plans';
-import { expenseCategoriesQueryOptions } from '@/entities/expense-categories';
+import { CategorySelect, expenseCategoriesQueryOptions } from '@/entities/expense-categories';
 import { useForm } from '@tanstack/react-form';
 import { useQuery } from '@tanstack/react-query';
 import { Button } from '@/shared/ui/button';
-import { CategorySelect } from '@/shared/ui/category-select';
 import { Dialog } from '@/shared/ui/dialog';
 import { Input } from '@/shared/ui/input';
 import { Typography } from '@/shared/ui/typography';

@@ -2,14 +2,14 @@ import {
   createTransactionSchema,
   listTransactionsQuerySchema,
   transactionSchema,
-} from '@/entities/transactions';
+} from '@/entities/transactions/@x/expenses';
 import { z } from 'zod';
 import {
   entityMetaSchema,
   objectIdSchema,
   paginatedResponseSchema,
 } from '@/shared/api';
-import { expenseCategorySchema } from '@/entities/expense-categories/model/schemas';
+import { expenseCategorySchema } from '@/entities/expense-categories/@x/expenses';
 
 export const expenseItemSchema = z.object({
   name: z.string(),

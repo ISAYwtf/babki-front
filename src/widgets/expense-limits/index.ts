@@ -1,1 +1,1 @@
-export { ExpenseLimits } from './expense-limits';
+export { ExpenseLimits } from './ui/expense-limits';

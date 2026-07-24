@@ -37,9 +37,6 @@ export const useCreateExpenseMutation = () => {
       mutationFn: expensesApi.create,
       onSuccess: async () => {
         await queryClient.invalidateQueries({ queryKey: expensesQueryKeys.all });
-        await queryClient.invalidateQueries({
-          queryKey: ['expense-categories'],
-        });
       },
     }),
   );

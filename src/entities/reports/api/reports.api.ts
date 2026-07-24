@@ -1,13 +1,13 @@
 import {
+  apiClient,
+  parseWithSchema,
+} from '@/shared/api';
+import {
   type FindMonthlyReportsByQuery,
   type FindYearlyReportsByQuery,
   type ReportPeriod,
   reportPeriodSchema,
-} from '@/entities/reports/model/schemas';
-import {
-  apiClient,
-  parseWithSchema,
-} from '@/shared/api';
+} from '../model/schemas';
 
 class ReportsApi {
   private readonly client = apiClient;

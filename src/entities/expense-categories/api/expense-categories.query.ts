@@ -46,7 +46,6 @@ export const useCreateExpenseCategoryMutation = () => {
         await queryClient.invalidateQueries({
           queryKey: expenseCategoriesQueryKeys.all,
         });
-        await queryClient.invalidateQueries({ queryKey: ['expenses'] });
       },
     }),
   );

@@ -1,2 +1,16 @@
-export * from './model/schemas';
-export * from './api/debt-transactions.query';
+export {
+  debtTransactionsQueryKeys,
+  debtTransactionsQueryOptions,
+  useDebtTransactionQuery,
+  useDebtTransactionsListQuery,
+} from './api/debt-transactions.query';
+export {
+  debtTransactionSchema,
+  debtTransactionsPaginatedResponseSchema,
+  listDebtTransactionsQuerySchema,
+} from './model/schemas';
+export type {
+  DebtTransaction,
+  DebtTransactionsPaginatedResponse,
+  ListDebtTransactionsQuery,
+} from './model/schemas';

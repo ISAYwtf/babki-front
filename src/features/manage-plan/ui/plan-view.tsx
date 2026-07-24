@@ -1,9 +1,8 @@
 import { type Plan } from '@/entities/plans';
-import { expenseCategoriesQueryOptions } from '@/entities/expense-categories';
+import { ExpenseCategoryBadge, expenseCategoriesQueryOptions } from '@/entities/expense-categories';
 import { getCurrentCurrencyCode } from '@/shared/lib/currency';
 import { Button } from '@/shared/ui/button';
 import { Dialog } from '@/shared/ui/dialog';
-import { ExpenseCategory } from '@/shared/ui/expense-category';
 import { Typography } from '@/shared/ui/typography';
 import { useQuery } from '@tanstack/react-query';
 import i18next from 'i18next';
@@ -66,7 +65,7 @@ export const PlanView: FC<PlanViewProps> = ({
             {t('plans.details.fields.category')}
           </Typography.Caption1>
           {category ? (
-            <ExpenseCategory color={category.color}>{category.name}</ExpenseCategory>
+            <ExpenseCategoryBadge color={category.color}>{category.name}</ExpenseCategoryBadge>
           ) : (
             <Typography.Body2 className="text-muted-foreground">—</Typography.Body2>
           )}

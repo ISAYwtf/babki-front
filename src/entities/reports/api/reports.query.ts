@@ -1,8 +1,8 @@
-import type { FindMonthlyReportsByQuery, FindYearlyReportsByQuery } from '@/entities/reports';
 import { queryOptions } from '@tanstack/react-query';
 import { reportsApi } from './reports.api';
+import type { FindMonthlyReportsByQuery, FindYearlyReportsByQuery } from '../model/schemas';
 
-const reportsQueryKeys = {
+export const reportsQueryKeys = {
   all: ['reports'] as const,
   monthly: (query?: FindMonthlyReportsByQuery) => [...reportsQueryKeys.all, 'monthly', query],
   yearly: (query?: FindYearlyReportsByQuery) => [...reportsQueryKeys.all, 'yearly', query],

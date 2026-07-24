@@ -1,1 +1,1 @@
-export { LastYearRest } from './last-year-rest';
+export { LastYearRest } from './ui/last-year-rest';

@@ -1,4 +1,4 @@
-import type { ElementProps } from '@/shared/types/jsx/elementProps';
+import type { ElementProps } from '@/shared/lib/react';
 import { cva } from 'class-variance-authority';
 import { clsx } from 'clsx';
 import type { FC } from 'react';

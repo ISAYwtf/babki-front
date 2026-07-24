@@ -1,6 +1,8 @@
 import {
   mutationOptions, queryOptions, useMutation, useQueryClient,
 } from '@tanstack/react-query';
+import { expensesQueryKeys } from '@/entities/expenses/@x/plans';
+import { reportsQueryKeys } from '@/entities/reports/@x/plans';
 import { plansApi } from './plans.api';
 import type { ClosePlanPayload, ListPlansQuery, UpdatePlanPayload } from '../model/schemas';
 
@@ -69,8 +71,8 @@ export const useClosePlanMutation = () => {
       onSuccess: async () => {
         await Promise.all([
           queryClient.invalidateQueries({ queryKey: plansQueryKeys.listAll() }),
-          queryClient.invalidateQueries({ queryKey: ['expenses'] }),
-          queryClient.invalidateQueries({ queryKey: ['reports'] }),
+          queryClient.invalidateQueries({ queryKey: expensesQueryKeys.all }),
+          queryClient.invalidateQueries({ queryKey: reportsQueryKeys.all }),
         ]);
       },
     }),

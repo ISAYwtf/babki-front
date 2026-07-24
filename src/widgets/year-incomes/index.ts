@@ -1,1 +1,1 @@
-export { YearIncomes } from './year-incomes';
+export { YearIncomes } from './ui/year-incomes';

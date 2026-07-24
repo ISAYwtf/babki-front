@@ -1,1 +1,1 @@
-export { Savings } from './savings';
+export { Savings } from './ui/savings';

@@ -1,4 +1,4 @@
-import type { ExpensesPaginatedResponse } from '@/entities/expenses';
+import type { ExpensesPaginatedResponse } from '@/entities/expenses/@x/expense-limits';
 import { apiClient, parseWithSchema } from '@/shared/api';
 import {
   createExpenseLimitSchema,

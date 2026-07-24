@@ -1,4 +1,4 @@
-import { snapshotSchema } from '@/entities/accounts-snapshots';
+import { snapshotSchema } from '@/entities/accounts-snapshots/@x/accounts';
 import { z } from 'zod';
 import {
   dateStringSchema,

@@ -1,7 +1,7 @@
 import {
   accountSchema,
   upsertAccountSchema,
-} from '@/entities/accounts';
+} from '@/entities/accounts/@x/savings';
 import { z } from 'zod';
 
 export const savingSchema = accountSchema.omit({ type: true });

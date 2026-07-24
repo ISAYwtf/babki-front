@@ -1,8 +1,8 @@
 import { balancesQueryOptions } from '@/entities/balances';
 import { useCreateSaveMutation } from '@/entities/saves';
 import { Dialog as DialogPrimitive } from '@base-ui/react';
-import type { StandardSchemaV1Issue } from '@tanstack/react-form';
 import { useForm } from '@tanstack/react-form';
+import { getFirstFieldError, getMutationErrorMessage } from '@/shared/lib/form-errors';
 import { cn } from '@/shared/lib/shadcn-utils';
 import { Button } from '@/shared/ui/button';
 import { Dialog } from '@/shared/ui/dialog';
@@ -40,34 +40,6 @@ const mapErrorMessage = (code: string | undefined) => {
     default:
       return undefined;
   }
-};
-
-const isStandardSchemaV1Issue = (error: unknown): error is StandardSchemaV1Issue => (
-  !!error
-  && typeof error === 'object'
-  && 'message' in error
-);
-
-const getMutationErrorMessage = (error: unknown) => {
-  if (error && typeof error === 'object' && 'message' in error) {
-    return String(error.message);
-  }
-
-  return undefined;
-};
-
-const getFirstFieldError = (errors: unknown[]) => {
-  const firstError = errors[0];
-
-  if (typeof firstError === 'string') {
-    return firstError;
-  }
-
-  if (isStandardSchemaV1Issue(firstError)) {
-    return String(firstError.message);
-  }
-
-  return undefined;
 };
 
 export const CreateSaveButton: FC<CreateSaveButtonProps> = ({

@@ -1,1 +1,1 @@
-export { ExpensesByCategories } from './expenses-by-categories';
+export { ExpensesByCategories } from './ui/expenses-by-categories';

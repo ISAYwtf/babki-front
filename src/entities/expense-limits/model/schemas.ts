@@ -1,4 +1,4 @@
-import { expenseCategorySchema } from '@/entities/expense-categories';
+import { expenseCategorySchema } from '@/entities/expense-categories/@x/expense-limits';
 import { z } from 'zod';
 import {
   dateStringSchema,

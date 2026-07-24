@@ -4,6 +4,7 @@ import {
   useMutation,
   useQueryClient,
 } from '@tanstack/react-query';
+import { snapshotsQueryKeys } from '@/entities/accounts-snapshots/@x/incomes';
 import { incomesApi } from './incomes.api';
 import type {
   ListIncomesQuery,
@@ -45,7 +46,7 @@ export const useCreateIncomeMutation = () => {
       onSuccess: async (data) => {
         if (data) {
           await queryClient.invalidateQueries({ queryKey: incomesQueryKeys.all });
-          await queryClient.invalidateQueries({ queryKey: ['snapshots', data?.accountId] });
+          await queryClient.invalidateQueries({ queryKey: snapshotsQueryKeys.byAccount(data.accountId) });
         }
       },
     }),

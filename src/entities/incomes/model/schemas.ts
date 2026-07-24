@@ -3,7 +3,7 @@ import {
   listTransactionsQuerySchema,
   transactionSchema,
   transactionsRevenueSchema,
-} from '@/entities/transactions';
+} from '@/entities/transactions/@x/incomes';
 import { z } from 'zod';
 import { entityMetaSchema, paginatedResponseSchema } from '@/shared/api';
 

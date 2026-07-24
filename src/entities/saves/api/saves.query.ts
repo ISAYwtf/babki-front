@@ -4,6 +4,8 @@ import {
   useMutation,
   useQueryClient,
 } from '@tanstack/react-query';
+import { snapshotsQueryKeys } from '@/entities/accounts-snapshots/@x/saves';
+import { savingsQueryKeys } from '@/entities/savings/@x/saves';
 import { savesApi } from './saves.api';
 import type {
   ListSavesQuery,
@@ -45,9 +47,9 @@ export const useCreateSaveMutation = () => {
       onSuccess: async (data) => {
         if (data) {
           await queryClient.invalidateQueries({ queryKey: savesQueryKeys.all });
-          await queryClient.invalidateQueries({ queryKey: ['savings'] });
-          await queryClient.invalidateQueries({ queryKey: ['snapshots', data?.accountId] });
-          await queryClient.invalidateQueries({ queryKey: ['snapshots', data?.sourceAccountId] });
+          await queryClient.invalidateQueries({ queryKey: savingsQueryKeys.all });
+          await queryClient.invalidateQueries({ queryKey: snapshotsQueryKeys.byAccount(data.accountId) });
+          await queryClient.invalidateQueries({ queryKey: snapshotsQueryKeys.byAccount(data.sourceAccountId) });
         }
       },
     }),
@@ -69,8 +71,10 @@ export const useUpdateSaveMutation = () => {
       onSuccess: async (save, { saveId }) => {
         queryClient.setQueryData(savesQueryKeys.detail(saveId), save);
         await queryClient.invalidateQueries({ queryKey: savesQueryKeys.listAll() });
-        await queryClient.invalidateQueries({ queryKey: ['snapshots', save?.accountId] });
-        await queryClient.invalidateQueries({ queryKey: ['snapshots', save?.sourceAccountId] });
+        if (save) {
+          await queryClient.invalidateQueries({ queryKey: snapshotsQueryKeys.byAccount(save.accountId) });
+          await queryClient.invalidateQueries({ queryKey: snapshotsQueryKeys.byAccount(save.sourceAccountId) });
+        }
       },
     }),
   );

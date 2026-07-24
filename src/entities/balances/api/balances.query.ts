@@ -1,4 +1,4 @@
-import type { FindAccountByQuery } from '@/entities/accounts';
+import type { FindAccountByQuery } from '@/entities/accounts/@x/balances';
 import {
   mutationOptions,
   queryOptions,

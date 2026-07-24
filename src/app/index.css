@@ -1,6 +1,4 @@
-@import "@/shared/styles/font-faces.css";
-@import "@/shared/styles/custom-vars.css";
-@import "@/shared/styles/globals.css";
+@import "@/shared/styles/index.css";
 
 body {
   font-synthesis: none;

@@ -1,10 +1,11 @@
-import type { SnapshotFindByQuery } from '@/entities/accounts-snapshots';
 import { queryOptions } from '@tanstack/react-query';
 import { snapshotsApi } from './snapshots.api';
+import type { SnapshotFindByQuery } from '../model/schemas';
 
-const snapshotsQueryKeys = {
+export const snapshotsQueryKeys = {
   all: ['snapshots'] as const,
-  detail: (accountId: string, date: string) => ['snapshots', accountId, date],
+  byAccount: (accountId: string) => [...snapshotsQueryKeys.all, accountId] as const,
+  detail: (accountId: string, date: string) => [...snapshotsQueryKeys.byAccount(accountId), date] as const,
 };
 
 export const snapshotsQueryOptions = {

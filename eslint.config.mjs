@@ -66,4 +66,10 @@ export default defineConfig([
       '@stylistic/max-len': [2, { code: 120, tabWidth: 2 }],
     },
   },
+  {
+    files: ['*.config.js', '*.config.mjs'],
+    rules: {
+      'import-x/no-extraneous-dependencies': [2, { devDependencies: true }],
+    },
+  },
 ]);
