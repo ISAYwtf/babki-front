@@ -9,6 +9,7 @@ import i18next from 'i18next';
 import { LucideArrowDown, LucideArrowUp } from 'lucide-react';
 import { type ComponentProps, type FC, type ReactNode } from 'react';
 import { Button } from '@/shared/ui/button';
+import { Skeleton } from '@/shared/ui/skeleton';
 
 type CurrencyType = string;
 type DiffStyleType = 'percent' | 'currency';
@@ -32,6 +33,39 @@ interface ICardAmountProps extends ComponentProps<typeof Card.Base> {
   items?: AmountItem[];
   controls?: ReactNode;
 }
+
+interface ICardAmountSkeletonProps extends ComponentProps<typeof Card.Base> {
+  title?: string;
+  controls?: ReactNode;
+  withDiff?: boolean;
+}
+
+export const CardAmountSkeleton: FC<ICardAmountSkeletonProps> = ({
+  title,
+  controls,
+  withDiff = false,
+  ...htmlProps
+}) => (
+  <Card.Base
+    {...htmlProps}
+    aria-busy="true"
+    className={clsx('flex flex-col gap-2.5 max-w-xl p-3.5', htmlProps.className)}
+  >
+    <span className="sr-only">Загрузка...</span>
+    <div className="flex justify-between">
+      {title && (
+        <Typography.Title3 className="text-muted-foreground uppercase">
+          {title}
+        </Typography.Title3>
+      )}
+      {controls && <Card.Controls>{controls}</Card.Controls>}
+    </div>
+    <div className="flex justify-between items-end gap-2.5">
+      <Skeleton className="h-6 w-32" />
+      {withDiff && <Skeleton className="h-4 w-12" />}
+    </div>
+  </Card.Base>
+);
 
 export const CardAmount: FC<ICardAmountProps> = ({
   children,

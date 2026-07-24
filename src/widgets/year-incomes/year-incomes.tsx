@@ -1,7 +1,7 @@
 import { usePeriodStore } from '@/entities/period';
 import { reportsQueryOptions } from '@/entities/reports';
 import { getPercent } from '@/shared/lib/getPercent';
-import { CardAmount } from '@/shared/ui/card-amount';
+import { CardAmount, CardAmountSkeleton } from '@/shared/ui/card-amount';
 import { useQuery } from '@tanstack/react-query';
 import { type FC } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -13,7 +13,7 @@ export const YearIncomes: FC = () => {
 
   if (reportsLoading) {
     return (
-      <div>Загрузка...</div>
+      <CardAmountSkeleton title={t('incomes.title')} withDiff />
     );
   }
 

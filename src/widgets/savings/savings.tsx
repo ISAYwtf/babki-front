@@ -3,7 +3,7 @@ import { savingsQueryOptions } from '@/entities/savings';
 import { savesQueryOptions } from '@/entities/saves';
 import { CreateSaveButton } from '@/features/create-save';
 import { getPercent } from '@/shared/lib/getPercent';
-import { CardAmount } from '@/shared/ui/card-amount';
+import { CardAmount, CardAmountSkeleton } from '@/shared/ui/card-amount';
 import { useQuery } from '@tanstack/react-query';
 import { format } from 'date-fns';
 import { ru } from 'date-fns/locale';
@@ -16,7 +16,7 @@ export const Savings: FC = () => {
     toDate: selectedPeriod.toDate,
   }));
   const snapshotsData = savingData?.timeline[0];
-  const { data: transactionsData } = useQuery({
+  const { data: transactionsData, isLoading: transactionsLoading } = useQuery({
     ...savesQueryOptions.findAll({
       fromDate: selectedPeriod.fromDate,
       toDate: selectedPeriod.toDate,
@@ -29,9 +29,13 @@ export const Savings: FC = () => {
   const prevSnapshotData = savingData?.timeline[1];
   const diffAmount = getPercent(snapshotsData?.amount, prevSnapshotData?.amount);
 
-  if (savingLoading) {
+  if (savingLoading || transactionsLoading) {
     return (
-      <div>Загрузка...</div>
+      <CardAmountSkeleton
+        title={t('savings.title')}
+        controls={<CreateSaveButton />}
+        withDiff
+      />
     );
   }
 

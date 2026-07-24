@@ -4,6 +4,7 @@ import { getCurrentCurrencyCode } from '@/shared/lib/currency';
 import { Card } from '@/shared/ui/card';
 import { Chart } from '@/shared/ui/chart';
 import type { ChartConfig } from '@/shared/ui/chart/chart';
+import { Skeleton } from '@/shared/ui/skeleton';
 import { useQuery } from '@tanstack/react-query';
 import { endOfMonth, endOfYear, format } from 'date-fns';
 import i18next from 'i18next';
@@ -66,7 +67,15 @@ export const ExpensesByMonths: FC = () => {
 
   if (isLoading) {
     return (
-      <div>Загрузка...</div>
+      <Card.Base aria-busy="true" className="h-fit min-w-max">
+        <span className="sr-only">Загрузка...</span>
+        <Card.Header>
+          <Card.Title>Расходы по месяцам</Card.Title>
+        </Card.Header>
+        <Card.Content>
+          <Skeleton className="h-92.5 aspect-video" />
+        </Card.Content>
+      </Card.Base>
     );
   }
 

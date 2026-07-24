@@ -3,6 +3,7 @@ import { CreateDebtButton } from '@/features/create-debt';
 import { DebtDetailsDialog } from '@/features/manage-debt';
 import { getCurrentCurrencyCode } from '@/shared/lib/currency';
 import { Card } from '@/shared/ui/card';
+import { Skeleton } from '@/shared/ui/skeleton';
 import { Table } from '@/shared/ui/table';
 import { Body1 } from '@/shared/ui/typography/typography';
 import { useQuery } from '@tanstack/react-query';
@@ -29,12 +30,33 @@ export const Debts: FC = () => {
 
   if (isLoading) {
     return (
-      <div>Загрузка...</div>
+      <Card.Base aria-busy="true" className="min-h-64">
+        <span className="sr-only">Загрузка...</span>
+        <Card.Header>
+          <Card.Title>{t('debts.title')}</Card.Title>
+          <Card.Controls>
+            <CreateDebtButton />
+          </Card.Controls>
+        </Card.Header>
+        <Card.Content className="px-0">
+          <Table.Base>
+            <Table.Body>
+              {['first', 'second', 'third'].map((row) => (
+                <Table.Row key={row}>
+                  <Table.Cell><Skeleton className="h-4 w-28" /></Table.Cell>
+                  <Table.Cell><Skeleton className="h-4 w-24" /></Table.Cell>
+                  <Table.Cell><Skeleton className="ml-auto h-4 w-20" /></Table.Cell>
+                </Table.Row>
+              ))}
+            </Table.Body>
+          </Table.Base>
+        </Card.Content>
+      </Card.Base>
     );
   }
 
   return (
-    <Card.Base>
+    <Card.Base className="min-h-64">
       <Card.Header>
         <Card.Title>{t('debts.title')}</Card.Title>
         <Card.Controls>

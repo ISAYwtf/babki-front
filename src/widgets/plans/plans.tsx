@@ -3,6 +3,7 @@ import { CreatePlanButton } from '@/features/create-plan';
 import { PlanDetailsDialog } from '@/features/manage-plan';
 import { getCurrentCurrencyCode } from '@/shared/lib/currency';
 import { Card } from '@/shared/ui/card';
+import { Skeleton } from '@/shared/ui/skeleton';
 import { Table } from '@/shared/ui/table';
 import { useQuery } from '@tanstack/react-query';
 import i18next from 'i18next';
@@ -30,7 +31,8 @@ export const Plans: FC = () => {
   const [selectedPlan, setSelectedPlan] = useState<Plan | null>(null);
 
   return (
-    <Card.Base>
+    <Card.Base aria-busy={isLoading} className="min-h-64">
+      {isLoading && <span className="sr-only">Загрузка...</span>}
       <Card.Header>
         <Card.Title>Планирование</Card.Title>
         <Card.Controls>
@@ -38,9 +40,23 @@ export const Plans: FC = () => {
         </Card.Controls>
       </Card.Header>
       <Card.Content className="px-0">
-        {isLoading && <div className="px-5 py-3 text-muted-foreground">Загрузка...</div>}
+        {isLoading && (
+          <Table.Base>
+            <Table.Body>
+              {['first', 'second', 'third'].map((row) => (
+                <Table.Row key={row}>
+                  <Table.Cell><Skeleton className="h-4 w-32" /></Table.Cell>
+                  <Table.Cell><Skeleton className="h-4 w-24" /></Table.Cell>
+                  <Table.Cell><Skeleton className="ml-auto h-4 w-20" /></Table.Cell>
+                </Table.Row>
+              ))}
+            </Table.Body>
+          </Table.Base>
+        )}
         {!isLoading && !data?.items.length && (
-          <div className="px-5 py-3 text-muted-foreground">Нет активных планов</div>
+          <div className="flex min-h-36 items-center justify-center px-5 py-3 text-muted-foreground">
+            Нет активных планов
+          </div>
         )}
         {!isLoading && !!data?.items.length && (
           <Table.Base>

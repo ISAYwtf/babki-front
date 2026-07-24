@@ -3,6 +3,7 @@ import { useSelectedPeriod } from '@/entities/period/hooks/useSelectedPeriod';
 import { getCurrentCurrencyCode } from '@/shared/lib/currency';
 import { Card } from '@/shared/ui/card';
 import { ExpenseCategory } from '@/shared/ui/expense-category';
+import { Skeleton } from '@/shared/ui/skeleton';
 import { Table } from '@/shared/ui/table';
 import {
   Body1,
@@ -33,12 +34,38 @@ export const Expenses: FC = () => {
 
   if (isLoading) {
     return (
-      <div>Загрузка...</div>
+      <Card.Base aria-busy="true" className="h-fit min-h-64 min-w-max">
+        <span className="sr-only">Загрузка...</span>
+        <Card.Header>
+          <Card.Title>{t('expenses.title')}</Card.Title>
+        </Card.Header>
+        <Card.Content className="px-0">
+          <Table.Base>
+            <Table.Body>
+              {['first', 'second', 'third'].map((row) => (
+                <Table.Row key={row}>
+                  <div className="grid grid-cols-4 items-center">
+                    <Table.Cell><Skeleton className="h-5 w-24" /></Table.Cell>
+                    <Table.Cell><Skeleton className="h-4 w-32" /></Table.Cell>
+                    <Table.Cell>
+                      <div className="flex flex-col gap-2">
+                        <Skeleton className="h-4 w-20" />
+                        <Skeleton className="h-3 w-24" />
+                      </div>
+                    </Table.Cell>
+                    <Table.Cell><Skeleton className="h-4 w-28" /></Table.Cell>
+                  </div>
+                </Table.Row>
+              ))}
+            </Table.Body>
+          </Table.Base>
+        </Card.Content>
+      </Card.Base>
     );
   }
 
   return (
-    <Card.Base className="h-fit min-w-max">
+    <Card.Base className="h-fit min-h-64 min-w-max">
       <Card.Header>
         <Card.Title>{t('expenses.title')}</Card.Title>
       </Card.Header>

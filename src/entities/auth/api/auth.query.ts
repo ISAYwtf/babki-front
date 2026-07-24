@@ -23,6 +23,8 @@ export const useLoginMutation = () => {
     mutationOptions({
       mutationFn: (payload: LoginDto) => authApi.login(payload),
       onSuccess: (authResponse) => {
+        if (!authResponse) return;
+
         handleAuthSuccess(authResponse);
         queryClient.setQueryData(usersQueryKeys.me(), authResponse.user);
       },
@@ -37,6 +39,8 @@ export const useRegisterMutation = () => {
     mutationOptions({
       mutationFn: (payload: RegisterDto) => authApi.register(payload),
       onSuccess: (authResponse) => {
+        if (!authResponse) return;
+
         handleAuthSuccess(authResponse);
         queryClient.setQueryData(usersQueryKeys.me(), authResponse.user);
       },

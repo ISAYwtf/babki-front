@@ -5,6 +5,8 @@ import { getCurrentCurrencyCode } from '@/shared/lib/currency';
 import { getPercent } from '@/shared/lib/getPercent';
 import { Card } from '@/shared/ui/card';
 import { Progress } from '@/shared/ui/progress';
+import { Skeleton } from '@/shared/ui/skeleton';
+import { Body1 } from '@/shared/ui/typography/typography';
 import { useQuery } from '@tanstack/react-query';
 import i18next from 'i18next';
 import {
@@ -40,16 +42,41 @@ export const ExpensesByCategories: FC = () => {
 
   if (expensesLoading || categoriesLoading) {
     return (
-      <div>Загрузка...</div>
+      <Card.Base aria-busy="true" className="h-fit min-h-56 min-w-93">
+        <span className="sr-only">Загрузка...</span>
+        <Card.Header>
+          <Card.Title>По категориям</Card.Title>
+        </Card.Header>
+        <Card.Content className="px-0">
+          {['first', 'second', 'third'].map((row) => (
+            <div key={row} className="px-5 pb-5">
+              <div className="mb-2 flex justify-between gap-4">
+                <Skeleton className="h-4 w-24" />
+                <Skeleton className="h-4 w-16" />
+              </div>
+              <Skeleton className="h-1 w-full rounded-full" />
+            </div>
+          ))}
+        </Card.Content>
+      </Card.Base>
     );
   }
 
   if (!categories?.length) {
-    return null;
+    return (
+      <Card.Base className="h-fit min-h-56 min-w-93">
+        <Card.Header>
+          <Card.Title>По категориям</Card.Title>
+        </Card.Header>
+        <Card.Content className="flex grow items-center justify-center">
+          <Body1 className="text-muted-foreground">Данные отсутствуют</Body1>
+        </Card.Content>
+      </Card.Base>
+    );
   }
 
   return (
-    <Card.Base className="h-fit min-w-93">
+    <Card.Base className="h-fit min-h-56 min-w-93">
       <Card.Header>
         <Card.Title>По категориям</Card.Title>
       </Card.Header>

@@ -4,6 +4,7 @@ import { getCurrentCurrencyCode } from '@/shared/lib/currency';
 import { Card } from '@/shared/ui/card';
 import { Chart } from '@/shared/ui/chart';
 import type { ChartConfig } from '@/shared/ui/chart/chart';
+import { Skeleton } from '@/shared/ui/skeleton';
 import { useQuery } from '@tanstack/react-query';
 import { isAfter } from 'date-fns';
 import i18next from 'i18next';
@@ -44,7 +45,15 @@ export const ExpensesByDays: FC = () => {
 
   if (expensesLoading) {
     return (
-      <div>Загрузка...</div>
+      <Card.Base aria-busy="true" className="h-fit min-w-max w-200">
+        <span className="sr-only">Загрузка...</span>
+        <Card.Header>
+          <Card.Title>Расходы по дням</Card.Title>
+        </Card.Header>
+        <Card.Content>
+          <Skeleton className="aspect-video w-full" />
+        </Card.Content>
+      </Card.Base>
     );
   }
 

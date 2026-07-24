@@ -1,7 +1,7 @@
 import { incomesQueryOptions } from '@/entities/incomes/api/incomes.query';
 import { useSelectedPeriod } from '@/entities/period/hooks/useSelectedPeriod';
 import { CreateIncomeButton } from '@/features/create-income';
-import { CardAmount } from '@/shared/ui/card-amount';
+import { CardAmount, CardAmountSkeleton } from '@/shared/ui/card-amount';
 import { useQuery } from '@tanstack/react-query';
 import { format } from 'date-fns';
 import { ru } from 'date-fns/locale';
@@ -20,7 +20,7 @@ export const Incomes: FC = () => {
 
   if (totalRevenueLoading || incomesLoading) {
     return (
-      <div>Загрузка...</div>
+      <CardAmountSkeleton title={t('incomes.title')} controls={<CreateIncomeButton />} />
     );
   }
 

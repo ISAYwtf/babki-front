@@ -5,6 +5,8 @@ import { getCurrentCurrencyCode } from '@/shared/lib/currency';
 import { Card } from '@/shared/ui/card';
 import { Chart } from '@/shared/ui/chart';
 import type { ChartConfig } from '@/shared/ui/chart/chart';
+import { Skeleton } from '@/shared/ui/skeleton';
+import { Body1 } from '@/shared/ui/typography/typography';
 import { useQuery } from '@tanstack/react-query';
 import i18next from 'i18next';
 import { type FC, useMemo } from 'react';
@@ -65,11 +67,34 @@ export const ExpensesByAnnualCategories: FC = () => {
   ), [chartData]);
 
   if (reportsLoading || categoriesLoading) {
-    return <div>Загрузка...</div>;
+    return (
+      <Card.Base aria-busy="true" className="h-fit min-w-min">
+        <span className="sr-only">Загрузка...</span>
+        <Card.Header>
+          <Card.Title>Расходы по категориям за год</Card.Title>
+        </Card.Header>
+        <Card.Content>
+          <div className="flex h-72 w-75 items-center justify-center">
+            <Skeleton className="size-52 rounded-full" />
+          </div>
+        </Card.Content>
+      </Card.Base>
+    );
   }
 
   if (!chartData.length) {
-    return null;
+    return (
+      <Card.Base className="h-fit min-w-min">
+        <Card.Header>
+          <Card.Title>Расходы по категориям за год</Card.Title>
+        </Card.Header>
+        <Card.Content>
+          <div className="flex h-72 w-75 items-center justify-center">
+            <Body1 className="text-muted-foreground">Данные отсутствуют</Body1>
+          </div>
+        </Card.Content>
+      </Card.Base>
+    );
   }
 
   return (

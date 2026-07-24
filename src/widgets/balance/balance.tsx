@@ -1,6 +1,6 @@
 import { balancesQueryOptions } from '@/entities/balances';
 import { useSelectedPeriod } from '@/entities/period/hooks/useSelectedPeriod';
-import { CardAmount } from '@/shared/ui/card-amount';
+import { CardAmount, CardAmountSkeleton } from '@/shared/ui/card-amount';
 import { useQuery } from '@tanstack/react-query';
 import type { FC } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -14,7 +14,7 @@ export const Balance: FC = () => {
 
   if (balanceLoading) {
     return (
-      <div>Загрузка...</div>
+      <CardAmountSkeleton title={t('account.title')} />
     );
   }
 

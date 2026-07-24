@@ -1,1 +1,1 @@
-export { CardAmount } from './card-amount';
+export { CardAmount, CardAmountSkeleton } from './card-amount';
