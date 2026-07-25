@@ -76,7 +76,7 @@ export const Expenses: FC = () => {
               _id, amount, transactionDate, merchant, category, description, items,
             }) => (
               <Accordion.Item key={_id} render={<Table.Row />}>
-                <div className="grid grid-cols-4 items-center">
+                <div className="grid grid-cols-[repeat(4,minmax(0,170px))] items-center">
                   <Table.Cell>
                     <ExpenseCategoryBadge color={category.color}>{category.name}</ExpenseCategoryBadge>
                   </Table.Cell>

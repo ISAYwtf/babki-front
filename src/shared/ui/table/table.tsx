@@ -60,7 +60,7 @@ export const TableHead = ({ className, ...props }: ComponentProps<'div'>) => (
 export const TableCell = ({ className, ...props }: ComponentProps<'div'>) => (
   <div
     data-slot="table-cell"
-    className={cn('table-cell p-5 align-middle whitespace-nowrap has-[[role=checkbox]]:pr-0', className)}
+    className={cn('table-cell p-5 align-middle has-[[role=checkbox]]:pr-0', className)}
     {...props}
   />
 );
