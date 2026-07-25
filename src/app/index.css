@@ -1,5 +1,10 @@
 @import "@/shared/styles/index.css";
 
+:root {
+  --app-content-max-width: 1200px;
+  --viewport-inline-bleed: max(0px, calc((100vw - var(--app-content-max-width)) / 2));
+}
+
 body {
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -12,7 +17,7 @@ body {
   display: flex;
   justify-content: center;
   min-width: 320px;
-  max-width: 1200px;
+  max-width: var(--app-content-max-width);
   min-height: 100vh;
   padding-bottom: 80px;
 }

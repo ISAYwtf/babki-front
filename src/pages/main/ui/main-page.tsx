@@ -15,6 +15,7 @@ import { YearIncomes } from '@/widgets/year-incomes';
 import { YearSavings } from '@/widgets/year-savings';
 import { MonthSwitcher, YearSwitcher } from '@/features/select-period';
 import { Header } from '@/shared/ui/header';
+import { HorizontalScroller } from '@/shared/ui/horizontal-scroller';
 import { useTranslation } from 'react-i18next';
 
 export function MainPage() {
@@ -35,11 +36,16 @@ export function MainPage() {
             <YearExpenses />
           </div>
 
-          <div className="flex flex-col grow gap-5 overflow-hidden">
-            <div className="flex gap-5 overflow-scroll">
+          <div className="flex min-w-0 grow flex-col gap-5">
+            <HorizontalScroller
+              aria-label="Годовые отчёты"
+              bleed="viewport-end"
+              role="region"
+              trackClassName="gap-5 pb-2"
+            >
               <ExpensesByMonths />
               <ExpensesByAnnualCategories />
-            </div>
+            </HorizontalScroller>
             <div className="grid grid-flow-col-dense gap-5">
               <Plans />
               <Debts />
@@ -49,13 +55,16 @@ export function MainPage() {
 
         <MonthSwitcher />
 
-        <div className="grid gap-2.5 grid-cols-[1fr_minmax(auto,400px)] overflow-scroll no-scrollbar">
+        <HorizontalScroller
+          aria-label="Отчёты за месяц"
+          bleed="viewport-both"
+          role="region"
+          trackClassName="gap-2.5 pb-2"
+        >
           <ExpensesByDays />
-          <div className="flex gap-2.5">
-            <ExpensesByCategories />
-            <ExpenseLimits />
-          </div>
-        </div>
+          <ExpensesByCategories />
+          <ExpenseLimits />
+        </HorizontalScroller>
         <div className="grid gap-2.5 grid-cols-[1fr_minmax(auto,400px)]">
           <Expenses />
           <div className="flex flex-col gap-2.5">
