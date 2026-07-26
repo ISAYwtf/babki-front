@@ -1,5 +1,8 @@
 import { z } from 'zod';
-import { entityMetaSchema } from '@/shared/api';
+import {
+  dateStringSchema,
+  entityMetaSchema,
+} from '@/shared/api';
 
 export const expenseCategorySchema = z
   .object({
@@ -7,6 +10,8 @@ export const expenseCategorySchema = z
     description: z.string().max(500).optional(),
     color: z.string().optional(),
     isArchived: z.boolean(),
+    createdAt: dateStringSchema,
+    updatedAt: dateStringSchema,
   })
   .extend(entityMetaSchema.shape);
 

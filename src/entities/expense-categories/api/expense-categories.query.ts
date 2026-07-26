@@ -4,6 +4,8 @@ import {
   useMutation,
   useQueryClient,
 } from '@tanstack/react-query';
+import { expenseLimitsQueryKeys } from '@/entities/expense-limits/@x/expense-categories';
+import { expensesQueryKeys } from '@/entities/expenses/@x/expense-categories';
 import { expenseCategoriesApi } from './expense-categories.api';
 import type {
   CreateExpenseCategoryDto,
@@ -64,13 +66,21 @@ export const useUpdateExpenseCategoryMutation = () => {
         payload: UpdateExpenseCategoryDto;
       }) => expenseCategoriesApi.update(categoryId, payload),
       onSuccess: async (category, { categoryId }) => {
-        await queryClient.invalidateQueries({
-          queryKey: expenseCategoriesQueryKeys.lists(),
-        });
         queryClient.setQueryData(
           expenseCategoriesQueryKeys.detail(categoryId),
           category,
         );
+        await Promise.all([
+          queryClient.invalidateQueries({
+            queryKey: expenseCategoriesQueryKeys.lists(),
+          }),
+          queryClient.invalidateQueries({
+            queryKey: expensesQueryKeys.listAll(),
+          }),
+          queryClient.invalidateQueries({
+            queryKey: expenseLimitsQueryKeys.listAll(),
+          }),
+        ]);
       },
     }),
   );
@@ -82,10 +92,19 @@ export const useDeleteExpenseCategoryMutation = () => {
   return useMutation(
     mutationOptions({
       mutationFn: deleteExpenseCategoryMutationFn,
-      onSuccess: async () => {
-        await queryClient.invalidateQueries({
-          queryKey: expenseCategoriesQueryKeys.lists(),
+      onSuccess: async (_, { categoryId }) => {
+        queryClient.removeQueries({
+          queryKey: expenseCategoriesQueryKeys.detail(categoryId),
+          exact: true,
         });
+        await Promise.all([
+          queryClient.invalidateQueries({
+            queryKey: expenseCategoriesQueryKeys.lists(),
+          }),
+          queryClient.invalidateQueries({
+            queryKey: expenseLimitsQueryKeys.listAll(),
+          }),
+        ]);
       },
     }),
   );

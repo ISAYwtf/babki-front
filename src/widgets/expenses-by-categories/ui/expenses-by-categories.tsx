@@ -1,5 +1,6 @@
 import { expenseCategoriesQueryOptions } from '@/entities/expense-categories';
 import { expensesQueryOptions } from '@/entities/expenses';
+import { ManageExpenseCategoriesButton } from '@/features/manage-expense-categories';
 import { useSelectedPeriod } from '@/features/select-period';
 import { getCurrentCurrencyCode } from '@/shared/lib/currency';
 import { getPercent } from '@/shared/lib/getPercent';
@@ -39,49 +40,37 @@ export const ExpensesByCategories: FC = () => {
         };
       }, { total: 0 })
   ), [expensesData?.items]);
-
-  if (expensesLoading || categoriesLoading) {
-    return (
-      <Card.Base aria-busy="true" className="h-fit min-h-56 min-w-93">
-        <span className="sr-only">Загрузка...</span>
-        <Card.Header>
-          <Card.Title>По категориям</Card.Title>
-        </Card.Header>
-        <Card.Content className="px-0">
-          {['first', 'second', 'third'].map((row) => (
-            <div key={row} className="px-5 pb-5">
-              <div className="mb-2 flex justify-between gap-4">
-                <Skeleton className="h-4 w-24" />
-                <Skeleton className="h-4 w-16" />
-              </div>
-              <Skeleton className="h-1 w-full rounded-full" />
-            </div>
-          ))}
-        </Card.Content>
-      </Card.Base>
-    );
-  }
-
-  if (!categories?.length) {
-    return (
-      <Card.Base className="h-fit min-h-56 min-w-93">
-        <Card.Header>
-          <Card.Title>По категориям</Card.Title>
-        </Card.Header>
-        <Card.Content className="flex grow items-center justify-center">
-          <Body1 className="text-muted-foreground">Данные отсутствуют</Body1>
-        </Card.Content>
-      </Card.Base>
-    );
-  }
+  const isLoading = expensesLoading || categoriesLoading;
+  const contentClassName = !isLoading && !categories?.length
+    ? 'flex grow items-center justify-center'
+    : 'px-0';
 
   return (
-    <Card.Base className="h-fit min-h-56 min-w-93">
+    <Card.Base
+      aria-busy={isLoading || undefined}
+      className="h-fit min-h-56 min-w-93"
+    >
+      {isLoading && <span className="sr-only">Загрузка...</span>}
       <Card.Header>
         <Card.Title>По категориям</Card.Title>
+        <Card.Controls>
+          <ManageExpenseCategoriesButton />
+        </Card.Controls>
       </Card.Header>
-      <Card.Content className="px-0">
-        {categories.map((category) => {
+      <Card.Content className={contentClassName}>
+        {isLoading && ['first', 'second', 'third'].map((row) => (
+          <div key={row} className="px-5 pb-5">
+            <div className="mb-2 flex justify-between gap-4">
+              <Skeleton className="h-4 w-24" />
+              <Skeleton className="h-4 w-16" />
+            </div>
+            <Skeleton className="h-1 w-full rounded-full" />
+          </div>
+        ))}
+        {!isLoading && !categories?.length && (
+          <Body1 className="text-muted-foreground">Данные отсутствуют</Body1>
+        )}
+        {!isLoading && categories?.map((category) => {
           const categoryExpenses = expensesByCategories[category._id] ?? 0;
           return (
             <div key={category._id} className="px-5 pb-5">
