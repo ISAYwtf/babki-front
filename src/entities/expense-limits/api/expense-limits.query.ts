@@ -30,12 +30,39 @@ export const expenseLimitsQueryOptions = {
   }),
 };
 
+const createExpenseLimitMutationFn = async (
+  payload: CreateExpenseLimitDto,
+) => {
+  const createdLimit = await expenseLimitsApi.create(payload);
+  if (createdLimit) return createdLimit;
+
+  const periodDate = payload.startDate ?? payload.endDate;
+  if (!periodDate) return null;
+
+  const limits = await expenseLimitsApi.findAll({ periodDate }).catch(() => null);
+  return limits?.find((limit) => limit.category._id === payload.categoryId) ?? null;
+};
+
+const updateExpenseLimitMutationFn = async (
+  limitId: string,
+  payload: UpdateExpenseLimitDto,
+) => {
+  const updatedLimit = await expenseLimitsApi.update(limitId, payload);
+  if (updatedLimit) return updatedLimit;
+
+  return expenseLimitsApi.findOne(limitId).catch(() => null);
+};
+
 export const useCreateExpenseLimitMutation = () => {
   const queryClient = useQueryClient();
 
   return useMutation(
     mutationOptions({
-      mutationFn: ({ payload }: { payload: CreateExpenseLimitDto }) => expenseLimitsApi.create(payload),
+      mutationFn: ({
+        payload,
+      }: {
+        payload: CreateExpenseLimitDto;
+      }) => createExpenseLimitMutationFn(payload),
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: expenseLimitsQueryKeys.all });
       },
@@ -54,10 +81,14 @@ export const useUpdateExpenseLimitMutation = () => {
       }: {
         limitId: string;
         payload: UpdateExpenseLimitDto;
-      }) => expenseLimitsApi.update(limitId, payload),
-      onSuccess: (category, { limitId }) => {
+      }) => updateExpenseLimitMutationFn(limitId, payload),
+      onSuccess: (updatedLimit, { limitId }) => {
         queryClient.invalidateQueries({ queryKey: expenseLimitsQueryKeys.listAll() });
-        queryClient.setQueryData(expenseLimitsQueryKeys.detail(limitId), category);
+        if (updatedLimit) {
+          queryClient.setQueryData(expenseLimitsQueryKeys.detail(limitId), updatedLimit);
+        } else {
+          queryClient.invalidateQueries({ queryKey: expenseLimitsQueryKeys.detail(limitId) });
+        }
       },
     }),
   );

@@ -18,6 +18,7 @@ interface CategorySelectProps {
   placeholder: string;
   disabled?: boolean;
   hasError?: boolean;
+  describedBy?: string;
 }
 
 export const CategorySelect: FC<CategorySelectProps> = ({
@@ -28,6 +29,7 @@ export const CategorySelect: FC<CategorySelectProps> = ({
   placeholder,
   disabled,
   hasError,
+  describedBy,
 }) => {
   const selected = options.find((option) => option._id === value);
 
@@ -41,7 +43,7 @@ export const CategorySelect: FC<CategorySelectProps> = ({
         onBlur={onBlur}
         className={cn(
           `
-            flex h-11 w-full items-center justify-between rounded-lg border bg-background
+            flex h-11 min-w-0 w-full items-center justify-between overflow-hidden rounded-lg border bg-background
             px-3 py-2 text-body-2 transition-colors outline-none
             focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/30
             disabled:cursor-not-allowed disabled:opacity-50
@@ -51,6 +53,9 @@ export const CategorySelect: FC<CategorySelectProps> = ({
             'focus-visible:border-destructive focus-visible:ring-destructive/20',
           ],
         )}
+        aria-label={placeholder}
+        aria-invalid={hasError || undefined}
+        aria-describedby={describedBy}
       >
         {selected ? (
           <ExpenseCategoryBadge color={selected.color}>{selected.name}</ExpenseCategoryBadge>

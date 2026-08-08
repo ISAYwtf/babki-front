@@ -1,4 +1,5 @@
 import { expenseLimitsQueryOptions } from '@/entities/expense-limits';
+import { ManageExpenseLimitsButton } from '@/features/manage-expense-limits';
 import { useSelectedPeriod } from '@/features/select-period';
 import { getCurrentCurrencyCode } from '@/shared/lib/currency';
 import { Card } from '@/shared/ui/card';
@@ -29,6 +30,9 @@ export const ExpenseLimits: FC = () => {
         <span className="sr-only">Загрузка...</span>
         <Card.Header>
           <Card.Title>По лимитам</Card.Title>
+          <Card.Controls>
+            <ManageExpenseLimitsButton periodDate={selectedPeriod.toDate} />
+          </Card.Controls>
         </Card.Header>
         <Card.Content className="px-0">
           {['first', 'second', 'third'].map((row) => (
@@ -49,6 +53,9 @@ export const ExpenseLimits: FC = () => {
     <Card.Base className="h-fit min-h-56 min-w-93">
       <Card.Header>
         <Card.Title>По лимитам</Card.Title>
+        <Card.Controls>
+          <ManageExpenseLimitsButton periodDate={selectedPeriod.toDate} />
+        </Card.Controls>
       </Card.Header>
       <Card.Content className="px-0">
         {limitsData?.map(({

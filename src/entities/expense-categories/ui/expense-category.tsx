@@ -11,11 +11,11 @@ export const ExpenseCategoryBadge: FC<ExpenseCategoryBadgeProps> = ({
   color,
 }) => (
   <div
-    className="flex gap-2 items-center rounded-full py-1 px-2.5 w-fit"
+    className="flex min-w-0 max-w-full w-fit gap-2 items-center rounded-full py-1 px-2.5"
     style={{ backgroundColor: `rgb(from ${color} r g b / 0.2)` }}
   >
-    <div className="rounded-full w-2 h-2" style={{ backgroundColor: color }} />
-    <Typography.Caption1 style={{ color }}>
+    <div className="size-2 shrink-0 rounded-full" style={{ backgroundColor: color }} />
+    <Typography.Caption1 className="truncate" style={{ color }}>
       {children}
     </Typography.Caption1>
   </div>
