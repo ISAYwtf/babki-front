@@ -138,15 +138,14 @@ export const changeExpenseItemQuantity = (
 
 export const calculateExpenseItemsTotal = (items: ExpenseItemDraft[]) => {
   const amountInMinorUnits = items.reduce((total, item) => {
-    const quantity = Number(item.quantity);
     const price = Number(item.price);
 
-    if (!Number.isInteger(quantity) || quantity < 1 || !Number.isFinite(price) || price <= 0) {
+    if (!Number.isFinite(price) || price <= 0) {
       return total;
     }
 
-    const unitPriceInMinorUnits = Math.round((price + Number.EPSILON) * 100);
-    return total + quantity * unitPriceInMinorUnits;
+    const priceInMinorUnits = Math.round((price + Number.EPSILON) * 100);
+    return total + priceInMinorUnits;
   }, 0);
 
   return amountInMinorUnits > 0 ? String(amountInMinorUnits / 100) : '';

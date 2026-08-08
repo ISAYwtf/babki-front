@@ -55,7 +55,7 @@ and optional item-list controls, and SHALL initialize every new dialog session d
 
 ### Requirement: Sequential item-list management
 The system SHALL let users add and remove optional expense items one at a time, with each item containing a required
-name, integer quantity of at least one, and positive unit price.
+name, integer quantity of at least one, and positive item price.
 
 #### Scenario: Offer the initial item action
 - **WHEN** the dialog contains no item rows
@@ -63,15 +63,15 @@ name, integer quantity of at least one, and positive unit price.
 
 #### Scenario: Add the first item
 - **WHEN** the user activates "Список"
-- **THEN** the system appends exactly one item row with an empty name, quantity `1`, and an empty unit price
+- **THEN** the system appends exactly one item row with an empty name, quantity `1`, and an empty price
 - **THEN** the add action label changes to "Добавить ещё"
 
 #### Scenario: Prevent another incomplete row
-- **WHEN** the last item has an empty name, non-integer or less-than-one quantity, or non-positive or missing unit price
+- **WHEN** the last item has an empty name, non-integer or less-than-one quantity, or non-positive or missing price
 - **THEN** the system disables "Добавить ещё"
 
 #### Scenario: Add another valid item
-- **WHEN** the last item has a non-whitespace name, integer quantity of at least one, and positive unit price
+- **WHEN** the last item has a non-whitespace name, integer quantity of at least one, and positive price
 - **THEN** activating "Добавить ещё" appends exactly one new item row with quantity `1`
 
 #### Scenario: Increment item quantity
@@ -103,20 +103,26 @@ name, integer quantity of at least one, and positive unit price.
 - **THEN** each control exposes a localized accessible name identifying its action
 
 ### Requirement: Automatic total with manual override
-The system SHALL calculate the expense amount from item quantities and unit prices while automatic mode is active and
-SHALL preserve a user-entered nonzero amount until the user resets the override by entering zero or clearing the amount.
+The system SHALL calculate the expense amount as the sum of positive item prices while automatic mode is active,
+without using item quantities, and SHALL preserve a user-entered nonzero amount until the user resets the override by
+entering zero or clearing the amount.
 
 #### Scenario: Calculate a completed item total
-- **WHEN** automatic mode is active and an item has a parseable quantity and unit price
-- **THEN** the amount includes that item's `quantity × unit price`
+- **WHEN** automatic mode is active and an item has a parseable positive price
+- **THEN** the amount includes that price exactly once
 
-#### Scenario: Recalculate after an item change
-- **WHEN** automatic mode is active and the user changes an item quantity or unit price
-- **THEN** the amount becomes the sum of `quantity × unit price` across the current parseable items
+#### Scenario: Ignore quantity during automatic calculation
+- **WHEN** automatic mode is active and the user changes an item quantity or leaves it empty or invalid
+- **THEN** the amount remains the sum of the current positive item prices
+- **THEN** quantity validation continues to determine whether the item and form can be submitted
+
+#### Scenario: Recalculate after an item price change
+- **WHEN** automatic mode is active and the user changes an item price
+- **THEN** the amount becomes the sum of positive prices across the current items
 
 #### Scenario: Recalculate after item addition or removal
 - **WHEN** automatic mode is active and the user adds or removes an item
-- **THEN** the amount reflects the remaining parseable item values without displaying floating-point artifacts
+- **THEN** the amount reflects the remaining positive item prices without displaying floating-point artifacts
 
 #### Scenario: Enter a manual amount
 - **WHEN** the user enters a nonzero amount
@@ -201,7 +207,7 @@ during the request, and preserve recoverable state when the request fails.
 
 #### Scenario: Map a valid form to the API contract
 - **WHEN** the user submits a valid form
-- **THEN** the system trims textual values, converts amount, quantities, and unit prices to numbers, and sends the
+- **THEN** the system trims textual values, converts amount, quantities, and prices to numbers, and sends the
   existing `CreateExpenseDto` request shape
 - **THEN** blank optional merchant, description, and absent item list values are omitted
 

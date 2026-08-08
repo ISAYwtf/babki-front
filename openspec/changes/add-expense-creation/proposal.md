@@ -9,10 +9,10 @@ the current month's transactions and keeps every expense-derived widget consiste
 - Add a plus action to the expense-table widget while the dashboard shows the user's current local calendar month,
   including the widget's loading, empty, and populated states.
 - Add an expense-creation dialog for category, amount, date, merchant, description, and an optional itemized list.
-- Support sequential item entry with integer quantity controls, unit prices, per-item removal, and conditional form
+- Support sequential item entry with integer quantity controls, item prices, per-item removal, and conditional form
   validation that requires either a description or at least one valid item.
-- Calculate the total from item quantities and prices until the user manually overrides it; entering zero or clearing
-  the amount clears the override and restores automatic calculation.
+- Calculate the total as the sum of item prices, independently of item quantities, until the user manually overrides
+  it; entering zero or clearing the amount clears the override and restores automatic calculation.
 - Submit through the existing expense creation API and refresh all expense-dependent transaction, report, limit,
   balance, and account-snapshot data after a successful request.
 - Add localized loading, validation, empty-category, pending, and server-error states without changing the backend

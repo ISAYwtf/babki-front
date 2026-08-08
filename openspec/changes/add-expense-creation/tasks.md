@@ -21,7 +21,7 @@
 
 ## 3. Expense Item Interface
 
-- [x] 3.1 Build an accessible expense-item row with name and unit-price inputs, integer quantity input, increment and
+- [x] 3.1 Build an accessible expense-item row with name and price inputs, integer quantity input, increment and
   decrement controls, remove action, pending state, and field-level errors.
 - [x] 3.2 Implement `Список` creation with quantity `1`, switch to `Добавить ещё` after the first row, and disable
   adding another row until the current last row is valid.
@@ -71,3 +71,5 @@
 - [x] 6.9 Remove the leading plus characters from the `Список` and `Добавить ещё` item-list action labels.
 - [x] 6.10 Align category validation coverage and specifications with submit-only required feedback because the selector
   has no clear affordance.
+- [x] 6.11 Calculate the automatic amount from item prices only, keep quantity validation and API mapping unchanged,
+  update the change artifacts and regression coverage, and verify that quantity edits do not change the amount.

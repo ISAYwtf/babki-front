@@ -44,24 +44,24 @@ test('changes integer quantities by one without going below one', async () => {
   assert.equal(model.changeExpenseItemQuantity?.('1', -1), '1');
 });
 
-test('calculates a rounded item total without floating-point artifacts', async () => {
+test('sums rounded item prices without using quantities', async () => {
   const model = await modelPromise;
 
   assert.equal(model.calculateExpenseItemsTotal?.([
     {
       ...validItem,
-      quantity: '1',
+      quantity: '5',
       price: '0.1',
     },
     {
       ...validItem,
       id: 'item-2',
-      quantity: '1',
+      quantity: 'invalid',
       price: '0.2',
     },
   ]), '0.3');
   assert.equal(model.calculateExpenseItemsTotal?.([
-    { ...validItem, quantity: 'invalid', price: '100' },
+    { ...validItem, quantity: 'invalid', price: 'invalid' },
   ]), '');
   assert.equal(model.calculateExpenseItemsTotal?.([
     { ...validItem, quantity: '1', price: '1.005' },
@@ -77,11 +77,11 @@ test('preserves a nonzero manual amount and resets it with zero or an empty valu
     amountOverridden: true,
   });
   assert.deepEqual(model.applyAmountInput?.('0.00', items), {
-    amount: '100',
+    amount: '50',
     amountOverridden: false,
   });
   assert.deepEqual(model.applyAmountInput?.('', items), {
-    amount: '100',
+    amount: '50',
     amountOverridden: false,
   });
   assert.deepEqual(model.applyAmountInput?.('', []), {

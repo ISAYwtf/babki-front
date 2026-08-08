@@ -7,7 +7,7 @@ deletion, but its header has no creation action. The expense entity already expo
 pending, reset, and error-handling patterns to follow.
 
 The backend create contract requires `categoryId`, `amount`, and `transactionDate`; accepts optional `merchant`,
-`description`, and `items`; and represents each item with `name`, numeric `quantity`, and numeric unit `price`. The UI
+`description`, and `items`; and represents each item with `name`, numeric `quantity`, and numeric `price`. The UI
 adds stricter creation-only rules without changing that request shape. The dashboard can show historical periods, so a
 today-defaulted creation action must be scoped to the current local calendar month to avoid creating a transaction that
 immediately falls outside the visible table.
@@ -19,7 +19,7 @@ immediately falls outside the visible table.
 - Create expenses from the current-month expense-table header in every widget render state.
 - Reuse established FSD, form, dialog, category-selection, localization, and mutation patterns.
 - Support an optional sequential item list with integer quantity controls and per-row removal.
-- Keep the total calculated from item quantities and unit prices until the user explicitly overrides it.
+- Keep the total calculated from item prices, independently of quantities, until the user explicitly overrides it.
 - Enforce the API constraints plus the product rule that a description or at least one valid item is required.
 - Preserve recoverable form state on failure and refresh every expense-dependent dashboard query after success.
 
@@ -70,7 +70,7 @@ omits blank optional values, and produces the existing `CreateExpenseDto`:
 
 Creation-specific Zod validation requires a category, a parseable date, amount greater than zero, merchant at most
 255 characters, description at most 1000 characters, and either a non-whitespace description or at least one item.
-Every present item requires a non-whitespace name, integer quantity of at least one, and unit price greater than zero.
+Every present item requires a non-whitespace name, integer quantity of at least one, and price greater than zero.
 Invalid present rows block submission even when a description exists.
 
 Validate the date-input value with Zod's built-in `z.iso.date()` schema after the required-string check. This enforces
@@ -102,9 +102,11 @@ fields while retaining the same focus order and accessible names. No arbitrary i
 ### Model calculated and manually overridden totals explicitly
 
 Track an internal `amountOverridden` flag that is not sent to the API. While it is false, any item quantity, price,
-addition, or removal recomputes the amount as the sum of `quantity * unitPrice` for parseable rows. Round the computed
-result to currency minor-unit precision before writing it to the string field to avoid floating-point artifacts. An
-empty new row contributes zero until its numeric fields are valid.
+addition, or removal synchronizes the amount with the sum of positive item prices. Each price is included exactly once;
+quantity is not read by the calculation, so a valid price contributes even while its quantity is empty or invalid.
+Quantity remains required for item validity and submission. Round each contributing price to currency minor-unit
+precision before writing the total to the string field to avoid floating-point artifacts. An empty new row contributes
+zero until its price is valid.
 
 A user-entered nonzero amount sets `amountOverridden` to true. While true, all item mutations preserve the entered
 amount. Entering numeric zero or clearing the amount clears the flag and immediately restores the current calculated
@@ -145,6 +147,8 @@ active widgets then reconcile through their invalidated queries.
 
 - **A manual total can intentionally differ from item arithmetic** → Preserve this explicitly requested behavior and
   make zero or clearing the amount deterministic actions for returning to automatic calculation.
+- **The automatic total can include a row whose quantity is currently invalid** → Treat price as the complete row cost;
+  keep the displayed sum independent of quantity while validation still blocks adding the next row and submission.
 - **Typing zero or clearing the amount immediately replaces it with a calculated total** → Treat both interactions as
   explicit reset signals; when no positive item total exists, keep the amount empty and invalid in automatic mode.
 - **A category can disappear between selection and submission** → Preserve the form and display the server error so the
