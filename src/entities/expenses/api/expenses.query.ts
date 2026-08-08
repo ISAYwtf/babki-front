@@ -4,6 +4,11 @@ import {
   useMutation,
   useQueryClient,
 } from '@tanstack/react-query';
+import { snapshotsQueryKeys } from '@/entities/accounts-snapshots/@x/expenses';
+import { balancesQueryKeys } from '@/entities/balances/@x/expenses';
+import { expenseLimitsQueryKeys } from '@/entities/expense-limits/@x/expenses';
+import { reportsQueryKeys } from '@/entities/reports/@x/expenses';
+import { transactionsQueryKeys } from '@/entities/transactions/@x/expenses';
 import { expensesApi } from './expenses.api';
 import type {
   ListExpensesQuery,
@@ -35,8 +40,17 @@ export const useCreateExpenseMutation = () => {
   return useMutation(
     mutationOptions({
       mutationFn: expensesApi.create,
-      onSuccess: async () => {
-        await queryClient.invalidateQueries({ queryKey: expensesQueryKeys.all });
+      onSuccess: (expense) => {
+        Promise.all([
+          queryClient.invalidateQueries({ queryKey: expensesQueryKeys.all }),
+          queryClient.invalidateQueries({ queryKey: transactionsQueryKeys.all }),
+          queryClient.invalidateQueries({ queryKey: reportsQueryKeys.all }),
+          queryClient.invalidateQueries({ queryKey: expenseLimitsQueryKeys.all }),
+          queryClient.invalidateQueries({ queryKey: balancesQueryKeys.all }),
+          ...(expense
+            ? [queryClient.invalidateQueries({ queryKey: snapshotsQueryKeys.byAccount(expense.accountId) })]
+            : []),
+        ]).catch(() => undefined);
       },
     }),
   );

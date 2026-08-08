@@ -1,5 +1,6 @@
 import { ExpenseCategoryBadge } from '@/entities/expense-categories';
 import { expensesQueryOptions } from '@/entities/expenses';
+import { CreateExpenseButton } from '@/features/create-expense';
 import { ExpenseActions } from '@/features/manage-expense';
 import {
   useIsCurrentPeriod,
@@ -46,6 +47,11 @@ export const Expenses: FC = () => {
         <span className="sr-only">Загрузка...</span>
         <Card.Header>
           <Card.Title>{t('expenses.title')}</Card.Title>
+          {isCurrentPeriod && (
+            <Card.Controls>
+              <CreateExpenseButton />
+            </Card.Controls>
+          )}
         </Card.Header>
         <Card.Content className="px-0">
           <Table.Base>
@@ -81,6 +87,11 @@ export const Expenses: FC = () => {
     <Card.Base className="h-fit min-h-64 min-w-max">
       <Card.Header>
         <Card.Title>{t('expenses.title')}</Card.Title>
+        {isCurrentPeriod && (
+          <Card.Controls>
+            <CreateExpenseButton />
+          </Card.Controls>
+        )}
       </Card.Header>
       <Card.Content className="px-0">
         <Table.Base>
