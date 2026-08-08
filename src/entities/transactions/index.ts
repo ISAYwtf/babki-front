@@ -1,7 +1,7 @@
 export {
   transactionsQueryKeys,
   transactionsQueryOptions,
-  useDeleteIncomeMutation,
+  useDeleteTransactionMutation,
 } from './api/transactions.query';
 export {
   createTransactionSchema,

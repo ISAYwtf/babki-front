@@ -4,14 +4,20 @@ import { Typography } from '@/shared/ui/typography';
 import type {
   ComponentProps,
   FC,
+  MouseEventHandler,
 } from 'react';
 
 const AlertDialogBase = AlertDialogPrimitive.Root;
 const AlertDialogClose = AlertDialogPrimitive.Close;
 
-const AlertDialogContent: FC<ComponentProps<typeof AlertDialogPrimitive.Popup>> = ({
+interface AlertDialogContentProps extends ComponentProps<typeof AlertDialogPrimitive.Popup> {
+  onBackdropClick?: MouseEventHandler<HTMLDivElement>;
+}
+
+const AlertDialogContent: FC<AlertDialogContentProps> = ({
   className,
   children,
+  onBackdropClick,
   ...props
 }) => (
   <AlertDialogPrimitive.Portal>
@@ -21,12 +27,13 @@ const AlertDialogContent: FC<ComponentProps<typeof AlertDialogPrimitive.Popup>> 
         data-ending-style:opacity-0 data-starting-style:opacity-0
         transition-opacity duration-200
       "
+      onClick={onBackdropClick}
     />
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
+    <div className="pointer-events-none fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
       <AlertDialogPrimitive.Popup
         className={cn(
           `
-            w-full max-w-md rounded-xl border bg-card p-5 shadow-xl
+            pointer-events-auto w-full max-w-md rounded-xl border bg-card p-5 shadow-xl
             data-ending-style:scale-95 data-ending-style:opacity-0
             data-starting-style:scale-95 data-starting-style:opacity-0
             transition-all duration-200

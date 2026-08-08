@@ -7,7 +7,7 @@ import {
 import { transactionsApi } from './transactions.api';
 import type { ListTransactionsQuery } from '../model/schemas';
 
-interface DeleteIncomeMutationPayload {
+interface DeleteTransactionMutationPayload {
   transactionId: string;
 }
 
@@ -30,14 +30,16 @@ export const transactionsQueryOptions = {
   }),
 };
 
-export const useDeleteIncomeMutation = () => {
+export const useDeleteTransactionMutation = () => {
   const queryClient = useQueryClient();
 
   return useMutation(
     mutationOptions({
-      mutationFn: ({ transactionId }: DeleteIncomeMutationPayload) => transactionsApi.delete(transactionId),
-      onSuccess: async () => {
-        await queryClient.invalidateQueries({ queryKey: transactionsQueryKeys.listAll() });
+      mutationFn: ({ transactionId }: DeleteTransactionMutationPayload) => transactionsApi.delete(transactionId),
+      onSuccess: () => {
+        queryClient
+          .invalidateQueries({ queryKey: transactionsQueryKeys.listAll() })
+          .catch(() => undefined);
       },
     }),
   );

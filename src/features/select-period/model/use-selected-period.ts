@@ -4,6 +4,7 @@ import {
   endOfMonth,
 } from 'date-fns';
 import { useMemo } from 'react';
+import { isCurrentPeriod } from './is-current-period';
 import { usePeriodStore } from './store';
 
 const PERIOD_DATE_FORMAT = 'yyyy-MM-dd';
@@ -11,12 +12,7 @@ const PERIOD_DATE_FORMAT = 'yyyy-MM-dd';
 export const useSelectedPeriod = () => {
   const selectedMonth = usePeriodStore((state) => state.selectedMonth);
   const selectedYear = usePeriodStore((state) => state.selectedYear);
-  const now = new Date();
-  const currentMonth = now.getMonth();
-  const currentYear = now.getFullYear();
-  const selectedDate = currentMonth === selectedMonth && currentYear === selectedYear
-    ? new Date(selectedYear, selectedMonth, now.getDate())
-    : endOfMonth(new Date(selectedYear, selectedMonth));
+  const selectedDate = endOfMonth(new Date(selectedYear, selectedMonth));
   const formattedSelectedDate = format(selectedDate, PERIOD_DATE_FORMAT);
   const startOfSelectedMonth = format(startOfMonth(selectedDate), PERIOD_DATE_FORMAT);
 
@@ -24,4 +20,11 @@ export const useSelectedPeriod = () => {
     fromDate: startOfSelectedMonth,
     toDate: formattedSelectedDate,
   }), [formattedSelectedDate, startOfSelectedMonth]);
+};
+
+export const useIsCurrentPeriod = () => {
+  const selectedMonth = usePeriodStore((state) => state.selectedMonth);
+  const selectedYear = usePeriodStore((state) => state.selectedYear);
+
+  return isCurrentPeriod(selectedMonth, selectedYear);
 };

@@ -7,7 +7,7 @@ import {
 } from '@tanstack/react-query';
 import { balancesApi } from './balances.api';
 
-const balancesQueryKeys = {
+export const balancesQueryKeys = {
   all: ['balances'] as const,
   find: (query?: FindAccountByQuery) => [...balancesQueryKeys.all, query] as const,
 };

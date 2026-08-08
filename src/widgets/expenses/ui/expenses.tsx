@@ -1,6 +1,10 @@
 import { ExpenseCategoryBadge } from '@/entities/expense-categories';
 import { expensesQueryOptions } from '@/entities/expenses';
-import { useSelectedPeriod } from '@/features/select-period';
+import { ExpenseActions } from '@/features/manage-expense';
+import {
+  useIsCurrentPeriod,
+  useSelectedPeriod,
+} from '@/features/select-period';
 import { getCurrentCurrencyCode } from '@/shared/lib/currency';
 import { Card } from '@/shared/ui/card';
 import { Skeleton } from '@/shared/ui/skeleton';
@@ -27,6 +31,10 @@ const formatAmount = new Intl.NumberFormat(locale, {
 
 export const Expenses: FC = () => {
   const selectedPeriod = useSelectedPeriod();
+  const isCurrentPeriod = useIsCurrentPeriod();
+  const rowGridClassName = isCurrentPeriod
+    ? 'grid grid-cols-[repeat(4,minmax(0,170px))_minmax(48px,1fr)] items-center'
+    : 'grid grid-cols-[repeat(4,minmax(0,170px))] items-center';
   const { data: expensesData, isLoading } = useQuery(
     expensesQueryOptions.findAll(selectedPeriod),
   );
@@ -44,7 +52,7 @@ export const Expenses: FC = () => {
             <Table.Body>
               {['first', 'second', 'third'].map((row) => (
                 <Table.Row key={row}>
-                  <div className="grid grid-cols-4 items-center">
+                  <div className={rowGridClassName}>
                     <Table.Cell><Skeleton className="h-5 w-24" /></Table.Cell>
                     <Table.Cell><Skeleton className="h-4 w-32" /></Table.Cell>
                     <Table.Cell>
@@ -54,6 +62,11 @@ export const Expenses: FC = () => {
                       </div>
                     </Table.Cell>
                     <Table.Cell><Skeleton className="h-4 w-28" /></Table.Cell>
+                    {isCurrentPeriod && (
+                      <Table.Cell className="flex justify-end py-5 pr-5 pl-0">
+                        <Skeleton className="size-7" />
+                      </Table.Cell>
+                    )}
                   </div>
                 </Table.Row>
               ))}
@@ -73,10 +86,10 @@ export const Expenses: FC = () => {
         <Table.Base>
           <Accordion.Root render={<Table.Body />}>
             {expensesData?.items.map(({
-              _id, amount, transactionDate, merchant, category, description, items,
+              _id, accountId, amount, transactionDate, merchant, category, description, items,
             }) => (
               <Accordion.Item key={_id} render={<Table.Row />}>
-                <div className="grid grid-cols-[repeat(4,minmax(0,170px))] items-center">
+                <div className={rowGridClassName}>
                   <Table.Cell>
                     <ExpenseCategoryBadge color={category.color}>{category.name}</ExpenseCategoryBadge>
                   </Table.Cell>
@@ -107,6 +120,14 @@ export const Expenses: FC = () => {
                   <Table.Cell className="text-body-2 text-muted-foreground">
                     {merchant ?? <Body1 className="text-muted-foreground">Место не указано</Body1>}
                   </Table.Cell>
+                  {isCurrentPeriod && (
+                    <Table.Cell
+                      className="flex justify-end py-5 pr-5 pl-0"
+                      onClick={(event) => event.stopPropagation()}
+                    >
+                      <ExpenseActions transactionId={_id} accountId={accountId} />
+                    </Table.Cell>
+                  )}
                 </div>
                 <Accordion.Panel render={<Table.Base className="px-5" />}>
                   <Table.Header>
