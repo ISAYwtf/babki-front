@@ -1,4 +1,4 @@
-import { apiClient, parseWithSchema } from '@/shared/api';
+import { apiClient, parseRequiredWithSchema } from '@/shared/api';
 import {
   authResponseSchema,
   type LoginDto,
@@ -14,14 +14,14 @@ class AuthApiClient {
     const body = loginSchema.parse(payload);
     const response = await this.client.post('/auth/login', body);
 
-    return parseWithSchema(authResponseSchema, response.data);
+    return parseRequiredWithSchema(authResponseSchema, response.data);
   }
 
   async register(payload: RegisterDto) {
     const body = registerSchema.parse(payload);
     const response = await this.client.post('/auth/register', body);
 
-    return parseWithSchema(authResponseSchema, response.data);
+    return parseRequiredWithSchema(authResponseSchema, response.data);
   }
 }
 

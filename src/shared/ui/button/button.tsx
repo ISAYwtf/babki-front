@@ -11,11 +11,12 @@ export const Button = ({
   className,
   variant = 'default',
   size = 'default',
+  disableHoverTranslation = false,
   ...props
-}: ButtonPrimitive.Props & VariantProps<typeof buttonVariants>) => (
+}: ButtonPrimitive.Props & VariantProps<typeof buttonVariants> & { disableHoverTranslation?: boolean }) => (
   <ButtonPrimitive
     data-slot="button"
-    className={cn(buttonVariants({ variant, size, className }))}
+    className={cn(buttonVariants({ variant, size, className }), !disableHoverTranslation && 'active:translate-y-px')}
     {...props}
   />
 );

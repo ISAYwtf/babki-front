@@ -1,6 +1,7 @@
 import { env } from '@/shared/lib/env';
 import axios, { AxiosHeaders } from 'axios';
 import { z } from 'zod';
+import { handleUnauthorizedSession } from './unauthorized-session';
 
 const ACCESS_TOKEN_STORAGE_KEY = 'babki.accessToken';
 
@@ -60,6 +61,27 @@ apiClient.interceptors.request.use((config) => {
 
   return config;
 });
+
+apiClient.interceptors.response.use(
+  (response) => response,
+  (error: unknown) => {
+    if (axios.isAxiosError(error)) {
+      const authorizationHeader = error.config?.headers
+        ? new AxiosHeaders(error.config.headers).get('Authorization')
+        : null;
+
+      handleUnauthorizedSession({
+        status: error.response?.status,
+        url: error.config?.url,
+        authorization: typeof authorizationHeader === 'string'
+          ? authorizationHeader
+          : null,
+      });
+    }
+
+    return Promise.reject(error);
+  },
+);
 
 export const parseWithSchema = <TSchema extends z.ZodTypeAny>(
   schema: TSchema,

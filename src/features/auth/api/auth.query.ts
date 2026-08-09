@@ -3,7 +3,10 @@ import {
   useMutation,
   useQueryClient,
 } from '@tanstack/react-query';
-import { setAccessToken } from '@/shared/api';
+import {
+  resetUnauthorizedSessionHandling,
+  setAccessToken,
+} from '@/shared/api';
 import { usersQueryKeys } from '@/entities/users';
 import { authApi } from './auth.api';
 import type {
@@ -14,6 +17,7 @@ import type {
 
 function handleAuthSuccess(authResponse: AuthResponse) {
   setAccessToken(authResponse.accessToken);
+  resetUnauthorizedSessionHandling();
 }
 
 export const useLoginMutation = () => {

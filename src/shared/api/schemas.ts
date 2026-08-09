@@ -32,3 +32,8 @@ export const periodQuerySchema = z.object({
   fromDate: dateStringSchema.optional(),
   toDate: dateStringSchema.optional(),
 });
+
+export const parseRequiredWithSchema = <TSchema extends z.ZodTypeAny>(
+  schema: TSchema,
+  payload: unknown,
+): z.infer<TSchema> => schema.parse(payload);

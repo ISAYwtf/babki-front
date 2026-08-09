@@ -17,7 +17,8 @@ i18n
   .use(LanguageDetector)
   .use(initReactI18next)
   .init({
-    fallbackLng: 'en',
+    fallbackLng: 'ru',
+    supportedLngs: ['ru'],
     detection: {
       order: ['localStorage', 'navigator'],
       caches: ['localStorage'],
