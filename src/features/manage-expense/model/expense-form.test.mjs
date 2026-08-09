@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { FieldApi, FormApi } from '@tanstack/react-form';
 
-const modelPromise = import('./create-expense-form.ts').catch(() => ({}));
+const modelPromise = import('./expense-form.ts').catch(() => ({}));
 
 const validItem = {
   id: 'item-1',
@@ -14,9 +14,9 @@ const validItem = {
 test('creates fresh form values for the supplied local date', async () => {
   const model = await modelPromise;
 
-  assert.equal(typeof model.getDefaultCreateExpenseFormValues, 'function');
+  assert.equal(typeof model.getDefaultExpenseFormValues, 'function');
   assert.deepEqual(
-    model.getDefaultCreateExpenseFormValues?.(new Date(2026, 7, 8)),
+    model.getDefaultExpenseFormValues?.(new Date(2026, 7, 8)),
     {
       categoryId: '',
       amount: '',
@@ -101,12 +101,12 @@ test('requires a description or valid items and rejects every invalid present it
     items: [],
   };
 
-  assert.equal(model.createExpenseFormSchema?.safeParse({
+  assert.equal(model.expenseFormSchema?.safeParse({
     ...base,
     description: 'Продукты',
   }).success, true);
-  assert.equal(model.createExpenseFormSchema?.safeParse(base).success, false);
-  assert.equal(model.createExpenseFormSchema?.safeParse({
+  assert.equal(model.expenseFormSchema?.safeParse(base).success, false);
+  assert.equal(model.expenseFormSchema?.safeParse({
     ...base,
     description: 'Продукты',
     items: [{ ...validItem, quantity: '1.5' }],
@@ -115,7 +115,7 @@ test('requires a description or valid items and rejects every invalid present it
 
 test('validates strict ISO calendar dates including four-digit years below 100', async () => {
   const model = await modelPromise;
-  const schema = model.createExpenseFieldSchemas?.transactionDate;
+  const schema = model.expenseFieldSchemas?.transactionDate;
 
   assert.equal(schema?.safeParse('2024-02-29').success, true);
   assert.equal(schema?.safeParse('2026-02-29').success, false);
@@ -128,23 +128,23 @@ test('category stays error-free until submit validation', async () => {
   const model = await modelPromise;
 
   assert.ok(
-    model.createExpenseCategoryFieldValidators,
+    model.expenseCategoryFieldValidators,
     'category interaction validators must be exported',
   );
 
   const form = new FormApi({
-    defaultValues: model.getDefaultCreateExpenseFormValues?.(new Date(2026, 7, 8)),
-    validators: { onSubmit: model.createExpenseFormSchema },
+    defaultValues: model.getDefaultExpenseFormValues?.(new Date(2026, 7, 8)),
+    validators: { onSubmit: model.expenseFormSchema },
   });
   const categoryField = new FieldApi({
     form,
     name: 'categoryId',
-    validators: model.createExpenseCategoryFieldValidators,
+    validators: model.expenseCategoryFieldValidators,
   });
   const amountField = new FieldApi({
     form,
     name: 'amount',
-    validators: { onBlur: model.createExpenseFieldSchemas.amount },
+    validators: { onBlur: model.expenseFieldSchemas.amount },
   });
   const unmountForm = form.mount();
   const unmountCategory = categoryField.mount();
@@ -178,8 +178,8 @@ test('handleSubmit reveals every invalid field after an earlier blur error', asy
   assert.equal(typeof model.getExpenseDescriptionValidationError, 'function');
 
   const form = new FormApi({
-    defaultValues: model.getDefaultCreateExpenseFormValues?.(new Date(2026, 7, 8)),
-    ...model.createExpenseFormValidationOptions,
+    defaultValues: model.getDefaultExpenseFormValues?.(new Date(2026, 7, 8)),
+    ...model.expenseFormValidationOptions,
     onSubmit: () => {
       submitCount += 1;
     },
@@ -187,12 +187,12 @@ test('handleSubmit reveals every invalid field after an earlier blur error', asy
   const categoryField = new FieldApi({
     form,
     name: 'categoryId',
-    validators: model.createExpenseCategoryFieldValidators,
+    validators: model.expenseCategoryFieldValidators,
   });
   const amountField = new FieldApi({
     form,
     name: 'amount',
-    validators: { onBlur: model.createExpenseFieldSchemas.amount },
+    validators: { onBlur: model.expenseFieldSchemas.amount },
   });
   const descriptionField = new FieldApi({
     form,
@@ -248,4 +248,153 @@ test('maps trimmed form values to the existing expense contract', async () => {
     description: undefined,
     items: [{ name: 'Молоко', quantity: 2, price: 89.9 }],
   });
+});
+
+const expenseFixture = {
+  _id: '507f1f77bcf86cd799439012',
+  accountId: '507f1f77bcf86cd799439013',
+  snapshotId: '507f1f77bcf86cd799439014',
+  amount: 179.8,
+  transactionDate: '2026-08-08T10:30:00.000Z',
+  description: '  Продукты  ',
+  merchant: '  Магазин  ',
+  type: 'expense',
+  category: {
+    _id: '507f1f77bcf86cd799439011',
+    name: 'Продукты',
+    color: '#ffffff',
+    isArchived: false,
+  },
+  items: [
+    { name: 'Молоко', quantity: 2, price: 89.9 },
+    { name: 'Хлеб', quantity: 3, price: 89.9 },
+  ],
+  createdAt: '2026-08-08T10:30:00.000Z',
+  updatedAt: '2026-08-08T10:30:00.000Z',
+};
+
+test('prefills editable values from an existing expense', async () => {
+  const model = await modelPromise;
+  const values = model.getEditExpenseFormValues?.(expenseFixture);
+
+  assert.equal(typeof model.getEditExpenseFormValues, 'function');
+  assert.deepEqual({
+    ...values,
+    items: values?.items.map(({ id, ...item }) => ({
+      hasLocalId: typeof id === 'string' && id.length > 0,
+      ...item,
+    })),
+  }, {
+    categoryId: '507f1f77bcf86cd799439011',
+    amount: '179.8',
+    transactionDate: '2026-08-08',
+    merchant: '  Магазин  ',
+    description: '  Продукты  ',
+    items: [
+      {
+        hasLocalId: true,
+        name: 'Молоко',
+        quantity: '2',
+        price: '89.9',
+      },
+      {
+        hasLocalId: true,
+        name: 'Хлеб',
+        quantity: '3',
+        price: '89.9',
+      },
+    ],
+  });
+});
+
+test('derives automatic amount mode with minor-unit price comparison', async () => {
+  const model = await modelPromise;
+
+  assert.equal(typeof model.isExpenseAmountOverridden, 'function');
+  assert.equal(model.isExpenseAmountOverridden?.('179.80', [
+    { ...validItem, price: '89.9' },
+    { ...validItem, id: 'item-2', price: '89.9' },
+  ]), false);
+  assert.equal(model.isExpenseAmountOverridden?.('200', [
+    { ...validItem, price: '89.9' },
+    { ...validItem, id: 'item-2', price: '89.9' },
+  ]), true);
+  assert.equal(model.isExpenseAmountOverridden?.('0.3', [
+    { ...validItem, price: '0.1' },
+    { ...validItem, id: 'item-2', price: '0.2' },
+  ]), false);
+});
+
+test('maps complete edit values and explicitly clears optional content', async () => {
+  const model = await modelPromise;
+  const values = {
+    categoryId: ' 507f1f77bcf86cd799439011 ',
+    amount: '179.80',
+    transactionDate: '2026-08-08',
+    merchant: '   ',
+    description: '',
+    items: [],
+  };
+  const payload = model.mapUpdateExpenseDto?.(values);
+
+  assert.equal(typeof model.mapUpdateExpenseDto, 'function');
+  assert.deepEqual(payload, {
+    categoryId: '507f1f77bcf86cd799439011',
+    amount: 179.8,
+    merchant: '',
+    description: '',
+    items: [],
+  });
+  assert.equal(Object.hasOwn(payload ?? {}, 'transactionDate'), false);
+});
+
+test('maps edited item numbers and trimmed text', async () => {
+  const model = await modelPromise;
+
+  assert.deepEqual(model.mapUpdateExpenseDto?.({
+    categoryId: '507f1f77bcf86cd799439011',
+    amount: '100',
+    transactionDate: '2026-08-08',
+    merchant: '  Магазин  ',
+    description: '  Покупки  ',
+    items: [{ ...validItem, name: '  Молоко  ' }],
+  }), {
+    categoryId: '507f1f77bcf86cd799439011',
+    amount: 100,
+    merchant: 'Магазин',
+    description: 'Покупки',
+    items: [{ name: 'Молоко', quantity: 2, price: 89.9 }],
+  });
+});
+
+test('offers active categories plus only the current archived category', async () => {
+  const model = await modelPromise;
+  const active = {
+    _id: 'active',
+    name: 'Активная',
+    isArchived: false,
+  };
+  const otherArchived = {
+    _id: 'other-archived',
+    name: 'Другая архивная',
+    isArchived: true,
+  };
+  const currentArchived = {
+    _id: 'current-archived',
+    name: 'Текущая архивная',
+    isArchived: true,
+  };
+
+  assert.equal(typeof model.getExpenseCategoryOptions, 'function');
+  assert.deepEqual(
+    model.getExpenseCategoryOptions?.(
+      [active, otherArchived],
+      currentArchived,
+    ),
+    [currentArchived, active],
+  );
+  assert.deepEqual(
+    model.getExpenseCategoryOptions?.([active], active),
+    [active],
+  );
 });

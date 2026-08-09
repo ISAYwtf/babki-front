@@ -1,8 +1,13 @@
+import type { Expense } from '@/entities/expenses';
 import { useDeleteTransactionMutation } from '@/entities/transactions';
 import { Button } from '@/shared/ui/button';
 import { Icon } from '@/shared/ui/icon';
 import { Menu } from '@base-ui/react';
 import { useQueryClient } from '@tanstack/react-query';
+import {
+  LucidePencil,
+  LucideX,
+} from 'lucide-react';
 import {
   type FC,
   useRef,
@@ -14,21 +19,27 @@ import {
   removeExpenseFromCachedLists,
 } from '../model/cache';
 import { DeleteConfirmDialog } from './delete-confirm-dialog';
+import { EditExpenseDialog } from './edit-expense-dialog';
 
 interface ExpenseActionsProps {
-  transactionId: string;
-  accountId: string;
+  expense: Expense;
 }
 
 export const ExpenseActions: FC<ExpenseActionsProps> = ({
-  transactionId,
-  accountId,
+  expense,
 }) => {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
   const deleteMutation = useDeleteTransactionMutation();
   const triggerRef = useRef<HTMLButtonElement>(null);
+  const [editOpen, setEditOpen] = useState(false);
+  const [editSession, setEditSession] = useState(0);
   const [deleteOpen, setDeleteOpen] = useState(false);
+
+  const handleEditRequest = () => {
+    setEditSession((value) => value + 1);
+    setEditOpen(true);
+  };
 
   const handleDeleteRequest = () => {
     deleteMutation.reset();
@@ -42,10 +53,10 @@ export const ExpenseActions: FC<ExpenseActionsProps> = ({
   };
 
   const handleConfirm = async () => {
-    await deleteMutation.mutateAsync({ transactionId });
+    await deleteMutation.mutateAsync({ transactionId: expense._id });
     setDeleteOpen(false);
-    removeExpenseFromCachedLists(queryClient, transactionId);
-    refreshExpenseDeletionQueries(queryClient, accountId);
+    removeExpenseFromCachedLists(queryClient, expense._id);
+    refreshExpenseDeletionQueries(queryClient, expense.accountId);
   };
 
   return (
@@ -68,6 +79,18 @@ export const ExpenseActions: FC<ExpenseActionsProps> = ({
               className="rounded-lg border bg-popover p-1 shadow-md outline-none"
             >
               <Menu.Item
+                aria-label={t('expenses.actions.edit')}
+                label={t('expenses.actions.edit')}
+                className="
+                  flex h-8 cursor-default items-center gap-2 rounded-md px-2 text-sm outline-none
+                  data-highlighted:bg-accent
+                "
+                onClick={handleEditRequest}
+              >
+                <LucidePencil size={24} />
+                <span>{t('expenses.actions.editLabel')}</span>
+              </Menu.Item>
+              <Menu.Item
                 aria-label={t('expenses.actions.delete')}
                 label={t('expenses.actions.delete')}
                 className="
@@ -76,13 +99,21 @@ export const ExpenseActions: FC<ExpenseActionsProps> = ({
                 "
                 onClick={handleDeleteRequest}
               >
-                <Icon icon="IcCross24" />
+                <LucideX size={24} />
                 <span>{t('expenses.actions.deleteLabel')}</span>
               </Menu.Item>
             </Menu.Popup>
           </Menu.Positioner>
         </Menu.Portal>
       </Menu.Root>
+
+      <EditExpenseDialog
+        key={editSession}
+        expense={expense}
+        open={editOpen}
+        finalFocus={triggerRef}
+        onClose={() => setEditOpen(false)}
+      />
 
       <DeleteConfirmDialog
         open={deleteOpen}

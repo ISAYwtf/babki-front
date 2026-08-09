@@ -1,4 +1,5 @@
-import type { CreateExpenseDto } from '@/entities/expenses';
+import type { ExpenseCategory } from '@/entities/expense-categories';
+import type { CreateExpenseDto, Expense, UpdateExpenseDto } from '@/entities/expenses';
 import { z } from 'zod';
 
 export interface ExpenseItemDraft {
@@ -8,7 +9,7 @@ export interface ExpenseItemDraft {
   price: string;
 }
 
-export interface CreateExpenseFormValues {
+export interface ExpenseFormValues {
   categoryId: string;
   amount: string;
   transactionDate: string;
@@ -36,7 +37,7 @@ const integerQuantityStringSchema = z
   .refine((value) => Number.isInteger(Number(value)), 'integer')
   .refine((value) => Number(value) >= 1, 'quantityMin');
 
-export const createExpenseFieldSchemas = {
+export const expenseFieldSchemas = {
   categoryId: z.string().trim().min(1, 'required'),
   amount: positiveNumberStringSchema,
   transactionDate: z.string().trim().min(1, 'required').pipe(z.iso.date('dateInvalid')),
@@ -47,15 +48,15 @@ export const createExpenseFieldSchemas = {
   itemPrice: positiveNumberStringSchema,
 } as const;
 
-export const createExpenseCategoryFieldValidators = {
-  onSubmit: createExpenseFieldSchemas.categoryId,
+export const expenseCategoryFieldValidators = {
+  onSubmit: expenseFieldSchemas.categoryId,
 } as const;
 
 export const getExpenseDescriptionValidationError = (
   description: string,
   items: ExpenseItemDraft[],
 ) => {
-  const result = createExpenseFieldSchemas.description.safeParse(description);
+  const result = expenseFieldSchemas.description.safeParse(description);
   if (!result.success) return result.error.issues[0]?.message;
 
   return !description.trim() && items.length === 0 ? 'contentRequired' : undefined;
@@ -63,18 +64,18 @@ export const getExpenseDescriptionValidationError = (
 
 export const expenseItemDraftSchema = z.object({
   id: z.string(),
-  name: createExpenseFieldSchemas.itemName,
-  quantity: createExpenseFieldSchemas.itemQuantity,
-  price: createExpenseFieldSchemas.itemPrice,
+  name: expenseFieldSchemas.itemName,
+  quantity: expenseFieldSchemas.itemQuantity,
+  price: expenseFieldSchemas.itemPrice,
 });
 
-export const createExpenseFormSchema = z
+export const expenseFormSchema = z
   .object({
-    categoryId: createExpenseFieldSchemas.categoryId,
-    amount: createExpenseFieldSchemas.amount,
-    transactionDate: createExpenseFieldSchemas.transactionDate,
-    merchant: createExpenseFieldSchemas.merchant,
-    description: createExpenseFieldSchemas.description,
+    categoryId: expenseFieldSchemas.categoryId,
+    amount: expenseFieldSchemas.amount,
+    transactionDate: expenseFieldSchemas.transactionDate,
+    merchant: expenseFieldSchemas.merchant,
+    description: expenseFieldSchemas.description,
     items: z.array(expenseItemDraftSchema),
   })
   .superRefine((value, context) => {
@@ -87,10 +88,10 @@ export const createExpenseFormSchema = z
     });
   });
 
-export const createExpenseFormValidationOptions = {
+export const expenseFormValidationOptions = {
   canSubmitWhenInvalid: true,
   validators: {
-    onSubmit: createExpenseFormSchema,
+    onSubmit: expenseFormSchema,
   },
 } as const;
 
@@ -102,9 +103,9 @@ export const formatLocalDate = (date: Date) => [
   padDatePart(date.getDate()),
 ].join('-');
 
-export const getDefaultCreateExpenseFormValues = (
+export const getDefaultExpenseFormValues = (
   date = new Date(),
-): CreateExpenseFormValues => ({
+): ExpenseFormValues => ({
   categoryId: '',
   amount: '',
   transactionDate: formatLocalDate(date),
@@ -112,6 +113,34 @@ export const getDefaultCreateExpenseFormValues = (
   description: '',
   items: [],
 });
+
+export const getEditExpenseFormValues = (
+  expense: Expense,
+): ExpenseFormValues => ({
+  categoryId: expense.category._id,
+  amount: String(expense.amount),
+  transactionDate: expense.transactionDate.slice(0, 10),
+  merchant: expense.merchant ?? '',
+  description: expense.description ?? '',
+  items: expense.items.map(({ name, quantity, price }) => ({
+    id: crypto.randomUUID(),
+    name,
+    quantity: String(quantity),
+    price: String(price),
+  })),
+});
+
+export const getExpenseCategoryOptions = (
+  categories: ExpenseCategory[],
+  currentCategory?: ExpenseCategory,
+) => {
+  const activeCategories = categories.filter(({ isArchived }) => !isArchived);
+
+  return currentCategory
+    && !activeCategories.some(({ _id }) => _id === currentCategory._id)
+    ? [currentCategory, ...activeCategories]
+    : activeCategories;
+};
 
 export const createExpenseItemDraft = (): ExpenseItemDraft => ({
   id: crypto.randomUUID(),
@@ -151,6 +180,18 @@ export const calculateExpenseItemsTotal = (items: ExpenseItemDraft[]) => {
   return amountInMinorUnits > 0 ? String(amountInMinorUnits / 100) : '';
 };
 
+const toMinorUnits = (value: string) => {
+  const parsedValue = Number(value);
+  return Number.isFinite(parsedValue)
+    ? Math.round((parsedValue + Number.EPSILON) * 100)
+    : 0;
+};
+
+export const isExpenseAmountOverridden = (
+  amount: string,
+  items: ExpenseItemDraft[],
+) => toMinorUnits(amount) !== toMinorUnits(calculateExpenseItemsTotal(items));
+
 export const applyAmountInput = (
   amount: string,
   items: ExpenseItemDraft[],
@@ -166,7 +207,7 @@ export const applyAmountInput = (
 };
 
 export const mapCreateExpenseDto = (
-  values: CreateExpenseFormValues,
+  values: ExpenseFormValues,
 ): CreateExpenseDto => ({
   categoryId: values.categoryId.trim(),
   amount: Number(values.amount),
@@ -182,7 +223,21 @@ export const mapCreateExpenseDto = (
     : undefined,
 });
 
-export const createExpenseValidationKeys = {
+export const mapUpdateExpenseDto = (
+  values: ExpenseFormValues,
+): UpdateExpenseDto => ({
+  categoryId: values.categoryId.trim(),
+  amount: Number(values.amount),
+  merchant: values.merchant.trim(),
+  description: values.description.trim(),
+  items: values.items.map(({ name, quantity, price }) => ({
+    name: name.trim(),
+    quantity: Number(quantity),
+    price: Number(price),
+  })),
+});
+
+export const expenseValidationKeys = {
   required: 'validation.required',
   invalid: 'expenses.create.validation.numberInvalid',
   positive: 'expenses.create.validation.positive',
@@ -194,8 +249,8 @@ export const createExpenseValidationKeys = {
   contentRequired: 'expenses.create.validation.contentRequired',
 } as const;
 
-export const getCreateExpenseValidationKey = (code: string | undefined) => (
-  code && code in createExpenseValidationKeys
-    ? createExpenseValidationKeys[code as keyof typeof createExpenseValidationKeys]
+export const getExpenseValidationKey = (code: string | undefined) => (
+  code && code in expenseValidationKeys
+    ? expenseValidationKeys[code as keyof typeof expenseValidationKeys]
     : undefined
 );

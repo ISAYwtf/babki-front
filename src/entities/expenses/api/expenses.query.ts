@@ -10,7 +10,9 @@ import { expenseLimitsQueryKeys } from '@/entities/expense-limits/@x/expenses';
 import { reportsQueryKeys } from '@/entities/reports/@x/expenses';
 import { transactionsQueryKeys } from '@/entities/transactions/@x/expenses';
 import { expensesApi } from './expenses.api';
+import { replaceExpenseInPaginatedResponse } from '../model/expense-list-cache';
 import type {
+  ExpensesPaginatedResponse,
   ListExpensesQuery,
   UpdateExpenseDto,
 } from '../model/schemas';
@@ -68,9 +70,27 @@ export const useUpdateExpenseMutation = () => {
         expenseId: string;
         payload: UpdateExpenseDto;
       }) => expensesApi.update(expenseId, payload),
-      onSuccess: async (expense, { expenseId }) => {
-        queryClient.setQueryData(expensesQueryKeys.detail(expenseId), expense);
-        await queryClient.invalidateQueries({ queryKey: expensesQueryKeys.listAll() });
+      onSuccess: (expense, { expenseId }) => {
+        if (expense) {
+          queryClient.setQueriesData<ExpensesPaginatedResponse>(
+            { queryKey: expensesQueryKeys.listAll() },
+            (expenses) => (
+              expenses ? replaceExpenseInPaginatedResponse(expenses, expense) : expenses
+            ),
+          );
+          queryClient.setQueryData(expensesQueryKeys.detail(expenseId), expense);
+        }
+
+        Promise.all([
+          queryClient.invalidateQueries({ queryKey: expensesQueryKeys.all }),
+          queryClient.invalidateQueries({ queryKey: transactionsQueryKeys.all }),
+          queryClient.invalidateQueries({ queryKey: reportsQueryKeys.all }),
+          queryClient.invalidateQueries({ queryKey: expenseLimitsQueryKeys.all }),
+          queryClient.invalidateQueries({ queryKey: balancesQueryKeys.all }),
+          ...(expense
+            ? [queryClient.invalidateQueries({ queryKey: snapshotsQueryKeys.byAccount(expense.accountId) })]
+            : []),
+        ]).catch(() => undefined);
       },
     }),
   );

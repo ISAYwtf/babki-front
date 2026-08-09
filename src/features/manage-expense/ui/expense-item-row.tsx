@@ -7,7 +7,7 @@ import {
 } from 'lucide-react';
 import type { FC } from 'react';
 import { useTranslation } from 'react-i18next';
-import type { ExpenseItemDraft } from '../model/create-expense-form';
+import type { ExpenseItemDraft } from '../model/expense-form';
 
 interface ExpenseItemRowProps {
   item: ExpenseItemDraft;

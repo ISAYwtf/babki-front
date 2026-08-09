@@ -1,7 +1,9 @@
 import { ExpenseCategoryBadge } from '@/entities/expense-categories';
 import { expensesQueryOptions } from '@/entities/expenses';
-import { CreateExpenseButton } from '@/features/create-expense';
-import { ExpenseActions } from '@/features/manage-expense';
+import {
+  CreateExpenseButton,
+  ExpenseActions,
+} from '@/features/manage-expense';
 import {
   useIsCurrentPeriod,
   useSelectedPeriod,
@@ -96,70 +98,74 @@ export const Expenses: FC = () => {
       <Card.Content className="px-0">
         <Table.Base>
           <Accordion.Root render={<Table.Body />}>
-            {expensesData?.items.map(({
-              _id, accountId, amount, transactionDate, merchant, category, description, items,
-            }) => (
-              <Accordion.Item key={_id} render={<Table.Row />}>
-                <div className={rowGridClassName}>
-                  <Table.Cell>
-                    <ExpenseCategoryBadge color={category.color}>{category.name}</ExpenseCategoryBadge>
-                  </Table.Cell>
-                  <Table.Cell>
-                    <div className="flex flex-col gap-1 items-start">
-                      {description}
-                      {!!items.length && (
-                      <Accordion.Trigger>
-                        <Body2 className="text-muted-foreground in-data-panel-open:hidden">
-                          {t('expenses.expandItems')}
+            {expensesData?.items.map((expense) => {
+              const {
+                _id: expenseId, amount, transactionDate, merchant, category, description, items,
+              } = expense;
+
+              return (
+                <Accordion.Item key={expenseId} render={<Table.Row />}>
+                  <div className={rowGridClassName}>
+                    <Table.Cell>
+                      <ExpenseCategoryBadge color={category.color}>{category.name}</ExpenseCategoryBadge>
+                    </Table.Cell>
+                    <Table.Cell>
+                      <div className="flex flex-col gap-1 items-start">
+                        {description}
+                        {!!items.length && (
+                        <Accordion.Trigger>
+                          <Body2 className="text-muted-foreground in-data-panel-open:hidden">
+                            {t('expenses.expandItems')}
+                          </Body2>
+                          <Body2 className="hidden text-muted-foreground in-data-panel-open:block">
+                            {t('expenses.collapseItems')}
+                          </Body2>
+                        </Accordion.Trigger>
+                        )}
+                        {!description && !items.length && <Body1 className="text-muted-foreground">Нет описания</Body1>}
+                      </div>
+                    </Table.Cell>
+                    <Table.Cell>
+                      <div className="flex flex-col gap-1">
+                        {formatAmount.format(amount)}
+                        <Body2 className="text-muted-foreground">
+                          {transactionDate && format(transactionDate, 'LLLL d, y', { locale: ru })}
                         </Body2>
-                        <Body2 className="hidden text-muted-foreground in-data-panel-open:block">
-                          {t('expenses.collapseItems')}
-                        </Body2>
-                      </Accordion.Trigger>
-                      )}
-                      {!description && !items.length && <Body1 className="text-muted-foreground">Нет описания</Body1>}
-                    </div>
-                  </Table.Cell>
-                  <Table.Cell>
-                    <div className="flex flex-col gap-1">
-                      {formatAmount.format(amount)}
-                      <Body2 className="text-muted-foreground">
-                        {transactionDate && format(transactionDate, 'LLLL d, y', { locale: ru })}
-                      </Body2>
-                    </div>
-                  </Table.Cell>
-                  <Table.Cell className="text-body-2 text-muted-foreground">
-                    {merchant ?? <Body1 className="text-muted-foreground">Место не указано</Body1>}
-                  </Table.Cell>
-                  {isCurrentPeriod && (
+                      </div>
+                    </Table.Cell>
+                    <Table.Cell className="text-body-2 text-muted-foreground">
+                      {merchant || <Body1 className="text-muted-foreground">Место не указано</Body1>}
+                    </Table.Cell>
+                    {isCurrentPeriod && (
                     <Table.Cell
                       className="flex justify-end py-5 pr-5 pl-0"
                       onClick={(event) => event.stopPropagation()}
                     >
-                      <ExpenseActions transactionId={_id} accountId={accountId} />
+                      <ExpenseActions expense={expense} />
                     </Table.Cell>
-                  )}
-                </div>
-                <Accordion.Panel render={<Table.Base className="px-5" />}>
-                  <Table.Header>
-                    <Table.Row>
-                      <Table.Head>{t('expenses.itemFields.name')}</Table.Head>
-                      <Table.Head>{t('expenses.itemFields.quantity')}</Table.Head>
-                      <Table.Head>{t('expenses.itemFields.price')}</Table.Head>
-                    </Table.Row>
-                  </Table.Header>
-                  <Table.Body>
-                    {items.map(({ name, quantity, price }) => (
-                      <Table.Row key={name}>
-                        <Table.Cell>{name}</Table.Cell>
-                        <Table.Cell>{quantity}</Table.Cell>
-                        <Table.Cell>{formatAmount.format(price)}</Table.Cell>
+                    )}
+                  </div>
+                  <Accordion.Panel render={<Table.Base className="px-5" />}>
+                    <Table.Header>
+                      <Table.Row>
+                        <Table.Head>{t('expenses.itemFields.name')}</Table.Head>
+                        <Table.Head>{t('expenses.itemFields.quantity')}</Table.Head>
+                        <Table.Head>{t('expenses.itemFields.price')}</Table.Head>
                       </Table.Row>
-                    ))}
-                  </Table.Body>
-                </Accordion.Panel>
-              </Accordion.Item>
-            ))}
+                    </Table.Header>
+                    <Table.Body>
+                      {items.map(({ name, quantity, price }) => (
+                        <Table.Row key={name}>
+                          <Table.Cell>{name}</Table.Cell>
+                          <Table.Cell>{quantity}</Table.Cell>
+                          <Table.Cell>{formatAmount.format(price)}</Table.Cell>
+                        </Table.Row>
+                      ))}
+                    </Table.Body>
+                  </Accordion.Panel>
+                </Accordion.Item>
+              );
+            })}
             {!expensesData?.items.length && (
             <div className="w-fit m-auto p-5">
               <Body1 className="text-muted-foreground">Данные отсутствуют</Body1>
