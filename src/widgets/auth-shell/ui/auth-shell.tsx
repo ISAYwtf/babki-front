@@ -1,3 +1,4 @@
+import { LucideCurrency } from 'lucide-react';
 import type { PropsWithChildren } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -15,12 +16,12 @@ export function AuthShell({ children }: PropsWithChildren) {
         <div
           className={`
             flex flex-col justify-between gap-10 bg-primary p-7 text-primary-foreground
-            sm:p-10 lg:min-h-[620px]
+            sm:p-10 lg:min-h-155
           `}
         >
           <div className="flex items-center gap-3 text-xl font-bold tracking-tight">
             <span className="flex size-10 items-center justify-center rounded-xl bg-primary-foreground text-primary">
-              Б
+              <LucideCurrency />
             </span>
             {t('auth.brand.name')}
           </div>
