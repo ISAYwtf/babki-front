@@ -51,6 +51,11 @@ test('does not invalidate a session for public auth failures or requests without
   }), false);
   assert.equal(session.handleUnauthorizedSession?.({
     status: 401,
+    url: '/auth/login/two-factor',
+    authorization: 'Bearer stale-token',
+  }), false);
+  assert.equal(session.handleUnauthorizedSession?.({
+    status: 401,
     url: '/expenses',
   }), false);
   assert.equal(session.handleUnauthorizedSession?.({
@@ -59,6 +64,57 @@ test('does not invalidate a session for public auth failures or requests without
     authorization: 'Bearer stale-token',
   }), false);
   assert.equal(invalidationCount, 0);
+});
+
+test('keeps expected lifecycle credential failures inside the management flow', async () => {
+  const session = await sessionPromise;
+  let invalidationCount = 0;
+
+  session.setUnauthorizedSessionHandler?.(() => {
+    invalidationCount += 1;
+  });
+
+  const expectedCredentialFailure = {
+    status: 401,
+    url: '/auth/two-factor/setup',
+    authorization: 'Bearer active-token',
+    currentAuthorization: 'Bearer active-token',
+    suppressSessionInvalidation: true,
+  };
+
+  assert.equal(session.handleUnauthorizedSession?.(expectedCredentialFailure), false);
+  assert.equal(invalidationCount, 0);
+  assert.equal(session.handleUnauthorizedSession?.({
+    ...expectedCredentialFailure,
+    url: '/users/me',
+    suppressSessionInvalidation: false,
+  }), true);
+  assert.equal(invalidationCount, 1);
+});
+
+test('invalidates only a rejection sent with the currently active bearer token', async () => {
+  const session = await sessionPromise;
+  let invalidationCount = 0;
+
+  session.setUnauthorizedSessionHandler?.(() => {
+    invalidationCount += 1;
+  });
+
+  const activeRejection = {
+    status: 401,
+    url: '/expenses',
+    authorization: 'Bearer active-token',
+    currentAuthorization: 'Bearer active-token',
+  };
+  assert.equal(session.handleUnauthorizedSession?.(activeRejection), true);
+  assert.equal(session.handleUnauthorizedSession?.(activeRejection), false);
+  assert.equal(session.handleUnauthorizedSession?.({
+    status: 401,
+    url: '/plans',
+    authorization: 'Bearer old-token',
+    currentAuthorization: 'Bearer replacement-token',
+  }), false);
+  assert.equal(invalidationCount, 1);
 });
 
 test('allows the same bearer token to start a later authenticated session after reset', async () => {

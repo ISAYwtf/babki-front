@@ -14,7 +14,10 @@ import { YearExpenses } from '@/widgets/year-expenses';
 import { YearIncomes } from '@/widgets/year-incomes';
 import { YearSavings } from '@/widgets/year-savings';
 import { MonthSwitcher, YearSwitcher } from '@/features/select-period';
-import { LogoutButton } from '@/features/auth';
+import {
+  LogoutButton,
+  TwoFactorManagementDialog,
+} from '@/features/auth';
 import { Header } from '@/shared/ui/header';
 import { HorizontalScroller } from '@/shared/ui/horizontal-scroller';
 import { useTranslation } from 'react-i18next';
@@ -27,7 +30,12 @@ export function MainPage() {
       <Header
         title={t('header.title')}
         subtitle={t('header.subtitle')}
-        actions={<LogoutButton />}
+        actions={(
+          <>
+            <TwoFactorManagementDialog />
+            <LogoutButton />
+          </>
+        )}
       />
 
       <div className="flex flex-col gap-5">

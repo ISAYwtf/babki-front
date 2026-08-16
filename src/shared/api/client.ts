@@ -3,6 +3,12 @@ import axios, { AxiosHeaders } from 'axios';
 import { z } from 'zod';
 import { handleUnauthorizedSession } from './unauthorized-session';
 
+declare module 'axios' {
+  export interface AxiosRequestConfig {
+    suppressSessionInvalidation?: boolean;
+  }
+}
+
 const ACCESS_TOKEN_STORAGE_KEY = 'babki.accessToken';
 
 const canUseLocalStorage = () => typeof window !== 'undefined' && !!window.localStorage;
@@ -76,6 +82,11 @@ apiClient.interceptors.response.use(
         authorization: typeof authorizationHeader === 'string'
           ? authorizationHeader
           : null,
+        currentAuthorization: (() => {
+          const currentAccessToken = getAccessToken();
+          return currentAccessToken ? `Bearer ${currentAccessToken}` : null;
+        })(),
+        suppressSessionInvalidation: error.config?.suppressSessionInvalidation,
       });
     }
 

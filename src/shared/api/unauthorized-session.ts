@@ -2,6 +2,8 @@ interface UnauthorizedSessionContext {
   status?: number;
   url?: string;
   authorization?: string | null;
+  currentAuthorization?: string | null;
+  suppressSessionInvalidation?: boolean;
 }
 
 type UnauthorizedSessionHandler = () => void;
@@ -19,7 +21,7 @@ const getBearerAuthorization = (authorization: string | null | undefined) => {
 
 const isPublicAuthEndpoint = (url: string | undefined) => {
   const path = url?.split(/[?#]/, 1)[0] ?? '';
-  return /(^|\/)auth\/(login|register)\/?$/.test(path);
+  return /(^|\/)auth\/(login(?:\/two-factor)?|register)\/?$/.test(path);
 };
 
 export const setUnauthorizedSessionHandler = (handler: UnauthorizedSessionHandler | null) => {
@@ -35,13 +37,21 @@ export const handleUnauthorizedSession = ({
   status,
   url,
   authorization,
+  currentAuthorization,
+  suppressSessionInvalidation,
 }: UnauthorizedSessionContext) => {
   const bearerAuthorization = getBearerAuthorization(authorization);
+  const currentBearerAuthorization = currentAuthorization === undefined
+    ? undefined
+    : getBearerAuthorization(currentAuthorization);
 
   if (
     status !== 401
+    || suppressSessionInvalidation
     || isPublicAuthEndpoint(url)
     || !bearerAuthorization
+    || (currentBearerAuthorization !== undefined
+      && bearerAuthorization !== currentBearerAuthorization)
     || !unauthorizedSessionHandler
     || bearerAuthorization === handledAuthorization
   ) {
