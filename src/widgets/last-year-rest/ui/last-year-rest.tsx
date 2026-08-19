@@ -19,7 +19,7 @@ export const LastYearRest: FC = () => {
     return (
       <Card.Base
         aria-busy="true"
-        className="gap-6 max-w-xl min-h-28 p-3.5 w-2xs"
+        className="min-h-28 w-full min-w-0 max-w-xl gap-6 p-3.5 lg:w-2xs"
       >
         <span className="sr-only">Загрузка...</span>
         <Typography.Title3 className="text-muted-foreground uppercase">
@@ -41,7 +41,7 @@ export const LastYearRest: FC = () => {
 
   if (!prevYearReport) {
     return (
-      <Card.Base className="gap-6 max-w-xl min-h-28 p-3.5 w-2xs">
+      <Card.Base className="min-h-28 w-full min-w-0 max-w-xl gap-6 p-3.5 lg:w-2xs">
         <Typography.Title3 className="text-muted-foreground uppercase">
           {t('fromLastYear.title')}
         </Typography.Title3>

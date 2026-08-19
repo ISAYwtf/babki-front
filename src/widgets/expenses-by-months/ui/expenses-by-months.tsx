@@ -67,12 +67,12 @@ export const ExpensesByMonths: FC = () => {
 
   if (isLoading) {
     return (
-      <Card.Base aria-busy="true" className="h-fit min-w-max">
+      <Card.Base aria-busy="true" className="h-fit w-full min-w-0 md:w-auto md:min-w-max">
         <span className="sr-only">Загрузка...</span>
         <Card.Header>
           <Card.Title>Расходы по месяцам</Card.Title>
         </Card.Header>
-        <Card.Content>
+        <Card.Content className="overflow-x-auto">
           <Skeleton className="h-92.5 aspect-video" />
         </Card.Content>
       </Card.Base>
@@ -80,11 +80,11 @@ export const ExpensesByMonths: FC = () => {
   }
 
   return (
-    <Card.Base className="h-fit min-w-max">
+    <Card.Base className="h-fit w-full min-w-0 md:w-auto md:min-w-max">
       <Card.Header>
         <Card.Title>Расходы по месяцам</Card.Title>
       </Card.Header>
-      <Card.Content>
+      <Card.Content className="overflow-x-auto">
         <Chart.Root className="h-92.5" config={chartConfig}>
           <BarChart data={chartData}>
             <Chart.Legend content={<Chart.LegendContent />} />

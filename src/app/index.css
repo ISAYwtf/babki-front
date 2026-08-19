@@ -2,7 +2,23 @@
 
 :root {
   --app-content-max-width: 1200px;
-  --viewport-inline-bleed: max(0px, calc((100vw - var(--app-content-max-width)) / 2));
+  --app-inline-padding: 0px;
+  --viewport-inline-bleed: max(
+    var(--app-inline-padding),
+    calc((100vw - var(--app-content-max-width)) / 2)
+  );
+}
+
+@media (max-width: 1023px) {
+  :root {
+    --app-inline-padding: 20px;
+  }
+}
+
+@media (max-width: 639px) {
+  :root {
+    --app-inline-padding: 12px;
+  }
 }
 
 body {
@@ -20,8 +36,10 @@ body {
   max-width: var(--app-content-max-width);
   min-height: 100vh;
   padding-bottom: 80px;
+  overflow-x: clip;
 }
 
 #root {
   width: 100%;
+  min-width: 0;
 }

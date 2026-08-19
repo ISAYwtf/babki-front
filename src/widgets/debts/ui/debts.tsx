@@ -21,6 +21,11 @@ const formatAmount = new Intl.NumberFormat(locale, {
   minimumFractionDigits: 0,
 });
 
+const rowClassName = `
+  grid min-w-0 grid-cols-[minmax(0,1fr)_auto] items-start gap-x-3 gap-y-1
+  sm:grid-cols-[minmax(0,1fr)_auto_auto] sm:items-center sm:gap-0
+`;
+
 export const Debts: FC = () => {
   const { data: debtsData, isLoading } = useQuery(
     debtsQueryOptions.findAll({ status: 'active', limit: 5 }),
@@ -43,9 +48,25 @@ export const Debts: FC = () => {
             <Table.Body>
               {['first', 'second', 'third'].map((row) => (
                 <Table.Row key={row}>
-                  <Table.Cell><Skeleton className="h-4 w-28" /></Table.Cell>
-                  <Table.Cell><Skeleton className="h-4 w-24" /></Table.Cell>
-                  <Table.Cell><Skeleton className="ml-auto h-4 w-20" /></Table.Cell>
+                  <div className={rowClassName}>
+                    <Table.Cell className="min-w-0"><Skeleton className="h-4 w-28" /></Table.Cell>
+                    <Table.Cell
+                      className={`
+                        col-start-1 row-start-2 pt-0 text-body-2 text-muted-foreground
+                        sm:col-auto sm:row-auto sm:pt-5
+                      `}
+                    >
+                      <Skeleton className="h-4 w-24" />
+                    </Table.Cell>
+                    <Table.Cell
+                      className={`
+                        col-start-2 row-span-2 row-start-1 text-right
+                        sm:col-auto sm:row-auto sm:row-span-1
+                      `}
+                    >
+                      <Skeleton className="ml-auto h-4 w-20" />
+                    </Table.Cell>
+                  </div>
                 </Table.Row>
               ))}
             </Table.Body>
@@ -80,14 +101,26 @@ export const Debts: FC = () => {
                   }
                 }}
               >
-                <Table.Cell>{debt.debtor}</Table.Cell>
-                <Table.Cell
-                  className="text-body-2 text-muted-foreground"
-                  title={debt.dueDate && format(new Date(debt.dueDate), 'P', { locale: ru })}
-                >
-                  {debt.dueDate && format(new Date(debt.dueDate), 'LLLL d, y', { locale: ru })}
-                </Table.Cell>
-                <Table.Cell className="text-right">{formatAmount.format(debt.remainingAmount)}</Table.Cell>
+                <div className={rowClassName}>
+                  <Table.Cell className="min-w-0 break-words">{debt.debtor}</Table.Cell>
+                  <Table.Cell
+                    className={`
+                      col-start-1 row-start-2 pt-0 text-body-2 text-muted-foreground
+                      sm:col-auto sm:row-auto sm:pt-5
+                    `}
+                    title={debt.dueDate && format(new Date(debt.dueDate), 'P', { locale: ru })}
+                  >
+                    {debt.dueDate && format(new Date(debt.dueDate), 'LLLL d, y', { locale: ru })}
+                  </Table.Cell>
+                  <Table.Cell
+                    className={`
+                      col-start-2 row-span-2 row-start-1 text-right
+                      sm:col-auto sm:row-auto sm:row-span-1
+                    `}
+                  >
+                    {formatAmount.format(debt.remainingAmount)}
+                  </Table.Cell>
+                </div>
               </Table.Row>
             ))}
             {!debtsData?.items.length && (

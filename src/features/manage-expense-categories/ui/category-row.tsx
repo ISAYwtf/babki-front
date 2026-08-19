@@ -71,7 +71,10 @@ export const CategoryRow: FC<CategoryRowProps> = ({
 
   return (
     <form
-      className="grid grid-cols-[minmax(0,1fr)_38px_32px_32px] gap-x-2 gap-y-1"
+      className="
+        grid grid-cols-[minmax(0,1fr)_32px_32px] gap-x-2 gap-y-2
+        sm:grid-cols-[minmax(0,1fr)_38px_32px_32px] sm:gap-y-1
+      "
       onSubmit={handleSubmit}
     >
       <Input.Base
@@ -85,23 +88,28 @@ export const CategoryRow: FC<CategoryRowProps> = ({
         hasError={Boolean(nameError)}
         disabled={disabled}
         maxLength={101}
-        className="h-[38px]"
+        className="col-span-3 h-[38px] sm:col-span-1"
       />
 
-      <ColorPicker
-        value={draft.values.color}
-        onValueChange={(value) => onChange('color', value)}
-        onBlur={() => onBlur('color')}
-        disabled={disabled}
-        hasError={Boolean(colorError)}
-        label={t('expenseCategories.management.fields.color')}
-        describedBy={colorError && error === colorError ? errorId : undefined}
-      />
+      <div className="col-start-1 row-start-2 sm:col-auto sm:row-auto">
+        <ColorPicker
+          value={draft.values.color}
+          onValueChange={(value) => onChange('color', value)}
+          onBlur={() => onBlur('color')}
+          disabled={disabled}
+          hasError={Boolean(colorError)}
+          label={t('expenseCategories.management.fields.color')}
+          describedBy={colorError && error === colorError ? errorId : undefined}
+        />
+      </div>
 
       <Button.Icon
         type="button"
         variant="ghost"
-        className="size-8 text-destructive hover:bg-destructive/10 hover:text-destructive"
+        className="
+          col-start-2 row-start-2 size-8 text-destructive
+          hover:bg-destructive/10 hover:text-destructive sm:col-auto sm:row-auto
+        "
         aria-label={t('expenseCategories.management.actions.delete')}
         onClick={onDelete}
         disabled={disabled}
@@ -109,7 +117,7 @@ export const CategoryRow: FC<CategoryRowProps> = ({
         <LucideX />
       </Button.Icon>
 
-      <div className="flex size-8 items-center justify-center">
+      <div className="col-start-3 row-start-2 flex size-8 items-center justify-center sm:col-auto sm:row-auto">
         {dirty && (
           <Button.Icon
             type="submit"
@@ -131,7 +139,7 @@ export const CategoryRow: FC<CategoryRowProps> = ({
       {error && (
         <Typography.Caption1
           id={errorId}
-          className="col-span-4 text-destructive"
+          className="col-span-3 text-destructive sm:col-span-4"
           role="alert"
         >
           {error}

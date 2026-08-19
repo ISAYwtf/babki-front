@@ -26,7 +26,7 @@ export const ExpenseLimits: FC = () => {
 
   if (limitsLoading) {
     return (
-      <Card.Base aria-busy="true" className="h-fit min-h-56 min-w-93">
+      <Card.Base aria-busy="true" className="h-fit min-h-56 w-full min-w-0 md:w-auto md:min-w-93">
         <span className="sr-only">Загрузка...</span>
         <Card.Header>
           <Card.Title>По лимитам</Card.Title>
@@ -50,7 +50,7 @@ export const ExpenseLimits: FC = () => {
   }
 
   return (
-    <Card.Base className="h-fit min-h-56 min-w-93">
+    <Card.Base className="h-fit min-h-56 w-full min-w-0 md:w-auto md:min-w-93">
       <Card.Header>
         <Card.Title>По лимитам</Card.Title>
         <Card.Controls>

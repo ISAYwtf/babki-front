@@ -33,7 +33,8 @@ const AlertDialogContent: FC<AlertDialogContentProps> = ({
       <AlertDialogPrimitive.Popup
         className={cn(
           `
-            pointer-events-auto w-full max-w-md rounded-xl border bg-card p-5 shadow-xl
+            pointer-events-auto max-h-[calc(100dvh-2rem)] w-full max-w-md overflow-y-auto
+            rounded-xl border bg-card p-4 shadow-xl sm:p-5
             data-ending-style:scale-95 data-ending-style:opacity-0
             data-starting-style:scale-95 data-starting-style:opacity-0
             transition-all duration-200
@@ -57,7 +58,7 @@ const AlertDialogBody = ({ className, ...props }: ComponentProps<'div'>) => (
 );
 
 const AlertDialogFooter = ({ className, ...props }: ComponentProps<'div'>) => (
-  <div className={cn('mt-6 flex items-center justify-end gap-3', className)} {...props} />
+  <div className={cn('mt-6 flex flex-wrap items-center justify-end gap-3', className)} {...props} />
 );
 
 const AlertDialogTitle = (props: Typography.IVariantProps) => (

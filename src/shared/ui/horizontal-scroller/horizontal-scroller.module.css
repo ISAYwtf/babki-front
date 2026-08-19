@@ -1,0 +1,62 @@
+@layer components {
+  .viewport {
+    min-width: 0;
+    overflow: visible;
+  }
+
+  .track {
+    display: flex;
+    width: 100%;
+    min-width: 0;
+    flex-direction: column;
+  }
+
+  @media (min-width: 768px) {
+    .viewport {
+      overflow-x: auto;
+      overscroll-behavior-x: contain;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .viewport[data-hide-scrollbar='true'] {
+      scrollbar-width: none;
+    }
+
+    .viewport[data-hide-scrollbar='true']::-webkit-scrollbar {
+      display: none;
+    }
+
+    .track {
+      width: max-content;
+      flex-direction: row;
+    }
+
+    .track > * {
+      flex-shrink: 0;
+    }
+
+    .viewport[data-bleed='viewport-start'],
+    .viewport[data-bleed='viewport-both'] {
+      margin-inline-start: calc(-1 * var(--viewport-inline-bleed, 0px));
+    }
+
+    .viewport[data-bleed='viewport-start'],
+    .viewport[data-bleed='viewport-end'] {
+      width: calc(100% + var(--viewport-inline-bleed, 0px));
+    }
+
+    .viewport[data-bleed='viewport-both'] {
+      width: calc(100% + var(--viewport-inline-bleed, 0px) + var(--viewport-inline-bleed, 0px));
+    }
+
+    .viewport[data-bleed='viewport-start'] .track,
+    .viewport[data-bleed='viewport-both'] .track {
+      padding-inline-start: var(--viewport-inline-bleed, 0px);
+    }
+
+    .viewport[data-bleed='viewport-end'] .track,
+    .viewport[data-bleed='viewport-both'] .track {
+      padding-inline-end: var(--viewport-inline-bleed, 0px);
+    }
+  }
+}

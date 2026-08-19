@@ -24,7 +24,8 @@ const DialogContent: FC<ComponentProps<typeof DialogPrimitive.Popup>> = ({
       <DialogPrimitive.Popup
         className={cn(
           `
-            w-full max-w-md rounded-xl border bg-card p-5 shadow-xl
+            pointer-events-auto max-h-[calc(100dvh-2rem)] w-full max-w-md overflow-y-auto
+            rounded-xl border bg-card p-4 shadow-xl sm:p-5
             data-ending-style:scale-95 data-ending-style:opacity-0
             data-starting-style:scale-95 data-starting-style:opacity-0
             transition-all duration-200
@@ -48,7 +49,7 @@ const DialogBody = ({ className, ...props }: ComponentProps<'div'>) => (
 );
 
 const DialogFooter = ({ className, ...props }: ComponentProps<'div'>) => (
-  <div className={cn('mt-6 flex items-center justify-end gap-3', className)} {...props} />
+  <div className={cn('mt-6 flex flex-wrap items-center justify-end gap-3', className)} {...props} />
 );
 
 const DialogTitle = (props: Typography.IVariantProps) => (

@@ -68,13 +68,13 @@ export const ExpensesByAnnualCategories: FC = () => {
 
   if (reportsLoading || categoriesLoading) {
     return (
-      <Card.Base aria-busy="true" className="h-fit min-w-min">
+      <Card.Base aria-busy="true" className="h-fit w-full min-w-0 md:w-auto md:min-w-min">
         <span className="sr-only">Загрузка...</span>
         <Card.Header>
           <Card.Title>Расходы по категориям за год</Card.Title>
         </Card.Header>
         <Card.Content>
-          <div className="flex h-72 w-75 items-center justify-center">
+          <div className="flex h-72 w-full items-center justify-center md:w-75">
             <Skeleton className="size-52 rounded-full" />
           </div>
         </Card.Content>
@@ -84,12 +84,12 @@ export const ExpensesByAnnualCategories: FC = () => {
 
   if (!chartData.length) {
     return (
-      <Card.Base className="h-fit min-w-min">
+      <Card.Base className="h-fit w-full min-w-0 md:w-auto md:min-w-min">
         <Card.Header>
           <Card.Title>Расходы по категориям за год</Card.Title>
         </Card.Header>
         <Card.Content>
-          <div className="flex h-72 w-75 items-center justify-center">
+          <div className="flex h-72 w-full items-center justify-center md:w-75">
             <Body1 className="text-muted-foreground">Данные отсутствуют</Body1>
           </div>
         </Card.Content>
@@ -98,12 +98,12 @@ export const ExpensesByAnnualCategories: FC = () => {
   }
 
   return (
-    <Card.Base className="h-fit min-w-min">
+    <Card.Base className="h-fit w-full min-w-0 md:w-auto md:min-w-min">
       <Card.Header>
         <Card.Title>Расходы по категориям за год</Card.Title>
       </Card.Header>
       <Card.Content>
-        <Chart.Root config={chartConfig} className="h-72 w-75 relative">
+        <Chart.Root config={chartConfig} className="relative h-72 w-full md:w-75">
           <PieChart>
             <Chart.Tooltip
               content={(

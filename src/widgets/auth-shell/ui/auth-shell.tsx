@@ -6,10 +6,11 @@ export function AuthShell({ children }: PropsWithChildren) {
   const { t } = useTranslation();
 
   return (
-    <main className="flex min-h-[calc(100vh-5rem)] w-full items-center px-4 py-8 sm:px-8">
+    <main className="flex min-h-[calc(100dvh-5rem)] w-full min-w-0 items-center px-3 py-6 sm:px-8 sm:py-8">
       <section
         className={`
-          mx-auto grid w-full max-w-5xl overflow-hidden rounded-3xl border bg-card shadow-xl
+          mx-auto grid w-full min-w-0 max-w-5xl overflow-hidden rounded-2xl border bg-card shadow-xl
+          sm:rounded-3xl
           lg:grid-cols-[0.9fr_1.1fr]
         `}
       >

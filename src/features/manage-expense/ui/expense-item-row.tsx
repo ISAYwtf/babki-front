@@ -50,7 +50,12 @@ export const ExpenseItemRow: FC<ExpenseItemRowProps> = ({
   const decrementDisabled = disabled || !Number.isInteger(quantity) || quantity <= 1;
 
   return (
-    <div className="grid gap-3 rounded-lg border p-3 sm:grid-cols-[minmax(0,1fr)_11rem_9rem_auto] sm:items-start">
+    <div
+      className="
+        grid min-w-0 gap-3 rounded-lg border p-3
+        sm:grid-cols-[minmax(0,1fr)_11rem_9rem_auto] sm:items-start
+      "
+    >
       <div>
         <Input.Base
           value={item.name}
@@ -64,11 +69,12 @@ export const ExpenseItemRow: FC<ExpenseItemRowProps> = ({
         {errors.name && <Input.Error>{errors.name}</Input.Error>}
       </div>
 
-      <div>
-        <div className="grid grid-cols-[2rem_minmax(0,1fr)_2rem] gap-1">
+      <div className="min-w-0">
+        <div className="grid min-w-0 grid-cols-[2rem_minmax(0,1fr)_2rem] gap-1">
           <Button.Icon
             type="button"
             variant="outline"
+            className="size-8"
             onClick={onDecrement}
             disabled={decrementDisabled}
             aria-label={t('expenses.create.accessibility.decrement', { number: itemNumber })}
@@ -76,7 +82,7 @@ export const ExpenseItemRow: FC<ExpenseItemRowProps> = ({
             <LucideMinus />
           </Button.Icon>
           <Input.Base
-            className="h-8 px-2 text-center"
+            className="h-8 min-w-0 px-2 text-center"
             type="number"
             inputMode="numeric"
             step="1"
@@ -91,6 +97,7 @@ export const ExpenseItemRow: FC<ExpenseItemRowProps> = ({
           <Button.Icon
             type="button"
             variant="outline"
+            className="size-8"
             onClick={onIncrement}
             disabled={disabled}
             aria-label={t('expenses.create.accessibility.increment', { number: itemNumber })}
@@ -101,8 +108,9 @@ export const ExpenseItemRow: FC<ExpenseItemRowProps> = ({
         {errors.quantity && <Input.Error>{errors.quantity}</Input.Error>}
       </div>
 
-      <div>
+      <div className="min-w-0">
         <Input.Base
+          className="min-w-0"
           type="number"
           inputMode="decimal"
           min="0.01"
@@ -121,7 +129,7 @@ export const ExpenseItemRow: FC<ExpenseItemRowProps> = ({
       <Button.Icon
         type="button"
         variant="ghost"
-        className="justify-self-end text-muted-foreground hover:text-destructive"
+        className="size-8 justify-self-end text-muted-foreground hover:text-destructive"
         onClick={onRemove}
         disabled={disabled}
         aria-label={t('expenses.create.accessibility.removeItem', { number: itemNumber })}

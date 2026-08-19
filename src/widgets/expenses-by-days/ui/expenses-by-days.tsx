@@ -45,7 +45,7 @@ export const ExpensesByDays: FC = () => {
 
   if (expensesLoading) {
     return (
-      <Card.Base aria-busy="true" className="h-fit min-w-max w-200">
+      <Card.Base aria-busy="true" className="h-fit w-full min-w-0 md:w-200 md:min-w-max">
         <span className="sr-only">Загрузка...</span>
         <Card.Header>
           <Card.Title>Расходы по дням</Card.Title>
@@ -58,7 +58,7 @@ export const ExpensesByDays: FC = () => {
   }
 
   return (
-    <Card.Base className="h-fit min-w-max w-200">
+    <Card.Base className="h-fit w-full min-w-0 md:w-200 md:min-w-max">
       <Card.Header>
         <Card.Title>Расходы по дням</Card.Title>
       </Card.Header>

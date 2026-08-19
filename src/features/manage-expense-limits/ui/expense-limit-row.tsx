@@ -96,32 +96,34 @@ export const ExpenseLimitRow: FC<ExpenseLimitRowProps> = ({
   return (
     <form
       className="
-        grid grid-cols-[minmax(0,1.25fr)_minmax(5rem,0.75fr)_32px_32px]
-        gap-x-1.5 gap-y-1
+        grid grid-cols-[minmax(0,1fr)_32px_32px] gap-x-1.5 gap-y-2
+        sm:grid-cols-[minmax(0,1.25fr)_minmax(5rem,0.75fr)_32px_32px] sm:gap-y-1
       "
       aria-describedby={genericMutationError ? mutationErrorId : undefined}
       onSubmit={handleSubmit}
     >
-      {draft.limitId || draft.writeConfirmed ? (
-        <div className="flex h-11 min-w-0 items-center overflow-hidden">
-          {draft.category && (
-            <ExpenseCategoryBadge color={draft.category.color}>
-              {draft.category.name}
-            </ExpenseCategoryBadge>
-          )}
-        </div>
-      ) : (
-        <CategorySelect
-          options={categoryOptions}
-          value={draft.values.categoryId}
-          onValueChange={(value) => onChange('categoryId', value)}
-          onBlur={() => onBlur('categoryId')}
-          placeholder={t('expenseLimits.management.fields.category')}
-          disabled={disabled}
-          hasError={Boolean(categoryError)}
-          describedBy={categoryError ? categoryErrorId : undefined}
-        />
-      )}
+      <div className="col-span-3 min-w-0 sm:col-span-1">
+        {draft.limitId || draft.writeConfirmed ? (
+          <div className="flex h-11 min-w-0 items-center overflow-hidden">
+            {draft.category && (
+              <ExpenseCategoryBadge color={draft.category.color}>
+                {draft.category.name}
+              </ExpenseCategoryBadge>
+            )}
+          </div>
+        ) : (
+          <CategorySelect
+            options={categoryOptions}
+            value={draft.values.categoryId}
+            onValueChange={(value) => onChange('categoryId', value)}
+            onBlur={() => onBlur('categoryId')}
+            placeholder={t('expenseLimits.management.fields.category')}
+            disabled={disabled}
+            hasError={Boolean(categoryError)}
+            describedBy={categoryError ? categoryErrorId : undefined}
+          />
+        )}
+      </div>
 
       <Input.Base
         type="number"
@@ -137,13 +139,16 @@ export const ExpenseLimitRow: FC<ExpenseLimitRowProps> = ({
         aria-describedby={totalError ? totalErrorId : undefined}
         hasError={Boolean(totalError)}
         disabled={disabled}
-        className="h-11 min-w-0 px-2"
+        className="col-start-1 row-start-2 h-11 min-w-0 px-2 sm:col-auto sm:row-auto"
       />
 
       <Button.Icon
         type="button"
         variant="ghost"
-        className="mt-1.5 size-8 text-destructive hover:bg-destructive/10 hover:text-destructive"
+        className="
+          col-start-2 row-start-2 mt-1.5 size-8 text-destructive
+          hover:bg-destructive/10 hover:text-destructive sm:col-auto sm:row-auto
+        "
         aria-label={t('expenseLimits.management.actions.delete')}
         onClick={onDelete}
         disabled={disabled}
@@ -151,7 +156,12 @@ export const ExpenseLimitRow: FC<ExpenseLimitRowProps> = ({
         <LucideX />
       </Button.Icon>
 
-      <div className="mt-1.5 flex size-8 items-center justify-center">
+      <div
+        className="
+          col-start-3 row-start-2 mt-1.5 flex size-8 items-center justify-center
+          sm:col-auto sm:row-auto
+        "
+      >
         {dirty && (
           <Button.Icon
             type="submit"
@@ -173,7 +183,7 @@ export const ExpenseLimitRow: FC<ExpenseLimitRowProps> = ({
       {categoryError && (
         <Typography.Caption1
           id={categoryErrorId}
-          className="col-span-4 text-destructive"
+          className="col-span-3 text-destructive sm:col-span-4"
           role="alert"
         >
           {categoryError}
@@ -183,7 +193,7 @@ export const ExpenseLimitRow: FC<ExpenseLimitRowProps> = ({
       {totalError && (
         <Typography.Caption1
           id={totalErrorId}
-          className="col-span-4 text-destructive"
+          className="col-span-3 text-destructive sm:col-span-4"
           role="alert"
         >
           {totalError}
@@ -193,7 +203,7 @@ export const ExpenseLimitRow: FC<ExpenseLimitRowProps> = ({
       {genericMutationError && (
         <Typography.Caption1
           id={mutationErrorId}
-          className="col-span-4 text-destructive"
+          className="col-span-3 text-destructive sm:col-span-4"
           role="alert"
         >
           {genericMutationError}

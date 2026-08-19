@@ -26,6 +26,7 @@
     }
 
     &[data-checked] {
+        display: none;
         background-color: var(--secondary);
     }
 }

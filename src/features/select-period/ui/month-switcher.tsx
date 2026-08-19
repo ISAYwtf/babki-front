@@ -182,7 +182,7 @@ const MonthSwitcherView: React.FC<DraggableSnapScrollProps> = ({
   return (
     <div
       ref={containerRef}
-      className="w-screen overflow-hidden relative touch-pan-y select-none left-1/2 -translate-x-1/2"
+      className="relative left-1/2 w-screen max-w-[100vw] -translate-x-1/2 touch-pan-y select-none overflow-hidden"
     >
       <div
         ref={trackRef}

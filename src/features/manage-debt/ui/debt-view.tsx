@@ -149,7 +149,7 @@ export const DebtView: FC<DebtViewProps> = ({
           <LucideTrash2 />
           {t('debts.details.actions.delete')}
         </Button.Base>
-        <div className="flex gap-2.5">
+        <div className="flex flex-wrap gap-2.5">
           <Button.Base variant="outline" onClick={onEdit}>
             <LucidePencil />
             {t('debts.details.actions.edit')}

@@ -32,7 +32,7 @@ export const CardList: FC<ICardListProps> = ({
 }) => (
   <Card.Base
     {...htmlProps}
-    className={clsx('gap-6 max-w-xl p-3.5 w-2xs', htmlProps.className)}
+    className={clsx('w-full min-w-0 max-w-xl gap-6 p-3.5 lg:w-2xs', htmlProps.className)}
   >
     {title && (
       <Typography.Title3

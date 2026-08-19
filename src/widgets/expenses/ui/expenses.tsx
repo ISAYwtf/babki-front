@@ -32,12 +32,30 @@ const formatAmount = new Intl.NumberFormat(locale, {
   minimumFractionDigits: 0,
 });
 
+const mobileTableClassName = `
+  overflow-visible
+  [&>[data-slot=table]]:block md:[&>[data-slot=table]]:table
+`;
+
+const mobileBodyClassName = 'block space-y-3 px-3 pb-3 md:table-row-group md:space-y-0 md:p-0';
+
+const mobileRowClassName = `
+  block overflow-hidden rounded-lg border last-of-type:border
+  md:table-row md:overflow-visible md:rounded-none md:border-x-0 md:border-t-0 md:last-of-type:border-b-0
+`;
+
+const getRowGridClassName = (withActions: boolean) => `
+  grid min-w-0 grid-cols-[minmax(0,1fr)_auto] items-start gap-x-3 gap-y-3 p-4
+  md:items-center md:gap-0 md:p-0
+  ${withActions
+    ? 'md:grid-cols-[repeat(4,minmax(0,170px))_minmax(48px,1fr)]'
+    : 'md:grid-cols-[repeat(4,minmax(0,170px))]'}
+`;
+
 export const Expenses: FC = () => {
   const selectedPeriod = useSelectedPeriod();
   const isCurrentPeriod = useIsCurrentPeriod();
-  const rowGridClassName = isCurrentPeriod
-    ? 'grid grid-cols-[repeat(4,minmax(0,170px))_minmax(48px,1fr)] items-center'
-    : 'grid grid-cols-[repeat(4,minmax(0,170px))] items-center';
+  const rowGridClassName = getRowGridClassName(isCurrentPeriod);
   const { data: expensesData, isLoading } = useQuery(
     expensesQueryOptions.findAll(selectedPeriod),
   );
@@ -45,7 +63,7 @@ export const Expenses: FC = () => {
 
   if (isLoading) {
     return (
-      <Card.Base aria-busy="true" className="h-fit min-h-64 min-w-max">
+      <Card.Base aria-busy="true" className="h-fit min-h-64 min-w-0">
         <span className="sr-only">Загрузка...</span>
         <Card.Header>
           <Card.Title>{t('expenses.title')}</Card.Title>
@@ -56,22 +74,40 @@ export const Expenses: FC = () => {
           )}
         </Card.Header>
         <Card.Content className="px-0">
-          <Table.Base>
-            <Table.Body>
+          <Table.Base className={mobileTableClassName}>
+            <Table.Body className={mobileBodyClassName}>
               {['first', 'second', 'third'].map((row) => (
-                <Table.Row key={row}>
+                <Table.Row key={row} className={mobileRowClassName}>
                   <div className={rowGridClassName}>
-                    <Table.Cell><Skeleton className="h-5 w-24" /></Table.Cell>
-                    <Table.Cell><Skeleton className="h-4 w-32" /></Table.Cell>
-                    <Table.Cell>
+                    <Table.Cell className="block min-w-0 p-0 md:table-cell md:p-5">
+                      <Skeleton className="h-5 w-24" />
+                    </Table.Cell>
+                    <Table.Cell
+                      className="col-span-2 block min-w-0 p-0 md:col-span-1 md:table-cell md:p-5"
+                    >
+                      <Skeleton className="h-4 w-32" />
+                    </Table.Cell>
+                    <Table.Cell
+                      className={`
+                        col-start-2 row-start-1 block p-0 text-right
+                        md:col-auto md:row-auto md:table-cell md:p-5 md:text-left
+                      `}
+                    >
                       <div className="flex flex-col gap-2">
                         <Skeleton className="h-4 w-20" />
                         <Skeleton className="h-3 w-24" />
                       </div>
                     </Table.Cell>
-                    <Table.Cell><Skeleton className="h-4 w-28" /></Table.Cell>
+                    <Table.Cell className="block min-w-0 p-0 md:table-cell md:p-5">
+                      <Skeleton className="h-4 w-28" />
+                    </Table.Cell>
                     {isCurrentPeriod && (
-                      <Table.Cell className="flex justify-end py-5 pr-5 pl-0">
+                      <Table.Cell
+                        className={`
+                          col-start-2 row-start-3 flex justify-end p-0
+                          md:col-auto md:row-auto md:py-5 md:pr-5 md:pl-0
+                        `}
+                      >
                         <Skeleton className="size-7" />
                       </Table.Cell>
                     )}
@@ -86,7 +122,7 @@ export const Expenses: FC = () => {
   }
 
   return (
-    <Card.Base className="h-fit min-h-64 min-w-max">
+    <Card.Base className="h-fit min-h-64 min-w-0">
       <Card.Header>
         <Card.Title>{t('expenses.title')}</Card.Title>
         {isCurrentPeriod && (
@@ -96,21 +132,23 @@ export const Expenses: FC = () => {
         )}
       </Card.Header>
       <Card.Content className="px-0">
-        <Table.Base>
-          <Accordion.Root render={<Table.Body />}>
+        <Table.Base className={mobileTableClassName}>
+          <Accordion.Root render={<Table.Body className={mobileBodyClassName} />}>
             {expensesData?.items.map((expense) => {
               const {
                 _id: expenseId, amount, transactionDate, merchant, category, description, items,
               } = expense;
 
               return (
-                <Accordion.Item key={expenseId} render={<Table.Row />}>
+                <Accordion.Item key={expenseId} render={<Table.Row className={mobileRowClassName} />}>
                   <div className={rowGridClassName}>
-                    <Table.Cell>
+                    <Table.Cell className="block min-w-0 p-0 md:table-cell md:p-5">
                       <ExpenseCategoryBadge color={category.color}>{category.name}</ExpenseCategoryBadge>
                     </Table.Cell>
-                    <Table.Cell>
-                      <div className="flex flex-col gap-1 items-start">
+                    <Table.Cell
+                      className="col-span-2 block min-w-0 p-0 md:col-span-1 md:table-cell md:p-5"
+                    >
+                      <div className="flex min-w-0 flex-col items-start gap-1 break-words">
                         {description}
                         {!!items.length && (
                         <Accordion.Trigger>
@@ -125,7 +163,12 @@ export const Expenses: FC = () => {
                         {!description && !items.length && <Body1 className="text-muted-foreground">Нет описания</Body1>}
                       </div>
                     </Table.Cell>
-                    <Table.Cell>
+                    <Table.Cell
+                      className={`
+                        col-start-2 row-start-1 block p-0 text-right
+                        md:col-auto md:row-auto md:table-cell md:p-5 md:text-left
+                      `}
+                    >
                       <div className="flex flex-col gap-1">
                         {formatAmount.format(amount)}
                         <Body2 className="text-muted-foreground">
@@ -133,19 +176,24 @@ export const Expenses: FC = () => {
                         </Body2>
                       </div>
                     </Table.Cell>
-                    <Table.Cell className="text-body-2 text-muted-foreground">
+                    <Table.Cell
+                      className="block min-w-0 break-words p-0 text-body-2 text-muted-foreground md:table-cell md:p-5"
+                    >
                       {merchant || <Body1 className="text-muted-foreground">Место не указано</Body1>}
                     </Table.Cell>
                     {isCurrentPeriod && (
                     <Table.Cell
-                      className="flex justify-end py-5 pr-5 pl-0"
+                      className={`
+                        col-start-2 row-start-3 flex justify-end p-0
+                        md:col-auto md:row-auto md:py-5 md:pr-5 md:pl-0
+                      `}
                       onClick={(event) => event.stopPropagation()}
                     >
                       <ExpenseActions expense={expense} />
                     </Table.Cell>
                     )}
                   </div>
-                  <Accordion.Panel render={<Table.Base className="px-5" />}>
+                  <Accordion.Panel render={<Table.Base className="border-t px-3 py-2 md:px-5" />}>
                     <Table.Header>
                       <Table.Row>
                         <Table.Head>{t('expenses.itemFields.name')}</Table.Head>
@@ -167,7 +215,7 @@ export const Expenses: FC = () => {
               );
             })}
             {!expensesData?.items.length && (
-            <div className="w-fit m-auto p-5">
+            <div className="m-auto w-fit p-5">
               <Body1 className="text-muted-foreground">Данные отсутствуют</Body1>
             </div>
             )}

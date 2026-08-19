@@ -48,7 +48,7 @@ export const ExpensesByCategories: FC = () => {
   return (
     <Card.Base
       aria-busy={isLoading || undefined}
-      className="h-fit min-h-56 min-w-93"
+      className="h-fit min-h-56 w-full min-w-0 md:w-auto md:min-w-93"
     >
       {isLoading && <span className="sr-only">Загрузка...</span>}
       <Card.Header>

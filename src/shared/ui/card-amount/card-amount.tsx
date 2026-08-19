@@ -48,7 +48,7 @@ export const CardAmountSkeleton: FC<ICardAmountSkeletonProps> = ({
   <Card.Base
     {...htmlProps}
     aria-busy="true"
-    className={clsx('flex flex-col gap-2.5 max-w-xl p-3.5', htmlProps.className)}
+    className={clsx('flex w-full min-w-0 max-w-xl flex-col gap-2.5 p-3.5', htmlProps.className)}
   >
     <span className="sr-only">Загрузка...</span>
     <div className="flex justify-between">
@@ -104,7 +104,7 @@ export const CardAmount: FC<ICardAmountProps> = ({
       render={(
         <Card.Base
           {...htmlProps}
-          className={clsx('flex flex-col gap-2.5 max-w-xl p-3.5', htmlProps.className)}
+          className={clsx('flex w-full min-w-0 max-w-xl flex-col gap-2.5 p-3.5', htmlProps.className)}
         />
       )}
     >
@@ -126,7 +126,7 @@ export const CardAmount: FC<ICardAmountProps> = ({
           {items.map((item) => (
             <div key={item.date} className="table-row">
               {item.title && (
-                <Body1 className="table-cell pb-2.5 font-semibold [&+.date]:text-right">
+                <Body1 className="table-cell min-w-0 pb-2.5 font-semibold [&+.date]:text-right">
                   {item.title}
                 </Body1>
               )}

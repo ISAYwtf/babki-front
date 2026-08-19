@@ -24,6 +24,11 @@ const formatDate = new Intl.DateTimeFormat(locale, {
   year: 'numeric',
 });
 
+const rowClassName = `
+  grid min-w-0 grid-cols-[minmax(0,1fr)_auto] items-start gap-x-3 gap-y-1
+  sm:grid-cols-[minmax(0,1fr)_auto_auto] sm:items-center sm:gap-0
+`;
+
 export const Plans: FC = () => {
   const { data, isLoading } = useQuery(
     plansQueryOptions.findAll({ status: 'active', limit: 100 }),
@@ -45,9 +50,25 @@ export const Plans: FC = () => {
             <Table.Body>
               {['first', 'second', 'third'].map((row) => (
                 <Table.Row key={row}>
-                  <Table.Cell><Skeleton className="h-4 w-32" /></Table.Cell>
-                  <Table.Cell><Skeleton className="h-4 w-24" /></Table.Cell>
-                  <Table.Cell><Skeleton className="ml-auto h-4 w-20" /></Table.Cell>
+                  <div className={rowClassName}>
+                    <Table.Cell className="min-w-0"><Skeleton className="h-4 w-32" /></Table.Cell>
+                    <Table.Cell
+                      className={`
+                        col-start-1 row-start-2 pt-0 text-body-2 text-muted-foreground
+                        sm:col-auto sm:row-auto sm:pt-5
+                      `}
+                    >
+                      <Skeleton className="h-4 w-24" />
+                    </Table.Cell>
+                    <Table.Cell
+                      className={`
+                        col-start-2 row-span-2 row-start-1 text-right
+                        sm:col-auto sm:row-auto sm:row-span-1
+                      `}
+                    >
+                      <Skeleton className="ml-auto h-4 w-20" />
+                    </Table.Cell>
+                  </div>
                 </Table.Row>
               ))}
             </Table.Body>
@@ -75,13 +96,25 @@ export const Plans: FC = () => {
                     }
                   }}
                 >
-                  <Table.Cell>{plan.description}</Table.Cell>
-                  <Table.Cell className="text-muted-foreground text-body-2">
-                    {formatDate.format(new Date(plan.targetDate))}
-                  </Table.Cell>
-                  <Table.Cell className="text-right">
-                    {formatAmount.format(plan.amount)}
-                  </Table.Cell>
+                  <div className={rowClassName}>
+                    <Table.Cell className="min-w-0 break-words">{plan.description}</Table.Cell>
+                    <Table.Cell
+                      className={`
+                        col-start-1 row-start-2 pt-0 text-body-2 text-muted-foreground
+                        sm:col-auto sm:row-auto sm:pt-5
+                      `}
+                    >
+                      {formatDate.format(new Date(plan.targetDate))}
+                    </Table.Cell>
+                    <Table.Cell
+                      className={`
+                        col-start-2 row-span-2 row-start-1 text-right
+                        sm:col-auto sm:row-auto sm:row-span-1
+                      `}
+                    >
+                      {formatAmount.format(plan.amount)}
+                    </Table.Cell>
+                  </div>
                 </Table.Row>
               ))}
             </Table.Body>

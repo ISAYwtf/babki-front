@@ -91,7 +91,7 @@ export const PlanView: FC<PlanViewProps> = ({
           <LucideTrash2 />
           {t('plans.details.actions.delete')}
         </Button.Base>
-        <div className="flex gap-2.5">
+        <div className="flex flex-wrap gap-2.5">
           <Button.Base variant="outline" onClick={onEdit}>
             <LucidePencil />
             {t('plans.details.actions.edit')}
